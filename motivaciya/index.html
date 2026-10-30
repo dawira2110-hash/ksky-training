@@ -86,9 +86,6 @@
 <div id="rp-warnings" class="warn" role="alert"></div>
 <div class="table-responsive"><table class="table q-table" id="quarter-table"></table></div>
 <div class="period-section" id="deals-section"><div class="section-heading"><h3>Допродажи — сделки</h3><span class="small-note">разовая выплата, вне квартальной премии</span></div><p class="micro" style="margin-bottom:6px">Выберите квартал и введите сумму каждой допродажи — бонус посчитается по способу из блока «5. Допродажи» слева.</p><div id="deals"></div><button type="button" class="action" id="add-deal" style="margin-top:14px">+ Сделка</button></div>
-<div class="period-section"><div class="section-heading"><h3>Дополнительные показатели</h3><button class="info-button" data-help="indicators" type="button" aria-label="О дополнительных показателях">i</button></div>
-<p class="micro">По договорённости 29.10 показатели качества в деньги не идут, они остаются в оценке. Блок оставлен для сравнения вариантов: отметьте показатель или добавьте свой, задайте вес и выполнение.</p>
-<div class="kpi-selection"><div id="indicator-choices"></div><div class="custom-indicator-add"><label class="form-label" for="custom-indicator-name">Свой показатель</label><div class="custom-add-row"><input class="form-control" id="custom-indicator-name" type="text" maxlength="180" placeholder="Напишите название"><button type="button" class="action" id="add-custom-indicator">Добавить</button></div><p class="micro text-destructive" id="custom-indicator-error" role="alert"></p></div><div id="indicator-editors"></div><p class="micro" id="indicator-weight-summary"></p></div></div>
 </div></div>
 <p class="assumption">Суммы до НДФЛ. Цифры по умолчанию — проект по встрече 29.10, а не утверждённые значения. Изменения сохраняются в этом браузере; «Скачать с правками» создаёт копию файла с текущими цифрами и текстом.</p>
 <section class="annual-totals result-surface" aria-labelledby="annual-title"><div class="annual-heading"><div class="label-line"><h2 id="annual-title">Итог за год</h2><button class="info-button" data-help="annual" type="button" aria-label="Как считается итог за год">i</button></div><p class="micro">Сумма четырёх кварталов по введённым данным.</p></div><div class="annual-grid" id="annual-results" aria-live="polite"></div></section>
@@ -101,7 +98,7 @@
 <div class="document-section"><h3 data-edit="s3-title">03. Актированная выручка</h3><code id="live-formula-rev"></code><p data-edit="s3-text">Факт — работы выполнены и приняты заказчиком. Ниже порога часть за выручку не выплачивается, выше — пропорционально выполнению, до потолка. Для квартала с нулевым планом в калькуляторе выбирается правило: часть не выплачивается или фонд переносится на следующий квартал. Перенос предлагали на встрече, но не утвердили.</p></div>
 <div class="document-section"><h3 data-edit="s4-title">04. Топ-задачи: как работает перенос</h3><code id="live-formula-tasks"></code><p data-edit="s4-text">Каждый контракт, запланированный к подписанию в квартале, — одна топ-задача. Выплата по каждой — «да / нет», без порога в процентах. Фонд блока делится на число задач квартала. Незаключённый контракт переходит в следующий квартал, где тот же фонд делится на большее число задач: каждая дешевеет, а недополученное за прошлый квартал не возвращается. Пример со встречи: фонд 10 000 ₽ на 3 задачи — по 3 333 ₽; заключён 1 контракт — 3 333 ₽; 2 переходят, в следующем квартале 3 + 2 = 5 задач по 2 000 ₽. Плановый разброс — 4–7 задач на квартал, минимум 2.</p></div>
 <div class="document-section"><h3 data-edit="s5-title">05. Допродажи</h3><p data-edit="s5-text">Процент от суммы допродажи по регрессивной шкале: чеки бывают от 1 до 20 млн ₽, в теории — до 50 млн ₽. Выше верхней границы — по отдельному согласованию. Допродажи выплачиваются разово и не входят в факт квартальной премии. Ставки шкалы — пример для обсуждения.</p><p class="budget-note" id="proposal-upsell-live"></p></div>
-<div class="document-section"><h3 data-edit="s6-title">06. Показатели качества</h3><p data-edit="s6-text">Показатели качества из прежней модели (готовность этапов к приёмке, продление ТП, использование платформы и др.) остаются в оценке работы РП и в деньги не переводятся. В калькуляторе их можно включить только для сравнения вариантов.</p></div>
+<div class="document-section"><h3 data-edit="s6-title">06. Показатели качества</h3><p data-edit="s6-text">Показатели качества из прежней модели (готовность этапов к приёмке, продление ТП, использование платформы и др.) остаются в оценке работы РП и в деньги не переводятся, поэтому в калькуляторе их нет.</p></div>
 <div class="document-section"><h3 data-edit="s7-title">07. Что осталось согласовать</h3><p data-edit="s7-text">Точный оклад в диапазоне 115–120 тыс. ₽ и индексация; веса выручки и топ-задач; ставки и отсечка шкалы допродаж; правило для квартала без плана; что делать при полной отмене контракта, а не переносе; переход незакрытых задач через конец года и лимиты выплат; ответственность РП за дебиторскую задолженность и графики закрытия; пилот поквартального закрытия (Тула) и список регионов; бенчмарк по зарплатам в телекоме.</p><p class="source-links">Источник: Plaud, «Рабочая встреча: Система мотивации, согласование ТЗ и регламент КП», 29.10.2026: 21:56–25:38 — два показателя; 29:00–30:29 — вес актированной выручки; 33:19–41:37 — топ-задачи; 42:11–43:53 и 47:24–48:42 — оклад, доход, итог; 48:42–49:56 — допродажи; 50:31–50:44 — рынок.<br>Редактирование текста не меняет формулы. Цифры меняйте в калькуляторе.</p></div>
 </article></section>
 </div>
@@ -143,7 +140,6 @@
   const doc=window.rpDocument;
   const root=document.getElementById('rp-motivation-2027');
   const QN=['I квартал','II квартал','III квартал','IV квартал'];
-  const catalog=[{"id": "stages_ready", "tier": "key", "group": "Готовность к выручке", "title": "Ключевые этапы проектов, готовые к приемке в срок", "rule": "План — согласованные этапы контрактов со сроком в квартале. Факт — работы по этапу завершены к сроку, результат проверен, блокирующие замечания устранены, комплект закрытия передан на приемку. Подтверждение — результат этапа, протокол проверки и дата передачи. Готовность фиксируется до подписания акта; актированная сумма учитывается в финансовом KPI."}, {"id": "tp_renewal", "tier": "key", "group": "Удержание портфеля", "title": "Контракты на ТП, продленные без перерыва", "rule": "План — действующие контракты на ТП, которые должны быть продлены в квартале. Факт — продление подписано и действует без разрыва обслуживания. Подтверждение — договор или допсоглашение и даты действия. Это сохранение базового портфеля; допродажи учитываются отдельно. Подходит для РП, отвечающих за продление ТП."}, {"id": "portfolio_retention", "tier": "key", "group": "Удержание портфеля", "title": "Доля удержанных клиентов закрепленного портфеля", "rule": "До квартала фиксируется список клиентов, сотрудничество с которыми должно продолжаться. Факт, % = клиенты с подтвержденным продолжением сотрудничества / клиенты этого списка × 100. Вводите целевой и фактический проценты. Подтверждение — действующие договоры и реестр клиентов. Этот KPI и продление ТП — альтернативы оценки удержания; выберите один."}, {"id": "clinical_use", "tier": "key", "group": "Использование продукта", "title": "Врачи, использующие платформу в клинической работе", "rule": "План — согласованное количество активных врачей по закрепленным регионам на квартал. Факт — уникальные врачи с реальными обращениями к СППВР. Критерий достаточной активности фиксируется до квартала; одни входы в систему не засчитываются. Подтверждение — продуктовая статистика с исключением повторного счета одного врача. Подходит РП, отвечающим за использование платформы в регионе."}, {"id": "payment_calendar", "group": "Планирование и запуск", "title": "Проекты с календарем оплат, подготовленным в первый месяц квартала", "rule": "План — проекты, для которых календарь должен быть готов в первом месяце квартала. Факт — календарь сформирован к сроку: в нем указаны этапы, акты, суммы и даты оплаты по условиям контракта. Подтверждение — календарь со ссылкой в CRM и датой подготовки.", "tier": "process"}, {"id": "start_letter_3days", "group": "Планирование и запуск", "title": "Письма о старте, направленные в течение 3 рабочих дней", "rule": "План — новые проекты со сроком отправки письма в квартале. Факт — письмо о старте направлено заказчику не позднее трех рабочих дней после заключения контракта. Один проект — одно выполнение. Подтверждение — дата контракта и отправленное письмо в CRM.", "tier": "process"}, {"id": "kickoff_passport", "group": "Планирование и запуск", "title": "Проекты с установочной встречей и заполненным паспортом", "rule": "План — проекты, запуск которых согласован на квартал. Проект засчитывается, если проведена установочная встреча и заполнен паспорт: ответственные заказчика, план работ и календарь документов. Подтверждение — протокол встречи и ссылка на паспорт проекта.", "tier": "support"}, {"id": "tasks_on_time", "group": "Документы, сроки и риски", "title": "Ключевые задачи РП, выполненные в срок", "rule": "План — заранее согласованные задачи РП со сроком в квартале, от которых зависят запуск, приемка или продление. Факт — задачи завершены к исходному сроку и приняты ответственным. Подтверждение — задачи в Битриксе с результатом и датой закрытия. Перечень фиксируется заранее, без дробления задач ради количества.", "tier": "support"}, {"id": "eis_documents_on_time", "group": "Документы, сроки и риски", "title": "Пакеты документов для ЕИС, переданные в срок", "rule": "План — полные пакеты документов со сроком передачи в квартале. Факт — пакет подготовлен и передан заказчику или ответственному за размещение к согласованной дате. Подтверждение — реестр комплектности и письмо либо запись CRM с датой передачи. Считаем действие РП, а не дату публикации заказчиком.", "tier": "support"}, {"id": "risk_register", "group": "Документы, сроки и риски", "title": "Проекты с актуальным реестром рисков и планом действий", "rule": "План — проекты, для которых в квартале установлен срок проверки рисков. Факт — к этой дате реестр обновлен, по каждому риску есть действие, ответственный и срок. Подтверждение — версия реестра с датой проверки. Один проект учитывается один раз за квартал.", "tier": "support"}, {"id": "trained_doctors", "group": "Работа с регионом", "title": "Врачи, прошедшие обучение по согласованному плану", "rule": "План — согласованное с регионом количество врачей на квартал. Факт — врачи прошли обучение по утвержденной программе. Учитываем уникальных участников, без повторного счета одного врача за квартал. Подтверждение — программа, дата обучения и список прошедших обучение.", "tier": "support"}];
   const defaults={
     version:10,
     salary:{base:120000,indexOn:false,indexRate:10},
@@ -156,22 +152,21 @@
       {revPlan:3000000,revFact:3000000,tasksNew:4,tasksRemoved:0,tasksDone:4},
       {revPlan:3000000,revFact:3300000,tasksNew:4,tasksRemoved:0,tasksDone:4}
     ],
-    indicators:catalog.map(c=>({...c,custom:false,enabled:false,weight:0,performance:100})),
+    indicators:[],
     upsell:{mode:'scale',fixed:50000,rate:2.5,scaleType:'marginal',tiers:[{upTo:5000000,rate:3},{upTo:20000000,rate:2},{upTo:50000000,rate:1}],aboveMode:'agree',aboveRate:0.5,deals:[{q:2,amount:2000000}]}
   };
   const clone=o=>JSON.parse(JSON.stringify(o));
   let state=doc.data.calc&&doc.data.calc.version===10?clone(doc.data.calc):clone(defaults);
-  catalog.forEach(c=>{if(!state.indicators.some(m=>m.id===c.id))state.indicators.push({...c,custom:false,enabled:false,weight:0,performance:100});});
+  state.indicators=[];
   doc.data.calc=state;
 
   const help={
     salary:['Оклад','Ежемесячный оклад. Ориентир со встречи 29.10 — 115–120 тыс. ₽. Индексация по желанию: оклад × (1 + % / 100).'],
     bonus:['Премиальный фонд','Фонд — премия за квартал при 100% по всем частям. «От целевого дохода»: фонд = (целевой доход − оклад) × 3. При цели 160 000 ₽ и окладе 120 000 ₽ — 120 000 ₽ за квартал. «% от трёх окладов»: фонд = оклад × 3 × ставка / 100.'],
-    weights:['Веса в премии','Доли фонда для каждой части. По встрече: актированная выручка — меньшая доля (ориентир около 15%), основная — топ-задачи. Меняете один вес — второй подстраивается сам, чтобы сумма была 100%. Если включены дополнительные показатели, их вес вычитается из топ-задач.'],
+    weights:['Веса в премии','Доли фонда для каждой части. По встрече: актированная выручка — меньшая доля (ориентир около 15%), основная — топ-задачи. Меняете один вес — второй подстраивается сам, чтобы сумма была 100%.'],
     threshold:['Порог и потолок по выручке','Порог — минимальное выполнение плана актированной выручки, с которого платится часть за выручку. Потолок — максимум, учитываемый при перевыполнении. Пример при пороге 50% и потолке 120%: 40% → 0; 90% → 90% части; 150% → 120% части. «Если план 0» — предложение со встречи: фонд пустого квартала переносится на следующий. Оно не утверждено, поэтому вынесено в выбор.'],
     tasks:['Топ-задачи','Топ-задача — контракт, который должен быть подписан в квартале. Цена задачи = фонд топ-задач / (новые + перенесённые − снятые). Премия = цена × заключённые. Незаключённые переходят в следующий квартал и делят его фонд, поэтому цена каждой падает, а недополученное не возвращается. «Снято с плана» — регион отказался совсем.'],
     upsell:['Допродажи','Разовый бонус за каждую допродажу, вне квартальной премии. Регрессивная шкала: чем больше чек, тем ниже ставка. «По частям суммы» — каждая часть чека считается по своей ставке, без скачков на границах. «Одна ставка» — весь чек по ставке ступени, в которую он попал. Выше последней границы — по согласованию (в расчёте 0 ₽) или своя ставка.'],
-    indicators:['Дополнительные показатели','Для сравнения вариантов. Отметьте показатель, задайте вес и ожидаемое выполнение в %. Выплата за квартал = фонд × вес × min(выполнение; 100%). Вес показателя автоматически вычитается из веса топ-задач.'],
     annual:['Итог за год','Оклад × 12 + премии четырёх кварталов + бонусы за все допродажи. Среднемесячный доход = годовой / 12. Сверка показывает отклонение от целевого дохода.']
   };
 
@@ -255,24 +250,8 @@
     $('#quarter-table').innerHTML=head+'<tbody>'
       +group('Актированная выручка')+inRow('revPlan','План, ₽',100000)+inRow('revFact','Факт, ₽',100000)+outRow('revK','Выполнение')+outRow('revPaid','Премия за выручку')
       +group('Топ-задачи · подписанные контракты')+inRow('tasksNew','Новые контракты в плане, шт.',1)+outRow('carried','Перенесено из прошлого квартала')+inRow('tasksRemoved','Снято с плана, шт.',1,'регион отказался совсем')+outRow('open','Всего задач в квартале')+inRow('tasksDone','Заключено, шт.',1)+outRow('price','Цена одной задачи')+outRow('taskPaid','Премия за топ-задачи')
-      +group('Итог квартала')+outRow('indPaid','Доп. показатели')+outRow('premium','Квартальная премия','strong')+outRow('upsell','Допродажи, разово')+outRow('salary3','Оклад за 3 месяца')+outRow('total','Доход за квартал','strong')
+      +group('Итог квартала')+outRow('premium','Квартальная премия','strong')+outRow('upsell','Допродажи, разово')+outRow('salary3','Оклад за 3 месяца')+outRow('total','Доход за квартал','strong')
       +'</tbody>';
-  }
-
-  function renderIndicators(){
-    const wasOpen=$('#support-indicators')?.open;
-    let last='';
-    const choice=({m,i})=>{let h='';const g=m.group||'Свои показатели';if(g!==last){h+='<p class="indicator-group">'+esc(g)+'</p>';last=g;}return h+'<label class="indicator-choice"><input type="checkbox" data-s="indicators.'+i+'.enabled" data-rerender="1" '+(m.enabled?'checked':'')+'><span>'+esc(m.title||'Свой показатель без названия')+(m.custom?'<small>Свой вариант</small>':'')+'</span></label>';};
-    const list=arr=>{last='';return arr.map(choice).join('');};
-    const items=state.indicators.map((m,i)=>({m,i}));
-    const key=items.filter(x=>!x.m.custom&&x.m.tier==='key'),custom=items.filter(x=>x.m.custom),sup=items.filter(x=>!x.m.custom&&x.m.tier!=='key');
-    $('#indicator-choices').innerHTML='<p class="primary-kpi-caption">Показатели из модели 28.10</p>'+list(key)+list(custom)+'<details class="support-indicators" id="support-indicators" '+(wasOpen||sup.some(x=>x.m.enabled)?'open':'')+'><summary>Рабочие стандарты и прочие показатели</summary>'+list(sup)+'</details>';
-    const sel=items.filter(x=>x.m.enabled);
-    $('#indicator-editors').innerHTML=sel.length?'<h4 class="selected-kpi-heading">Вес и выполнение</h4>'+sel.map(({m,i})=>'<section class="indicator-editor">'
-      +(m.custom?'<label class="form-label">Название<input class="form-control" type="text" maxlength="180" data-s="indicators.'+i+'.title"></label><label class="form-label">Условие зачёта и подтверждение<textarea class="form-control" rows="3" maxlength="1200" data-s="indicators.'+i+'.rule"></textarea></label>':'<strong class="indicator-title">'+esc(m.title)+'</strong><p class="indicator-rule">'+esc(m.rule)+'</p>')
-      +'<div class="indicator-numbers agreement-indicator-numbers"><label class="form-label">Вес в премии, %'+numInput('indicators.'+i+'.weight',1,'Вес в премии, %',' max="100"')+'</label><label class="form-label">Выполнение, %'+numInput('indicators.'+i+'.performance',5,'Выполнение, %')+'</label></div>'
-      +(m.custom?'<button type="button" class="action" data-remove-ind="'+i+'">Удалить показатель</button>':'')+'</section>').join('')
-      :'<p class="empty-kpi-hint">Сейчас в премии только выручка и топ-задачи, как договорились 29.10. Отметьте показатель выше, чтобы сравнить вариант с ним.</p>';
   }
 
   function renderTiers(){
@@ -308,7 +287,7 @@
       else el.value=typeof v==='number'&&!Number.isFinite(v)?'':(v??'');
     });
   }
-  function renderStructure(){renderIndicators();renderTiers();renderDeals();enhance();sync();}
+  function renderStructure(){renderTiers();renderDeals();enhance();sync();}
   function save(){doc.data.calc=state;doc.persist();}
 
   function update(){
@@ -338,9 +317,8 @@
       set('revPaid',money(q.revPaid)+note('фонд '+money(q.revFund)));
       set('carried',num(q.carried));set('open',num(q.open));
       set('price',money(q.price));set('taskPaid',money(q.taskPaid)+note(q.done+' из '+q.open));
-      set('indPaid',money(q.indPaid));set('premium',money(q.premium));set('upsell',money(q.upsell));set('salary3',money(q.salary3));set('total',money(q.total));
+      set('premium',money(q.premium));set('upsell',money(q.upsell));set('salary3',money(q.salary3));set('total',money(q.total));
     });
-    $('#indicator-weight-summary').textContent=r.active.length?'Доп. показатели — '+num(r.wInd)+'% фонда, выплата за квартал '+money(r.quarters[0].indPaid)+'.':'';
     r.deals.forEach((d,i)=>{const el=root.querySelector('#deal-bonus-'+i);if(el)el.innerHTML=money(d.bonus)+(d.flag?'<span class="note">часть выше границы — по согласованию</span>':'');});
     $('#upsell-explainer').textContent='Сейчас: '+upsellText(u)+'.';
     const part=(l,v)=>'<div><span>'+l+'</span><strong>'+v+'</strong></div>';
@@ -379,27 +357,19 @@
   root.addEventListener('input',e=>{if(e.target.type!=='checkbox'&&e.target.tagName!=='SELECT')onField(e.target);});
   root.addEventListener('change',e=>{
     if(e.target.type==='checkbox'||e.target.tagName==='SELECT')onField(e.target);
-    else if(/^indicators\.\d+\.title$/.test(e.target.dataset.s||''))renderIndicators(),enhance(),sync();
   });
   root.addEventListener('keydown',e=>{if(e.target.matches('input[type="number"]')&&['ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();stepNumber(e.target,e.key==='ArrowUp'?1:-1);}});
   root.addEventListener('click',e=>{
     const t=e.target.closest('button');if(!t)return;
     if(t.dataset.stepDirection){e.preventDefault();stepNumber(t.closest('.number-control').querySelector('input'),Number(t.dataset.stepDirection));return;}
-    if(t.dataset.removeInd!==undefined){state.indicators.splice(Number(t.dataset.removeInd),1);}
-    else if(t.dataset.removeTier!==undefined){state.upsell.tiers.splice(Number(t.dataset.removeTier),1);}
+    if(t.dataset.removeTier!==undefined){state.upsell.tiers.splice(Number(t.dataset.removeTier),1);}
     else if(t.dataset.removeDeal!==undefined){state.upsell.deals.splice(Number(t.dataset.removeDeal),1);}
     else if(t.id==='add-tier'){const tiers=state.upsell.tiers,last=tiers.length?n(tiers[tiers.length-1].upTo):0,rate=tiers.length?n(tiers[tiers.length-1].rate):3;tiers.push({upTo:last?last*2:5000000,rate:Math.max(0,Math.round((rate-0.5)*10)/10)});}
     else if(t.id==='add-deal'){state.upsell.deals.push({q:0,amount:2000000});}
-    else if(t.id==='add-custom-indicator'){
-      const input=$('#custom-indicator-name'),title=input.value.trim();
-      if(!title){$('#custom-indicator-error').textContent='Напишите название своего показателя.';input.focus();return;}
-      state.indicators.push({id:'custom-'+Date.now(),group:'Свои показатели',title,rule:'',custom:true,enabled:true,weight:0,performance:100});
-      input.value='';$('#custom-indicator-error').textContent='';
-    }else return;
+    else return;
     renderStructure();update();save();
   });
   $('.jump-link').addEventListener('click',e=>{e.preventDefault();const s=$('#deals-section');s.scrollIntoView({behavior:'smooth',block:'start'});s.classList.remove('flash');void s.offsetWidth;s.classList.add('flash');const f=s.querySelector('input[type="number"]');if(f)setTimeout(()=>f.focus({preventScroll:true}),500);});
-  $('#custom-indicator-name').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#add-custom-indicator').click();}});
 
   const popup=document.getElementById('info-popover');let activeHelp=null,pinned=false,hideTimer;
   function closeHelp(){popup.hidden=true;if(activeHelp)activeHelp.setAttribute('aria-expanded','false');activeHelp=null;pinned=false;}
