@@ -78,14 +78,13 @@
 <div id="tiers"></div><button type="button" class="action" id="add-tier">+ Ступень</button>
 <label class="form-label" style="margin-top:16px">Выше последней границы<select class="form-select" data-s="upsell.aboveMode"><option value="agree">По согласованию</option><option value="rate">Своя ставка</option></select></label>
 <label class="form-label" id="above-rate-field">Ставка выше границы, %<input class="form-control" type="number" min="0" max="100" step="any" data-s="upsell.aboveRate" data-increment="0.1"></label></div>
-<p class="micro" id="upsell-explainer"></p><a class="jump-link" href="#deals-section">Ввести суммы сделок →</a></div>
+<p class="micro" id="upsell-explainer"></p><p class="micro" style="margin-top:8px">Суммы и количество допродаж вводятся в таблице кварталов, в группе «Допродажи».</p></div>
 </aside>
 <div class="variants-main"><div class="result-surface"><div class="result-header"><p class="result-kicker">Квартальная премия РП · 2027</p><div class="summary-grid"><div><div class="summary-label">Оклад / месяц</div><div class="summary-value" id="hero-salary">—</div><div class="summary-caption" id="hero-salary-caption"></div></div><div><div class="summary-label">Премиальный фонд / квартал</div><div class="summary-value" id="hero-fund">—</div><div class="summary-caption" id="hero-fund-caption"></div></div><div><div class="summary-label">Средний доход / месяц</div><div class="summary-value" id="hero-monthly">—</div><div class="summary-caption" id="hero-monthly-caption"></div></div></div><p class="micro fund-formula" id="fund-formula"></p></div>
 <div class="result-body"><div class="section-heading"><h2>Расчёт по кварталам</h2><button class="info-button" data-help="tasks" type="button" aria-label="Как работают топ-задачи">i</button></div>
-<p class="micro" style="margin-bottom:16px">Введите план и факт актированной выручки и количество контрактов. Незаключённые контракты сами переходят в следующий квартал, и цена каждой задачи там падает.</p>
+<p class="micro" style="margin-bottom:16px">Введите план и факт актированной выручки, количество контрактов и допродажи. Незаключённые контракты сами переходят в следующий квартал, и цена каждой задачи там падает.</p>
 <div id="rp-warnings" class="warn" role="alert"></div>
 <div class="table-responsive"><table class="table q-table" id="quarter-table"></table></div>
-<div class="period-section" id="deals-section"><div class="section-heading"><h3>Допродажи — сделки</h3><span class="small-note">разовая выплата, вне квартальной премии</span></div><p class="micro" style="margin-bottom:6px">Выберите квартал и введите сумму каждой допродажи — бонус посчитается по способу из блока «5. Допродажи» слева.</p><div id="deals"></div><button type="button" class="action" id="add-deal" style="margin-top:14px">+ Сделка</button></div>
 </div></div>
 <p class="assumption">Суммы до НДФЛ. Цифры по умолчанию — проект по встрече 29.10, а не утверждённые значения. Изменения сохраняются в этом браузере; «Скачать с правками» создаёт копию файла с текущими цифрами и текстом.</p>
 <section class="annual-totals result-surface" aria-labelledby="annual-title"><div class="annual-heading"><div class="label-line"><h2 id="annual-title">Итог за год</h2><button class="info-button" data-help="annual" type="button" aria-label="Как считается итог за год">i</button></div><p class="micro">Сумма четырёх кварталов по введённым данным.</p></div><div class="annual-grid" id="annual-results" aria-live="polite"></div></section>
@@ -147,17 +146,23 @@
     weights:{revenue:15,tasks:85},
     revenue:{threshold:50,cap:120,zeroPlan:'none'},
     quarters:[
-      {revPlan:3000000,revFact:3000000,tasksNew:4,tasksRemoved:0,tasksDone:3},
-      {revPlan:3000000,revFact:2700000,tasksNew:4,tasksRemoved:0,tasksDone:5},
-      {revPlan:3000000,revFact:3000000,tasksNew:4,tasksRemoved:0,tasksDone:4},
-      {revPlan:3000000,revFact:3300000,tasksNew:4,tasksRemoved:0,tasksDone:4}
+      {revPlan:3000000,revFact:3000000,tasksNew:4,tasksRemoved:0,tasksDone:3,upsellSum:0,upsellCount:0},
+      {revPlan:3000000,revFact:2700000,tasksNew:4,tasksRemoved:0,tasksDone:5,upsellSum:0,upsellCount:0},
+      {revPlan:3000000,revFact:3000000,tasksNew:4,tasksRemoved:0,tasksDone:4,upsellSum:2000000,upsellCount:1},
+      {revPlan:3000000,revFact:3300000,tasksNew:4,tasksRemoved:0,tasksDone:4,upsellSum:0,upsellCount:0}
     ],
     indicators:[],
-    upsell:{mode:'scale',fixed:50000,rate:2.5,scaleType:'marginal',tiers:[{upTo:5000000,rate:3},{upTo:20000000,rate:2},{upTo:50000000,rate:1}],aboveMode:'agree',aboveRate:0.5,deals:[{q:2,amount:2000000}]}
+    upsell:{mode:'scale',fixed:50000,rate:2.5,scaleType:'marginal',tiers:[{upTo:5000000,rate:3},{upTo:20000000,rate:2},{upTo:50000000,rate:1}],aboveMode:'agree',aboveRate:0.5}
   };
   const clone=o=>JSON.parse(JSON.stringify(o));
   let state=doc.data.calc&&doc.data.calc.version===10?clone(doc.data.calc):clone(defaults);
   state.indicators=[];
+  // Earlier saved versions kept upsells as a separate deal list; fold them into the quarters.
+  if(state.quarters.some(q=>q.upsellSum===undefined)){
+    const deals=Array.isArray(state.upsell.deals)?state.upsell.deals:[];
+    state.quarters.forEach((q,i)=>{const own=deals.filter(d=>d.q===i);q.upsellSum=own.reduce((a,d)=>a+(Number(d.amount)||0),0);q.upsellCount=own.length;});
+  }
+  delete state.upsell.deals;
   doc.data.calc=state;
 
   const help={
@@ -204,7 +209,6 @@
     const wSum=n(s.weights.revenue)+n(s.weights.tasks)+wInd;
     const revBase=fund*n(s.weights.revenue)/100,taskBase=fund*n(s.weights.tasks)/100;
     const indPaid=active.reduce((a,m)=>a+fund*n(m.weight)/100*Math.max(0,Math.min(1,n(m.performance)/100)),0);
-    const deals=s.upsell.deals.map(d=>({...d,...upsellBonus(n(d.amount),s.upsell)}));
     let carryTasks=0,carryRev=0;
     const quarters=s.quarters.map((q,i)=>{
       const revFund=revBase+carryRev;carryRev=0;
@@ -223,13 +227,15 @@
       const taskPaid=done*price;
       carryTasks=open-done;
       const premium=revPaid+taskPaid+indPaid;
-      const upsell=deals.filter(d=>d.q===i).reduce((a,d)=>a+d.bonus,0);
-      return {revFund,ratio,k,revPaid,revNote,carried,open,done,price,taskPaid,indPaid,premium,upsell,salary3:salary*3,total:salary*3+premium+upsell,doneOver:n(q.tasksDone)>open};
+      const upsellSum=Math.max(0,n(q.upsellSum)),upsellCount=upsellSum>0?Math.max(1,Math.round(n(q.upsellCount))):0;
+      const perDeal=upsellCount?upsellBonus(upsellSum/upsellCount,s.upsell):{bonus:0,flag:false};
+      const upsell=perDeal.bonus*upsellCount,upsellFlag=perDeal.flag;
+      return {revFund,ratio,k,revPaid,revNote,carried,open,done,price,taskPaid,indPaid,premium,upsell,salary3:salary*3,upsellCount,upsellFlag,total:salary*3+premium+upsell,doneOver:n(q.tasksDone)>open};
     });
     const sum=k=>quarters.reduce((a,q)=>a+q[k],0);
-    const year={salary:salary*12,revenue:sum('revPaid'),tasks:sum('taskPaid'),ind:sum('indPaid'),premium:sum('premium'),upsell:deals.reduce((a,d)=>a+d.bonus,0),tasksLeft:carryTasks,flagged:deals.filter(d=>d.flag).length,revLost:carryRev};
+    const year={salary:salary*12,revenue:sum('revPaid'),tasks:sum('taskPaid'),ind:sum('indPaid'),premium:sum('premium'),upsell:sum('upsell'),upsellCount:sum('upsellCount'),tasksLeft:carryTasks,flagged:quarters.filter(q=>q.upsellFlag).length,revLost:carryRev};
     year.total=year.salary+year.premium+year.upsell;year.monthly=year.total/12;
-    return {salary,indexed,fund,revBase,taskBase,wInd,wSum,active,quarters,deals,year};
+    return {salary,indexed,fund,revBase,taskBase,wInd,wSum,active,quarters,year};
   }
 
   function upsellText(u){
@@ -250,16 +256,13 @@
     $('#quarter-table').innerHTML=head+'<tbody>'
       +group('Актированная выручка')+inRow('revPlan','План, ₽',100000)+inRow('revFact','Факт, ₽',100000)+outRow('revK','Выполнение')+outRow('revPaid','Премия за выручку')
       +group('Топ-задачи · подписанные контракты')+inRow('tasksNew','Новые контракты в плане, шт.',1)+outRow('carried','Перенесено из прошлого квартала')+inRow('tasksRemoved','Снято с плана, шт.',1,'регион отказался совсем')+outRow('open','Всего задач в квартале')+inRow('tasksDone','Заключено, шт.',1)+outRow('price','Цена одной задачи')+outRow('taskPaid','Премия за топ-задачи')
-      +group('Итог квартала')+outRow('premium','Квартальная премия','strong')+outRow('upsell','Допродажи, разово')+outRow('salary3','Оклад за 3 месяца')+outRow('total','Доход за квартал','strong')
+      +group('Допродажи · разовая выплата')+inRow('upsellSum','Сумма допродаж, ₽',100000)+inRow('upsellCount','Сделок, шт.',1,'для шкалы: сумма делится на сделки')+outRow('upsell','Бонус за допродажи')
+      +group('Итог квартала')+outRow('premium','Квартальная премия','strong')+outRow('upsell2','Допродажи')+outRow('salary3','Оклад за 3 месяца')+outRow('total','Доход за квартал','strong')
       +'</tbody>';
   }
 
   function renderTiers(){
     $('#tiers').innerHTML=state.upsell.tiers.map((t,i)=>'<div class="tier-row"><label class="form-label">Чек до, ₽'+numInput('upsell.tiers.'+i+'.upTo',1000000,'Граница ступени, ₽')+'</label><label class="form-label">Ставка, %'+numInput('upsell.tiers.'+i+'.rate',0.5,'Ставка ступени, %',' max="100"')+'</label><button type="button" class="icon-btn" data-remove-tier="'+i+'" aria-label="Удалить ступень">×</button></div>').join('')||'<p class="micro">Ступеней нет — добавьте хотя бы одну.</p>';
-  }
-
-  function renderDeals(){
-    $('#deals').innerHTML=state.upsell.deals.length?state.upsell.deals.map((d,i)=>'<div class="deal-row"><label class="form-label">Квартал<select class="form-select" data-s="upsell.deals.'+i+'.q" data-num>'+QN.map((q,k)=>'<option value="'+k+'">'+q+'</option>').join('')+'</select></label><label class="form-label">Сумма допродажи, ₽'+numInput('upsell.deals.'+i+'.amount',100000,'Сумма допродажи, ₽')+'</label><div><span class="micro">Бонус</span><div class="deal-bonus" id="deal-bonus-'+i+'">—</div></div><button type="button" class="icon-btn" data-remove-deal="'+i+'" aria-label="Удалить сделку">×</button></div>').join(''):'<p class="micro">Допродаж нет. Добавьте сделку, чтобы увидеть бонус.</p>';
   }
 
   function enhance(){
@@ -287,7 +290,7 @@
       else el.value=typeof v==='number'&&!Number.isFinite(v)?'':(v??'');
     });
   }
-  function renderStructure(){renderTiers();renderDeals();enhance();sync();}
+  function renderStructure(){renderTiers();enhance();sync();}
   function save(){doc.data.calc=state;doc.persist();}
 
   function update(){
@@ -317,14 +320,13 @@
       set('revPaid',money(q.revPaid)+note('фонд '+money(q.revFund)));
       set('carried',num(q.carried));set('open',num(q.open));
       set('price',money(q.price));set('taskPaid',money(q.taskPaid)+note(q.done+' из '+q.open));
-      set('premium',money(q.premium));set('upsell',money(q.upsell));set('salary3',money(q.salary3));set('total',money(q.total));
+      set('premium',money(q.premium));set('upsell',money(q.upsell)+(q.upsellFlag?note('выше границы — по согласованию'):q.upsellCount>1?note(q.upsellCount+' сделки'):''));set('upsell2',money(q.upsell));set('salary3',money(q.salary3));set('total',money(q.total));
     });
-    r.deals.forEach((d,i)=>{const el=root.querySelector('#deal-bonus-'+i);if(el)el.innerHTML=money(d.bonus)+(d.flag?'<span class="note">часть выше границы — по согласованию</span>':'');});
     $('#upsell-explainer').textContent='Сейчас: '+upsellText(u)+'.';
     const part=(l,v)=>'<div><span>'+l+'</span><strong>'+v+'</strong></div>';
     const delta=s.bonus.mode==='target'?y.monthly-n(s.bonus.target):null;
-    $('#annual-results').innerHTML='<article class="annual-card"><div class="annual-kicker">По введённым кварталам</div><h3>Доход РП за 2027 год</h3><div class="annual-parts">'+part('Оклад за год',money(y.salary))+part('Премия за выручку',money(y.revenue))+part('Премия за топ-задачи',money(y.tasks))+(y.ind?part('Доп. показатели',money(y.ind)):'')+part('Допродажи · '+r.deals.length+' шт.',money(y.upsell))+'</div><div class="annual-total"><span>Годовой доход</span><strong>'+money(y.total)+'</strong></div><div class="annual-average"><span>Среднемесячный доход</span><strong>'+money(y.monthly)+'</strong></div></article>'
-      +'<article class="annual-card"><div class="annual-kicker">Сверка</div><h3>С целью и остатками на конец года</h3><div class="annual-parts">'+(delta!==null?part('Целевой доход в месяц',money(s.bonus.target))+part('Отклонение среднемесячного',(delta>=0?'+':'−')+money(Math.abs(delta))):part('Доход при 100% в месяц',money(r.salary+r.fund/3)))+part('Премия за год при 100%',money(r.fund*4))+part('Премия за год по вводным',money(y.premium))+part('Незакрытые топ-задачи на конец года',num(y.tasksLeft)+' шт.')+(y.flagged?part('Сделки «по согласованию»',y.flagged+' шт.'):'')+(y.revLost?part('Фонд выручки IV кв. без плана',money(y.revLost)):'')+'</div><p class="annual-explanation">Незакрытые задачи IV квартала в этой модели не оплачиваются. Правило перехода через год нужно согласовать.</p></article>';
+    $('#annual-results').innerHTML='<article class="annual-card"><div class="annual-kicker">По введённым кварталам</div><h3>Доход РП за 2027 год</h3><div class="annual-parts">'+part('Оклад за год',money(y.salary))+part('Премия за выручку',money(y.revenue))+part('Премия за топ-задачи',money(y.tasks))+(y.ind?part('Доп. показатели',money(y.ind)):'')+part('Допродажи · '+num(y.upsellCount)+' шт.',money(y.upsell))+'</div><div class="annual-total"><span>Годовой доход</span><strong>'+money(y.total)+'</strong></div><div class="annual-average"><span>Среднемесячный доход</span><strong>'+money(y.monthly)+'</strong></div></article>'
+      +'<article class="annual-card"><div class="annual-kicker">Сверка</div><h3>С целью и остатками на конец года</h3><div class="annual-parts">'+(delta!==null?part('Целевой доход в месяц',money(s.bonus.target))+part('Отклонение среднемесячного',(delta>=0?'+':'−')+money(Math.abs(delta))):part('Доход при 100% в месяц',money(r.salary+r.fund/3)))+part('Премия за год при 100%',money(r.fund*4))+part('Премия за год по вводным',money(y.premium))+part('Незакрытые топ-задачи на конец года',num(y.tasksLeft)+' шт.')+(y.flagged?part('Кварталы с допродажами «по согласованию»',y.flagged+' шт.'):'')+(y.revLost?part('Фонд выручки IV кв. без плана',money(y.revLost)):'')+'</div><p class="annual-explanation">Незакрытые задачи IV квартала в этой модели не оплачиваются. Правило перехода через год нужно согласовать.</p></article>';
     const g=id=>document.getElementById(id);
     g('proposal-live').textContent='Настройки: оклад '+money(r.salary)+'/мес.'+(s.salary.indexOn?' (с индексацией '+num(s.salary.indexRate)+'%)':'')+'; премиальный фонд '+money(r.fund)+' за квартал ('+money(r.fund/3)+' в месяц)'+(s.bonus.mode==='target'?', целевой доход '+money(s.bonus.target):'')+'; веса: выручка '+num(s.weights.revenue)+'%, топ-задачи '+num(s.weights.tasks)+'%'+(r.wInd?', доп. показатели '+num(r.wInd)+'%':'')+'; порог выручки '+num(s.revenue.threshold)+'%, потолок '+num(s.revenue.cap)+'%; допродажи — '+upsellText(u)+'.';
     g('live-formula-rev').textContent='Премия за выручку = фонд × '+num(s.weights.revenue)+'% × K; K = 0, если факт / план < '+num(s.revenue.threshold)+'%, иначе min(факт / план; '+num(s.revenue.cap)+'%)';
@@ -363,13 +365,10 @@
     const t=e.target.closest('button');if(!t)return;
     if(t.dataset.stepDirection){e.preventDefault();stepNumber(t.closest('.number-control').querySelector('input'),Number(t.dataset.stepDirection));return;}
     if(t.dataset.removeTier!==undefined){state.upsell.tiers.splice(Number(t.dataset.removeTier),1);}
-    else if(t.dataset.removeDeal!==undefined){state.upsell.deals.splice(Number(t.dataset.removeDeal),1);}
     else if(t.id==='add-tier'){const tiers=state.upsell.tiers,last=tiers.length?n(tiers[tiers.length-1].upTo):0,rate=tiers.length?n(tiers[tiers.length-1].rate):3;tiers.push({upTo:last?last*2:5000000,rate:Math.max(0,Math.round((rate-0.5)*10)/10)});}
-    else if(t.id==='add-deal'){state.upsell.deals.push({q:0,amount:2000000});}
     else return;
     renderStructure();update();save();
   });
-  $('.jump-link').addEventListener('click',e=>{e.preventDefault();const s=$('#deals-section');s.scrollIntoView({behavior:'smooth',block:'start'});s.classList.remove('flash');void s.offsetWidth;s.classList.add('flash');const f=s.querySelector('input[type="number"]');if(f)setTimeout(()=>f.focus({preventScroll:true}),500);});
 
   const popup=document.getElementById('info-popover');let activeHelp=null,pinned=false,hideTimer;
   function closeHelp(){popup.hidden=true;if(activeHelp)activeHelp.setAttribute('aria-expanded','false');activeHelp=null;pinned=false;}
