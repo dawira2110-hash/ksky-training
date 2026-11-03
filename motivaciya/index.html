@@ -44,6 +44,7 @@
 .jump-link{display:inline-block;margin-top:10px;font-size:13px;font-weight:550;color:var(--accent);text-decoration:none;border-bottom:1px solid #cadcde}.jump-link:hover{border-color:var(--accent)}#deals-section{scroll-margin-top:16px}#deals-section.flash{animation:flash 1.4s ease}@keyframes flash{0%,40%{background:var(--soft)}100%{background:transparent}}
 .annual-compact{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}.annual-figure span{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.annual-figure strong{font-size:28px;font-weight:550;letter-spacing:-.02em;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap}
 @media(max-width:480px){.annual-compact{grid-template-columns:1fr}}
+.ind-row{border:1px solid var(--line);border-radius:9px;padding:10px;margin-bottom:10px}.ind-row>.form-control{font-family:inherit;margin:0;font-size:13px;font-weight:550;line-height:1.35;resize:none;min-height:0;padding:8px 10px}.ind-row-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0 4px}.ind-type{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.ind-unit{width:auto;min-width:70px;min-height:30px;padding:4px 8px;margin:0;font-size:12px}.ind-row-bottom{display:grid;grid-template-columns:minmax(0,1fr) 34px;gap:8px;align-items:end}.ind-row-bottom .form-label{margin:0;font-size:11px}.q-select{min-height:34px;padding:6px 8px;margin:0;font-size:13px}.role-warnings:empty{display:none}.role-warnings{margin:0 0 14px}.custom-add-row .form-select{margin:0;min-width:0;font-size:12px}
 .q-table{min-width:760px}.q-table th[scope=row]{font-weight:400;color:var(--ink);width:26%;padding-top:14px}.q-table td{padding:7px 6px!important}.q-table .number-control{margin:0}.q-table .form-control{min-height:34px;padding:7px 30px 7px 8px;font-size:13px;margin:0;text-align:right}.q-table .row-group th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);padding-top:22px!important;padding-bottom:8px!important;font-weight:600;border-bottom:1px solid var(--line)}.q-table .out{font-variant-numeric:tabular-nums;text-align:right;padding-top:14px!important;padding-right:10px!important}.q-table tr.strong th,.q-table tr.strong td{font-weight:600}.q-table tr.strong td{color:var(--accent)}.note{display:block;font-size:10px;line-height:1.5;color:var(--muted);font-weight:400}
 .tier-row{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr) 34px;gap:8px;align-items:end;margin-bottom:10px}.tier-row .form-label{margin:0;font-size:11px}.tier-row .form-control{font-size:12px;padding:8px 28px 8px 8px}.icon-btn{border:1px solid #d7dee5;background:#fff;border-radius:7px;width:34px;height:41px;color:var(--muted);font-size:16px;line-height:1}.icon-btn:hover{color:var(--red);border-color:var(--red)}
 .deal-row{display:grid;grid-template-columns:150px minmax(0,1fr) minmax(0,1fr) 34px;gap:14px;align-items:end;padding:12px 0;border-bottom:1px solid #edf0f3}.deal-row .form-label{margin:0}.deal-bonus{font-variant-numeric:tabular-nums;font-size:16px;font-weight:550;padding:8px 0 4px}
@@ -52,8 +53,8 @@
 @media print{.icon-btn,#add-tier,#add-deal,.custom-indicator-add{display:none!important}.q-table{min-width:0}.q-table .form-control{border:0;padding:0;min-height:0;background:transparent}}
 </style></head><body>
 <header class="topbar"><div class="brand">К–СКАЙ <span>Рабочие материалы</span></div><div class="actions"><button class="action" id="edit-notes" aria-pressed="false">Править текст</button><button class="action" id="print-doc">Печать / PDF</button><button class="action primary" id="download-doc">Скачать с правками</button></div></header>
-<main class="page"><div class="hero compact-hero"><h1>Квартальная мотивация РП и тимлида РП · 2027</h1><nav class="role-tabs" aria-label="Роль"><button class="role-tab" id="role-rp" role="tab" aria-controls="rp-workspace" aria-selected="true">РП</button><button class="role-tab" id="role-teamlead" role="tab" aria-controls="teamlead-workspace" aria-selected="false">Тимлид РП</button></nav></div>
-<div id="rp-workspace" role="tabpanel" aria-labelledby="role-rp"><nav class="tabs" aria-label="Разделы"><button class="tab" id="tab-calculator" role="tab" aria-controls="calculator-panel" aria-selected="true">Калькулятор</button><button class="tab" id="tab-proposal" role="tab" aria-controls="proposal-panel" aria-selected="false">Предложения и правила</button></nav>
+<main class="page"><div class="hero compact-hero"><h1>Квартальная мотивация · 2027</h1><nav class="role-tabs" aria-label="Роль"><button class="role-tab" id="role-rp" role="tab" aria-controls="rp-workspace" aria-selected="true">РП</button><button class="role-tab" id="role-teamlead" role="tab" aria-controls="teamlead-workspace" aria-selected="false">Тимлид РП</button><button class="role-tab" id="role-sales" role="tab" aria-controls="sales-workspace" aria-selected="false">Продажи</button></nav></div>
+<div id="rp-workspace" class="role-workspace" role="tabpanel" aria-labelledby="role-rp"><nav class="tabs" aria-label="Разделы"><button class="tab" id="tab-calculator" data-panel="calculator-panel" role="tab" aria-controls="calculator-panel" aria-selected="true">Калькулятор</button><button class="tab" id="tab-proposal" data-panel="proposal-panel" role="tab" aria-controls="proposal-panel" aria-selected="false">Предложения и правила</button></nav>
 <section class="tab-panel" id="calculator-panel" role="tabpanel" aria-labelledby="tab-calculator"><div id="rp-motivation-2027"><div class="calculator-grid">
 <aside class="settings"><h2>Параметры</h2>
 <div class="setting-group"><p class="setting-title">1. Оклад <button class="info-button" data-help="salary" type="button" aria-label="Об окладе">i</button></p>
@@ -103,25 +104,23 @@
 <div class="document-section"><h3 data-edit="s7-title">07. Что осталось согласовать</h3><p data-edit="s7-text">Точный оклад в диапазоне 115–120 тыс. ₽ и индексация; веса выручки и топ-задач; ставки и отсечка шкалы допродаж; правило для квартала без плана; что делать при полной отмене контракта, а не переносе; переход незакрытых задач через конец года и лимиты выплат; ответственность РП за дебиторскую задолженность и графики закрытия; пилот поквартального закрытия (Тула) и список регионов; бенчмарк по зарплатам в телекоме.</p><p class="source-links">Источник: Plaud, «Рабочая встреча: Система мотивации, согласование ТЗ и регламент КП», 29.10.2026: 21:56–25:38 — два показателя; 29:00–30:29 — вес актированной выручки; 33:19–41:37 — топ-задачи; 42:11–43:53 и 47:24–48:42 — оклад, доход, итог; 48:42–49:56 — допродажи; 50:31–50:44 — рынок.<br>Редактирование текста не меняет формулы. Цифры меняйте в калькуляторе.</p></div>
 </article></section>
 </div>
-<section id="teamlead-workspace" role="tabpanel" aria-labelledby="role-teamlead" hidden="">
-<div class="calculator-grid" id="teamlead-calculator">
-<aside class="settings"><h2>Исходные параметры</h2><div class="setting-group"><p class="setting-title">Вознаграждение</p>
-<label class="form-label">Оклад в месяц, ₽<span class="number-control"><input class="form-control" data-tl="salary" type="number" min="0" step="any" placeholder="Введите оклад" aria-label="Оклад в месяц, ₽" data-increment="1000"><span class="number-step-buttons"><button type="button" class="number-step" data-tl-step="1" aria-label="Увеличить на 1000">▴</button><button type="button" class="number-step" data-tl-step="-1" aria-label="Уменьшить на 1000">▾</button></span></span></label>
-<label class="form-label">Целевая премия за квартал, ₽<span class="number-control"><input class="form-control" data-tl="fund" type="number" min="0" step="any" placeholder="Введите сумму" aria-label="Целевая премия за квартал, ₽" data-increment="1000"><span class="number-step-buttons"><button type="button" class="number-step" data-tl-step="1" aria-label="Увеличить на 1000">▴</button><button type="button" class="number-step" data-tl-step="-1" aria-label="Уменьшить на 1000">▾</button></span></span></label>
-<p class="micro">Размеры оклада и премии в исходной модели не заданы. Здесь — общая премия при выполнении пяти KPI на 100%, до понижающего коэффициента.</p></div>
-<div class="setting-group"><p class="setting-title">Понижающий коэффициент</p><label class="form-label">Паспорта и дорожные карты<select class="form-select" data-tl="documents"><option value="">Выберите состояние</option><option value="current">Все актуальны · × 1</option><option value="outdated">Есть неактуальные · × 0,8</option></select></label><p class="micro">У каждого активного проекта команды должны быть оба документа, обновленные за последние 30 календарных дней. Хотя бы один отсутствует или устарел — вся рассчитанная премия снижается на 20%.</p></div>
-<div class="setting-group"><button type="button" class="action" id="tl-example">Заполнить условный пример</button><p class="micro" id="tl-example-note">Для проверки механики. Это не согласованные суммы и планы.</p></div>
-</aside>
-<div class="variants-main"><div class="result-surface"><div class="result-header"><p class="result-kicker">Тимлид РП · квартальная премия</p><h2>Пять KPI + понижающий коэффициент</h2><p class="micro tl-intro">Общий результат команды: все РП и личный портфель тимлида. Финансовые результаты — 60% премии, использование платформы и сроки — 40%.</p><p class="micro catalog-source">Модель из листа <a href="https://docs.google.com/spreadsheets/d/1dOZS9ycvD-zVc-uAmTrWdmgdMoJWiO2n3GuY8GdGlmA/edit?gid=693444571#gid=693444571" target="_blank" rel="noopener noreferrer">«Мотивация»</a>. Показатели только для мониторинга в расчет не входят.</p></div>
-<div class="result-body"><div class="section-heading"><h3>Финансовые результаты</h3><span class="small-note">60% премии</span></div>
-<div id="tl-financial-metrics"><article class="tl-metric"><div class="tl-metric-title"><h4>1. Выполнение плана законтрактованной выручки</h4><span class="tl-weight">30% премии</span></div><p class="tl-definition">Законтрактованная выручка команды с 1 января / утвержденный накопительный план на конец отчетного квартала.</p><div class="tl-metric-controls"><label class="form-label">План с начала года, ₽<span class="number-control"><input class="form-control" data-tl="revenuePlan" type="number" min="0" step="any" placeholder="Введите значение" aria-label="План с начала года, ₽" data-increment="100000"><span class="number-step-buttons"><button type="button" class="number-step" data-tl-step="1" aria-label="Увеличить на 100000">▴</button><button type="button" class="number-step" data-tl-step="-1" aria-label="Уменьшить на 100000">▾</button></span></span></label><label class="form-label">Факт с начала года, ₽<span class="number-control"><input class="form-control" data-tl="revenueFact" type="number" min="0" step="any" placeholder="Введите значение" aria-label="Факт с начала года, ₽" data-increment="100000"><span class="number-step-buttons"><button type="button" class="number-step" data-tl-step="1" aria-label="Увеличить на 100000">▴</button><button type="button" class="number-step" data-tl-step="-1" aria-label="Уменьшить на 100000">▾</button></span></span></label><div class="tl-payout-cell"><span class="micro">Выплата за KPI</span><div class="tl-payout" id="tl-part-0">—</div></div></div><p class="tl-calculation" id="tl-coefficient-0">Введите план и факт для расчета.</p><details class="tl-rules"><summary>Правило расчета</summary><p>Каждый договор учитывается один раз. Передача между РП внутри команды не меняет общий результат. Порог — 80%. При 80–&lt;100% выплата пропорциональна выполнению; при 100–120% включительно — 100% части; свыше 120% — 120% части.</p></details></article><article class="tl-metric"><div class="tl-metric-title"><h4>2. Подписанные контракты: уникальные контрагенты</h4><span class="tl-weight">20% премии</span></div><p class="tl-definition">Уникальные контрагенты команды с подписанным контрактом / план. Один заказчик — один раз за календарный год.</p><div class="tl-metric-controls"><label class="form-label">План нарастающим итогом, шт.<span class="number-control"><input class="form-control" data-tl="contractPlan" type="number" min="0" step="any" placeholder="Введите значение" aria-label="План нарастающим итогом, шт." data-increment="1"><span class="number-step-buttons"><button type="button" class="number-step" data-tl-step="1" aria-label="Увеличить на 1">▴</button><button type="button" class="number-step" data-tl-step="-1" aria-label="Уменьшить на 1">▾</button></span></span></label><label class="form-label">Факт нарастающим итогом, шт.<span class="number-control"><input class="form-control" data-tl="contractFact" type="number" min="0" step="any" placeholder="Введите значение" aria-label="Факт нарастающим итогом, шт." data-increment="1"><span class="number-step-buttons"><button type="button" class="number-step" data-tl-step="1" aria-label="Увеличить на 1">▴</button><button type="button" class="number-step" data-tl-step="-1" aria-label="Уменьшить на 1">▾</button></span></span></label><div class="tl-payout-cell"><span class="micro">Выплата за KPI</span><div class="tl-payout" id="tl-part-1">—</div></div></div><p class="tl-calculation" id="tl-coefficient-1">Введите план и факт для расчета.</p><details class="tl-rules"><summary>Правило расчета</summary><p>Несколько договоров с одним заказчиком и передача проекта другому РП не увеличивают количество. Порог — 80%. При 80–&lt;100% выплата пропорциональна выполнению; при 100–120% включительно — 100% части; свыше 120% — 120% части.</p></details></article><article class="tl-metric"><div class="tl-metric-title"><h4>3. ДЗ с просрочкой более 2 календарных месяцев</h4><span class="tl-weight">10% премии</span></div><p class="tl-definition">Все проекты команды, включая личные проекты тимлида. Проверка на конец квартала от договорного срока оплаты.</p><div class="tl-metric-controls"><div class="micro">0 ₽ — полная выплата этой части.<br>Больше 0 ₽ — без выплаты этой части.</div><label class="form-label">Сумма такой ДЗ, ₽<span class="number-control"><input class="form-control" data-tl="debt" type="number" min="0" step="any" placeholder="Введите значение" aria-label="Сумма такой ДЗ, ₽" data-increment="1000"><span class="number-step-buttons"><button type="button" class="number-step" data-tl-step="1" aria-label="Увеличить на 1000">▴</button><button type="button" class="number-step" data-tl-step="-1" aria-label="Уменьшить на 1000">▾</button></span></span></label><div class="tl-payout-cell"><span class="micro">Выплата за KPI</span><div class="tl-payout" id="tl-part-2">—</div></div></div><p class="tl-calculation" id="tl-coefficient-2">Введите план и факт для расчета.</p><details class="tl-rules"><summary>Правило расчета</summary><p>Нет такой ДЗ — коэффициент 1. Есть любая сумма — коэффициент 0 только по этой части премии. Отсутствие бюджета у заказчика не исключает долг из расчета.</p></details></article></div>
-<div class="period-section"><div class="section-heading"><h3>Использование платформы и сроки</h3><span class="small-note">40% премии</span></div><div id="tl-quality-metrics"><article class="tl-metric"><div class="tl-metric-title"><h4>4. Обращения врачей к платформе</h4><span class="tl-weight">20% премии</span></div><p class="tl-definition">Обращения врачей во всех регионах команды за квартал / сумму квартальных планов регионов. Действует с I квартала 2027.</p><div class="tl-metric-controls"><label class="form-label">План за квартал, обращений<span class="number-control"><input class="form-control" data-tl="usagePlan" type="number" min="0" step="any" placeholder="Введите значение" aria-label="План за квартал, обращений" data-increment="1"><span class="number-step-buttons"><button type="button" class="number-step" data-tl-step="1" aria-label="Увеличить на 1">▴</button><button type="button" class="number-step" data-tl-step="-1" aria-label="Уменьшить на 1">▾</button></span></span></label><label class="form-label">Факт за квартал, обращений<span class="number-control"><input class="form-control" data-tl="usageFact" type="number" min="0" step="any" placeholder="Введите значение" aria-label="Факт за квартал, обращений" data-increment="1"><span class="number-step-buttons"><button type="button" class="number-step" data-tl-step="1" aria-label="Увеличить на 1">▴</button><button type="button" class="number-step" data-tl-step="-1" aria-label="Уменьшить на 1">▾</button></span></span></label><div class="tl-payout-cell"><span class="micro">Выплата за KPI</span><div class="tl-payout" id="tl-part-3">—</div></div></div><p class="tl-calculation" id="tl-coefficient-3">Введите план и факт для расчета.</p><details class="tl-rules"><summary>Правило расчета</summary><p>Ниже 80% — без выплаты; от 80% — пропорционально выполнению, максимум 100% части. Сравнение с прошлым периодом используется для анализа, а не для отдельной выплаты.</p></details></article><article class="tl-metric"><div class="tl-metric-title"><h4>5. Доля этапов воронки, выполненных в срок</h4><span class="tl-weight">20% премии</span></div><p class="tl-definition">Этапы лидов и сделок, завершенные в срок / все этапы со сроком в квартале. Незавершенные и просроченные остаются в знаменателе.</p><div class="tl-metric-controls"><label class="form-label">Все этапы со сроком, шт.<span class="number-control"><input class="form-control" data-tl="stagesTotal" type="number" min="0" step="any" placeholder="Введите значение" aria-label="Все этапы со сроком, шт." data-increment="1"><span class="number-step-buttons"><button type="button" class="number-step" data-tl-step="1" aria-label="Увеличить на 1">▴</button><button type="button" class="number-step" data-tl-step="-1" aria-label="Уменьшить на 1">▾</button></span></span></label><label class="form-label">Из них в срок, шт.<span class="number-control"><input class="form-control" data-tl="stagesOnTime" type="number" min="0" step="any" placeholder="Введите значение" aria-label="Из них в срок, шт." data-increment="1"><span class="number-step-buttons"><button type="button" class="number-step" data-tl-step="1" aria-label="Увеличить на 1">▴</button><button type="button" class="number-step" data-tl-step="-1" aria-label="Уменьшить на 1">▾</button></span></span></label><div class="tl-payout-cell"><span class="micro">Выплата за KPI</span><div class="tl-payout" id="tl-part-4">—</div></div></div><p class="tl-calculation" id="tl-coefficient-4">Введите план и факт для расчета.</p><details class="tl-rules"><summary>Правило расчета</summary><p>Ниже 80% — без выплаты; от 80% — по результату, максимум 100% части. Исходный срок фиксируется при входе в этап по утвержденному нормативу. Повторный переход не добавляет этап; перенос не меняет исходный срок. Запуск — после утверждения нормативов и проверки данных CRM.</p></details></article></div></div>
-<p class="micro tl-rule-note">Шкала из исходной модели: для выручки и контрактов 100–120% выполнения включительно дают 100% части; только свыше 120% — 120% части. Для обращений и этапов максимум — 100% части. Нулевой план или отсутствие этапов дают 0 по соответствующему KPI.</p>
-<div id="tl-error" class="text-destructive" role="alert"></div>
-</div></div>
-<section class="result-surface annual-totals" aria-labelledby="tl-total-title"><div class="annual-heading"><h2 id="tl-total-title">Итого за квартал</h2><p class="micro">Сумма пяти выплат с учетом актуальности документов.</p></div><div class="tl-totals" id="tl-totals" aria-live="polite"><div class="tl-total-line "><span>Целевая премия при 100% KPI</span><strong>—</strong></div><div class="tl-total-line "><span>Сумма пяти выплат до снижения</span><strong>—</strong></div><div class="tl-total-line "><span>Снижение за неактуальные документы</span><strong>—</strong></div><div class="tl-total-line primary"><span>Квартальная премия к выплате</span><strong>—</strong></div><div class="tl-total-line "><span>Оклад за три месяца</span><strong>—</strong></div><div class="tl-total-line "><span>Общий доход за квартал</span><strong>—</strong></div><p class="micro">Заполните целевую премию, пять KPI и состояние документов. Для общего дохода также укажите оклад.</p></div><p class="annual-explanation">Премия = целевая премия × (30% × К₁ + 20% × К₂ + 10% × К₃ + 20% × К₄ + 20% × К₅) × коэффициент документов. Оклад выплачивается ежемесячно. Суммы до НДФЛ; отдельный бонус за допродажи в модели тимлида не задан.</p></section>
-</div></div></section>
-
+<div id="teamlead-workspace" class="role-workspace" role="tabpanel" aria-labelledby="role-teamlead" hidden><nav class="tabs" aria-label="Разделы"><button class="tab" role="tab" data-panel="tl-calc-panel" aria-selected="true">Калькулятор</button><button class="tab" role="tab" data-panel="tl-proposal-panel" aria-selected="false">Предложения и правила</button></nav>
+<section class="tab-panel" id="tl-calc-panel" role="tabpanel"><div id="tl-calc"></div></section>
+<section class="tab-panel" id="tl-proposal-panel" role="tabpanel" hidden><div class="edit-hint">Нажмите на текст, чтобы изменить формулировку. Изменения сохраняются в этом браузере.</div><article class="document">
+<div class="document-section"><p class="doc-kicker">Рабочая модель · встреча 03.11.2026</p><h2 data-edit="tl-title">Квартальная мотивация тимлида РП на 2027 год</h2><p data-edit="tl-intro">Модель пересобрана по встрече «KPI» 03.11.2026 в той же логике, что у РП: премия квартальная, каждый квартал считается отдельно, а не накопительным итогом с начала года. В премии три общих показателя команды и личный бонус за допродажи в своих регионах.</p><p class="budget-note" data-live="teamlead"></p></div>
+<div class="document-section"><h3 data-edit="tl-s1-title">01. Показатели и веса</h3><p data-edit="tl-s1-text">Актированная выручка команды — 50%: складывается из результатов всех РП и личного портфеля тимлида. Подписанные контракты команды в штуках — 30%: уникальные контрагенты, процент выполнения плана. Механика топ-задач здесь не используется: у тимлида считается совокупный результат команды, а не каждый контракт. Просроченная дебиторская задолженность — 20%: нет просрочки на конец квартала — часть выплачивается полностью, есть — не выплачивается.</p></div>
+<div class="document-section"><h3 data-edit="tl-s2-title">02. Что убрано из прежней модели</h3><p data-edit="tl-s2-text">Обращения врачей к платформе — переводятся в справочные: данные по использованию платформы сейчас ненадёжны. Доля этапов воронки в срок — убрана: её сложно считать, пока не настроен Битрикс. Оба показателя можно вернуть позже, перераспределив веса.</p></div>
+<div class="document-section"><h3 data-edit="tl-s3-title">03. Личные допродажи</h3><p data-edit="tl-s3-text">У тимлида свой пул регионов. За допродажи в них он получает разовый бонус по той же шкале, что и РП. Это четвёртый, личный показатель — отдельно от трёх общих.</p></div>
+<div class="document-section"><h3 data-edit="tl-s4-title">04. Понижающий коэффициент</h3><p data-edit="tl-s4-text">Если на конец квартала у активного проекта команды нет актуального паспорта или дорожной карты (обновлены за последние 30 дней), вся рассчитанная премия квартала умножается на 0,8. Бонус за допродажи не снижается.</p></div>
+<div class="document-section"><h3 data-edit="tl-s5-title">05. Что осталось согласовать</h3><p data-edit="tl-s5-text">Срок просрочки ДЗ: 1 или 2 месяца (при весе 20% склонились к двум); нужен ли допуск по сумме ДЗ; оклад и размер премии тимлида; итоговые суммы с Романом. После доработки — получасовая встреча, на которой тимлида и продажника прокручивают вместе и утверждают.</p><p class="source-links">Источник: Plaud, «Совещание: модели вознаграждения и калькуляторы премий», 03.11.2026: 13:54–14:13 — калькуляторы тимлида и продаж; 18:03–18:20 — разбивка по кварталам; 20:52–23:34 — дебиторская задолженность; 23:56–26:40 — убрать показатели 4 и 5; 26:24–27:47 — личные допродажи; 28:40–30:06 — веса 50 / 30 / 20.</p></div>
+</article></section></div>
+<div id="sales-workspace" class="role-workspace" role="tabpanel" aria-labelledby="role-sales" hidden><nav class="tabs" aria-label="Разделы"><button class="tab" role="tab" data-panel="sales-calc-panel" aria-selected="true">Калькулятор</button><button class="tab" role="tab" data-panel="sales-proposal-panel" aria-selected="false">Предложения и правила</button></nav>
+<section class="tab-panel" id="sales-calc-panel" role="tabpanel"><div id="sales-calc"></div></section>
+<section class="tab-panel" id="sales-proposal-panel" role="tabpanel" hidden><div class="edit-hint">Нажмите на текст, чтобы изменить формулировку. Изменения сохраняются в этом браузере.</div><article class="document">
+<div class="document-section"><p class="doc-kicker">Черновик · встреча 03.11.2026</p><h2 data-edit="sl-title">Квартальная мотивация менеджера по продажам на 2027 год</h2><p data-edit="sl-intro">Калькулятор добавлен по итогам встречи 03.11.2026: продажника решили считать в той же логике и в том же интерфейсе, что РП и тимлида. Сами показатели продажника на встрече не обсуждались — ниже стартовый вариант для разговора. Показатели, веса и все цифры меняются в калькуляторе.</p><p class="budget-note" data-live="sales"></p></div>
+<div class="document-section"><h3 data-edit="sl-s1-title">01. Стартовые показатели</h3><p data-edit="sl-s1-text">Законтрактованная выручка по новым клиентам — 50%: план и факт за квартал. Новые контракты — 50%: каждый контракт в плане квартала — топ-задача; незаключённый переходит в следующий квартал и дешевеет, как у РП. Бонус за допродажи и понижающий коэффициент пока выключены — их можно включить слева.</p></div>
+<div class="document-section"><h3 data-edit="sl-s2-title">02. Что решить на встрече</h3><p data-edit="sl-s2-text">Какие показатели оставить и их веса; оклад и размер премии; нужны ли бонус за допродажи и понижающий коэффициент; момент зачёта сделки — подписание контракта или поступление выручки (этот вопрос поднимали 03.11 для допродаж); как разделить зачёт, если контракт ведут продажник и РП вместе.</p></div>
+</article></section></div>
 
 <footer class="footer"><p>Рабочая модель для обсуждения · параметры сохраняются в вашем браузере</p><p class="save-status" id="save-status" aria-live="polite">Изменения сохраняются в этом браузере</p></footer></main>
 <script id="rp-file-state" type="application/json">{"version": 1, "documentId": "ksky-rp-2027-v2-20261030", "savedAt": 1793340000000, "calc": null, "notes": {}, "activeRole": "rp"}</script>
@@ -388,11 +387,11 @@
   const doc=window.rpDocument,editButton=document.getElementById('edit-notes'),editable=[...document.querySelectorAll('[data-edit]')];
   editable.forEach(el=>{if(Object.prototype.hasOwnProperty.call(doc.data.notes,el.dataset.edit))el.textContent=doc.data.notes[el.dataset.edit];});
   let editing=false;
-  function showTab(name){const calc=name==='calculator';document.getElementById('calculator-panel').hidden=!calc;document.getElementById('proposal-panel').hidden=calc;document.getElementById('tab-calculator').setAttribute('aria-selected',String(calc));document.getElementById('tab-proposal').setAttribute('aria-selected',String(!calc));}
-  document.getElementById('tab-calculator').addEventListener('click',()=>showTab('calculator'));
-  document.getElementById('tab-proposal').addEventListener('click',()=>showTab('proposal'));
-  editButton.addEventListener('click',()=>{editing=!editing;document.body.classList.toggle('editing',editing);editButton.setAttribute('aria-pressed',String(editing));editButton.textContent=editing?'Готово':'Править текст';editable.forEach(el=>{if(editing)el.setAttribute('contenteditable','plaintext-only');else el.removeAttribute('contenteditable');});if(editing){showTab('proposal');editable[0].focus();}});
-  document.getElementById('proposal-panel').addEventListener('input',e=>{const el=e.target.closest('[data-edit]');if(el){doc.data.notes[el.dataset.edit]=el.textContent;doc.persist();}});
+  function showPanel(btn){btn.closest('nav.tabs').querySelectorAll('.tab[data-panel]').forEach(b=>{const on=b===btn;b.setAttribute('aria-selected',String(on));document.getElementById(b.dataset.panel).hidden=!on;});}
+  document.querySelectorAll('.tab[data-panel]').forEach(b=>b.addEventListener('click',()=>showPanel(b)));
+  function showProposal(){const ws=[...document.querySelectorAll('.role-workspace')].find(w=>!w.hidden);if(!ws)return null;const tabs=ws.querySelectorAll(':scope > nav.tabs .tab[data-panel]');showPanel(tabs[tabs.length-1]);return document.getElementById(tabs[tabs.length-1].dataset.panel);}
+  editButton.addEventListener('click',()=>{editing=!editing;document.body.classList.toggle('editing',editing);editButton.setAttribute('aria-pressed',String(editing));editButton.textContent=editing?'Готово':'Править текст';editable.forEach(el=>{if(editing)el.setAttribute('contenteditable','plaintext-only');else el.removeAttribute('contenteditable');});if(editing){const panel=showProposal();const first=panel&&panel.querySelector('[data-edit]');if(first)first.focus();}});
+  document.addEventListener('input',e=>{const el=e.target.closest('[data-edit]');if(el){doc.data.notes[el.dataset.edit]=el.textContent;doc.persist();}});
   document.getElementById('print-doc').addEventListener('click',()=>window.print());
   document.getElementById('download-doc').addEventListener('click',()=>{
     editable.forEach(el=>doc.data.notes[el.dataset.edit]=el.textContent);
@@ -411,81 +410,336 @@
   if(!doc.storageAvailable)document.getElementById('save-status').textContent='Автосохранение недоступно — используйте «Скачать с правками»';
 })();
 </script>
-<script>function calculateTeamleadScenario(s){
-  const number=v=>v!==''&&v!==null&&Number.isFinite(Number(v))&&Number(v)>=0?Number(v):null;
-  const financial=r=>r<.8?0:r<1?r:r<=1.2?1:1.2;
-  const quality=r=>r<.8?0:Math.min(1,r);
-  const ratio=(p,f)=>{p=number(p);f=number(f);return p===null||f===null?null:p===0?0:f/p;};
-  const r1=ratio(s.revenuePlan,s.revenueFact),r2=ratio(s.contractPlan,s.contractFact),r4=ratio(s.usagePlan,s.usageFact),r5=ratio(s.stagesTotal,s.stagesOnTime);
-  const debt=number(s.debt),fund=number(s.fund),salary=number(s.salary);
-  const stagesInvalid=number(s.stagesTotal)!==null&&number(s.stagesOnTime)!==null&&Number(s.stagesOnTime)>Number(s.stagesTotal);
-  const integerKeys=['contractPlan','contractFact','usagePlan','usageFact','stagesTotal','stagesOnTime'];
-  const invalidInteger=integerKeys.some(k=>number(s[k])!==null&&!Number.isInteger(Number(s[k])));
-  const coefficients=[r1===null?null:financial(r1),r2===null?null:financial(r2),debt===null?null:debt===0?1:0,r4===null?null:quality(r4),r5===null||stagesInvalid?null:quality(r5)];
-  const weights=[.3,.2,.1,.2,.2];
-  const parts=coefficients.map((c,i)=>c===null||fund===null?null:fund*weights[i]*c);
-  const documentation=s.documents==='current'?1:s.documents==='outdated'?.8:null;
-  const subtotal=parts.some(x=>x===null)||stagesInvalid||invalidInteger?null:parts.reduce((a,b)=>a+b,0);
-  const paid=subtotal===null||documentation===null?null:subtotal*documentation;
-  return {ratios:[r1,r2,null,r4,r5],coefficients,weights,parts,documentation,subtotal,paid,reduction:paid===null?null:subtotal-paid,salary,fund,quarterIncome:paid===null||salary===null?null:salary*3+paid,stagesInvalid,invalidInteger};
-}
-</script>
-<script>(function(){
-  const root=document.getElementById('teamlead-calculator'),doc=window.rpDocument;
-  const defaults={salary:'',fund:'',revenuePlan:'',revenueFact:'',contractPlan:'',contractFact:'',debt:'',usagePlan:'',usageFact:'',stagesTotal:'',stagesOnTime:'',documents:''};
-  const saved=doc.data.teamLead;
-  const state={...defaults,...(saved&&saved.version===1?saved.settings:{})};
-  const money=n=>n===null||!Number.isFinite(n)?'—':new Intl.NumberFormat('ru-RU',{maximumFractionDigits:0}).format(n)+' ₽';
-  const pct=n=>n===null?'—':new Intl.NumberFormat('ru-RU',{maximumFractionDigits:1}).format(n*100)+'%';
-  const metrics=[
-    {title:'Выполнение плана законтрактованной выручки',weight:30,p:'revenuePlan',f:'revenueFact',plan:'План с начала года, ₽',fact:'Факт с начала года, ₽',step:100000,definition:'Законтрактованная выручка команды с 1 января / утвержденный накопительный план на конец отчетного квартала.',rule:'Каждый договор учитывается один раз. Передача между РП внутри команды не меняет общий результат. Порог — 80%. При 80–<100% выплата пропорциональна выполнению; при 100–120% включительно — 100% части; свыше 120% — 120% части.'},
-    {title:'Подписанные контракты: уникальные контрагенты',weight:20,p:'contractPlan',f:'contractFact',plan:'План нарастающим итогом, шт.',fact:'Факт нарастающим итогом, шт.',step:1,definition:'Уникальные контрагенты команды с подписанным контрактом / план. Один заказчик — один раз за календарный год.',rule:'Несколько договоров с одним заказчиком и передача проекта другому РП не увеличивают количество. Порог — 80%. При 80–<100% выплата пропорциональна выполнению; при 100–120% включительно — 100% части; свыше 120% — 120% части.'},
-    {title:'ДЗ с просрочкой более 2 календарных месяцев',weight:10,f:'debt',fact:'Сумма такой ДЗ, ₽',step:1000,definition:'Все проекты команды, включая личные проекты тимлида. Проверка на конец квартала от договорного срока оплаты.',rule:'Нет такой ДЗ — коэффициент 1. Есть любая сумма — коэффициент 0 только по этой части премии. Отсутствие бюджета у заказчика не исключает долг из расчета.'},
-    {title:'Обращения врачей к платформе',weight:20,p:'usagePlan',f:'usageFact',plan:'План за квартал, обращений',fact:'Факт за квартал, обращений',step:1,definition:'Обращения врачей во всех регионах команды за квартал / сумму квартальных планов регионов. Действует с I квартала 2027.',rule:'Ниже 80% — без выплаты; от 80% — пропорционально выполнению, максимум 100% части. Сравнение с прошлым периодом используется для анализа, а не для отдельной выплаты.'},
-    {title:'Доля этапов воронки, выполненных в срок',weight:20,p:'stagesTotal',f:'stagesOnTime',plan:'Все этапы со сроком, шт.',fact:'Из них в срок, шт.',step:1,definition:'Этапы лидов и сделок, завершенные в срок / все этапы со сроком в квартале. Незавершенные и просроченные остаются в знаменателе.',rule:'Ниже 80% — без выплаты; от 80% — по результату, максимум 100% части. Исходный срок фиксируется при входе в этап по утвержденному нормативу. Повторный переход не добавляет этап; перенос не меняет исходный срок. Запуск — после утверждения нормативов и проверки данных CRM.'}
-  ];
-  const input=(key,label,step)=>'<label class="form-label">'+label+'<input class="form-control" data-tl="'+key+'" type="number" min="0" step="'+step+'" placeholder="Введите значение"></label>';
-  root.querySelector('#tl-financial-metrics').innerHTML='';root.querySelector('#tl-quality-metrics').innerHTML='';
-  metrics.forEach((m,i)=>{
-    const card=document.createElement('article');card.className='tl-metric';
-    card.innerHTML='<div class="tl-metric-title"><h4>'+(i+1)+'. '+m.title+'</h4><span class="tl-weight">'+m.weight+'% премии</span></div><p class="tl-definition">'+m.definition+'</p><div class="tl-metric-controls">'+(m.p?input(m.p,m.plan,m.step):'<div class="micro">0 ₽ — полная выплата этой части.<br>Больше 0 ₽ — без выплаты этой части.</div>')+input(m.f,m.fact,m.step)+'<div class="tl-payout-cell"><span class="micro">Выплата за KPI</span><div class="tl-payout" id="tl-part-'+i+'">—</div></div></div><p class="tl-calculation" id="tl-coefficient-'+i+'"></p><details class="tl-rules"><summary>Правило расчета</summary><p>'+m.rule+'</p></details>';
-    root.querySelector(i<3?'#tl-financial-metrics':'#tl-quality-metrics').append(card);
-  });
-  // The same explicit step increment as the RP calculator, including values off the step grid.
-  root.querySelectorAll('input[type="number"]').forEach(input=>{
-    if(input.closest('.number-control'))return;
-    input.setAttribute('aria-label',input.closest('label')?.textContent.trim()||'Значение');
-    input.dataset.increment=input.step||'1';input.step='any';
-    const wrapper=document.createElement('span');wrapper.className='number-control';input.before(wrapper);wrapper.append(input);
-    const buttons=document.createElement('span');buttons.className='number-step-buttons';
-    [1,-1].forEach(d=>{const b=document.createElement('button');b.type='button';b.className='number-step';b.dataset.tlStep=d;b.textContent=d>0?'▴':'▾';b.setAttribute('aria-label',(d>0?'Увеличить':'Уменьшить')+' на '+input.dataset.increment);buttons.append(b);});wrapper.append(buttons);
-  });
-  function sync(){root.querySelectorAll('[data-tl]').forEach(el=>el.value=state[el.dataset.tl]??'');}
-  function save(){doc.data.teamLead={version:1,settings:{...state}};doc.persist();}
-  function render(){
-    const result=calculateTeamleadScenario(state);
-    metrics.forEach((m,i)=>{
-      root.querySelector('#tl-part-'+i).textContent=money(result.parts[i]);
-      const text=result.coefficients[i]===null?'Введите план и факт для расчета.':i===2?'Коэффициент ДЗ: '+pct(result.coefficients[i])+'.':'Выполнение: '+pct(result.ratios[i])+' · коэффициент выплаты: '+pct(result.coefficients[i])+'.';
-      root.querySelector('#tl-coefficient-'+i).textContent=text;
-    });
-    const error=result.stagesInvalid?'Этапов, выполненных в срок, не может быть больше общего количества этапов.':result.invalidInteger?'Количество контрактов, обращений и этапов вводится целым числом.':'';
-    root.querySelector('#tl-error').textContent=error;
-    const line=(name,value,cls='')=>'<div class="tl-total-line '+cls+'"><span>'+name+'</span><strong>'+money(value)+'</strong></div>';
-    root.querySelector('#tl-totals').innerHTML=line('Целевая премия при 100% KPI',result.fund)+line('Сумма пяти выплат до снижения',result.subtotal)+line('Снижение за неактуальные документы',result.reduction)+line('Квартальная премия к выплате',result.paid,'primary')+line('Оклад за три месяца',result.salary===null?null:result.salary*3)+line('Общий доход за квартал',result.quarterIncome)+(result.paid===null?'<p class="micro">Заполните целевую премию, пять KPI и состояние документов. Для общего дохода также укажите оклад.</p>':'');
+<script>
+// Shared quarterly calculator for the team lead and sales tabs: same layout as the RP tab, indicators configurable.
+window.createRoleCalc=function(cfg){
+  const doc=window.rpDocument;
+  const root=document.getElementById(cfg.rootId);
+  const QN=['I квартал','II квартал','III квартал','IV квартал'];
+  const TYPES={ratio:'Показатель: план / факт',tasks:'Топ-задачи с переносом',debt:'Просроченная ДЗ: да / нет'};
+  const clone=o=>JSON.parse(JSON.stringify(o));
+  doc.data.roles=doc.data.roles||{};
+  const saved=doc.data.roles[cfg.key];
+  let state=saved&&saved.version===cfg.defaults.version?clone(saved):clone(cfg.defaults);
+  doc.data.roles[cfg.key]=state;
+
+  const n=v=>Number.isFinite(v)?v:0;
+  const money=v=>v===null||!Number.isFinite(v)?'—':new Intl.NumberFormat('ru-RU',{maximumFractionDigits:0}).format(Math.round(v))+' ₽';
+  const num=v=>Number.isFinite(v)?new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2}).format(v):'—';
+  const pct=v=>v===null||!Number.isFinite(v)?'—':new Intl.NumberFormat('ru-RU',{maximumFractionDigits:1}).format(v*100)+'%';
+  const mln=v=>num(v/1e6)+' млн ₽';
+  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const getP=(o,p)=>p.split('.').reduce((a,k)=>a==null?undefined:a[k],o);
+  const setP=(o,p,v)=>{const ks=p.split('.'),last=ks.pop();ks.reduce((a,k)=>a[k],o)[last]=v;};
+  const $=s=>root.querySelector(s);
+  const out=k=>root.querySelector('[data-o="'+k+'"]');
+  const H=k=>'<button class="info-button" data-rhelp="'+k+'" type="button" aria-label="Подсказка">i</button>';
+  const numIn=(path,inc,label,attrs)=>'<input class="form-control" type="number" min="0" step="any" data-s="'+path+'" data-increment="'+inc+'" aria-label="'+esc(label)+'"'+(attrs||'')+'>';
+  const unitInc=u=>u==='₽'?100000:1;
+  const blankQ=t=>t==='ratio'?{plan:0,fact:0}:t==='tasks'?{new:0,removed:0,done:0}:{amount:0};
+  function normalize(){state.quarters.forEach(q=>{q.v=q.v||{};state.indicators.forEach(m=>{if(!q.v[m.id])q.v[m.id]=blankQ(m.type);});});}
+  normalize();
+
+  function upsellBonus(amount,u){
+    if(!(amount>0))return {bonus:0,flag:false};
+    if(u.mode==='fixed')return {bonus:n(u.fixed),flag:false};
+    if(u.mode==='percent')return {bonus:amount*n(u.rate)/100,flag:false};
+    const tiers=u.tiers.filter(t=>t.upTo>0).slice().sort((a,b)=>a.upTo-b.upTo);
+    const last=tiers.length?tiers[tiers.length-1].upTo:0;
+    const above=u.aboveMode==='rate'?n(u.aboveRate):0,flag=amount>last&&u.aboveMode==='agree';
+    if(u.scaleType==='whole'){const t=tiers.find(t=>amount<=t.upTo);return {bonus:amount*(t?n(t.rate):above)/100,flag};}
+    let bonus=0,prev=0;
+    for(const t of tiers){if(amount>prev)bonus+=(Math.min(amount,t.upTo)-prev)*n(t.rate)/100;prev=t.upTo;}
+    if(amount>last)bonus+=(amount-last)*above/100;
+    return {bonus,flag};
   }
-  function step(input,d){const n=Number(input.value)||0;input.value=String(Math.max(0,Number((n+d*Number(input.dataset.increment)).toFixed(8))));input.dispatchEvent(new Event('input',{bubbles:true}));input.focus({preventScroll:true});}
-  root.addEventListener('click',e=>{const b=e.target.closest('[data-tl-step]');if(b)step(b.closest('.number-control').querySelector('input'),Number(b.dataset.tlStep));});
-  root.addEventListener('keydown',e=>{if(e.target.matches('input[type="number"]')&&['ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();step(e.target,e.key==='ArrowUp'?1:-1);}});
-  function onInput(e){if(!e.target.dataset.tl)return;state[e.target.dataset.tl]=e.target.value;render();save();}
-  root.addEventListener('input',onInput);root.addEventListener('change',e=>{if(e.target.tagName==='SELECT')onInput(e);});
-  root.querySelector('#tl-example').addEventListener('click',()=>{Object.assign(state,{salary:150000,fund:90000,revenuePlan:20000000,revenueFact:18000000,contractPlan:10,contractFact:10,debt:0,usagePlan:1000,usageFact:900,stagesTotal:20,stagesOnTime:18,documents:'current'});sync();render();save();root.querySelector('#tl-example-note').textContent='Условный пример: оклад 150 000 ₽, премия 90 000 ₽. Все значения можно изменить.';});
-  const rp=document.getElementById('rp-workspace'),tl=document.getElementById('teamlead-workspace');
-  function role(name){const isTl=name==='teamlead';rp.hidden=isTl;tl.hidden=!isTl;document.getElementById('role-rp').setAttribute('aria-selected',String(!isTl));document.getElementById('role-teamlead').setAttribute('aria-selected',String(isTl));document.getElementById('edit-notes').hidden=isTl;doc.data.activeRole=isTl?'teamlead':'rp';}
-  document.getElementById('role-rp').addEventListener('click',()=>{role('rp');doc.persist();});
-  document.getElementById('role-teamlead').addEventListener('click',()=>{role('teamlead');doc.persist();});
-  sync();render();role(doc.data.activeRole);
+  function upsellText(u){
+    if(u.mode==='fixed')return 'фикс '+money(u.fixed)+' за сделку';
+    if(u.mode==='percent')return num(u.rate)+'% от суммы сделки';
+    let prev=0;
+    const parts=u.tiers.filter(t=>t.upTo>0).slice().sort((a,b)=>a.upTo-b.upTo).map(t=>{const s=(prev?'от '+mln(prev)+' ':'')+'до '+mln(t.upTo)+' — '+num(t.rate)+'%';prev=t.upTo;return s;});
+    parts.push('свыше '+mln(prev)+' — '+(u.aboveMode==='rate'?num(u.aboveRate)+'%':'по согласованию'));
+    return 'регрессивная шкала ('+(u.scaleType==='marginal'?'по частям суммы':'одна ставка на весь чек')+'): '+parts.join('; ');
+  }
+
+  function calc(s){
+    const salary=Math.round(n(s.salary.base)*(1+(s.salary.indexOn?n(s.salary.indexRate):0)/100));
+    const fund=s.bonus.mode==='target'?Math.max(0,(n(s.bonus.target)-salary)*3):salary*3*n(s.bonus.rate)/100;
+    const wSum=s.indicators.reduce((a,m)=>a+n(m.weight),0);
+    const carry={};
+    const quarters=s.quarters.map((q,i)=>{
+      const parts={};let raw=0;
+      s.indicators.forEach(m=>{
+        const v=q.v[m.id],base=fund*n(m.weight)/100;let r={base,k:0,paid:0,note:''};
+        if(m.type==='ratio'){
+          if(n(v.plan)>0){r.ratio=n(v.fact)/v.plan;if(r.ratio<n(s.rules.threshold)/100)r.note='ниже порога';else{r.k=Math.min(r.ratio,n(s.rules.cap)/100);if(r.ratio>r.k)r.note='учтено до потолка';}}
+          else{r.ratio=null;r.note='план 0 · не выплачивается';}
+        }else if(m.type==='tasks'){
+          r.carried=carry[m.id]||0;r.open=Math.max(0,n(v.new)+r.carried-n(v.removed));r.done=Math.min(r.open,Math.max(0,n(v.done)));
+          r.price=r.open>0?base/r.open:0;r.k=r.open>0?r.done/r.open:0;carry[m.id]=r.open-r.done;r.over=n(v.done)>r.open;
+        }else{
+          r.amount=n(v.amount);r.k=r.amount<=n(s.debtRule.tolerance)?1:0;r.note=r.k?'нет просрочки сверх допуска':'есть просрочка — часть не платится';
+        }
+        r.paid=m.type==='tasks'?r.done*r.price:base*r.k;raw+=r.paid;parts[m.id]=r;
+      });
+      const docsK=s.docs.on&&!q.docsOk?n(s.docs.coef):1;
+      const premium=raw*docsK;
+      let upsell=0,upsellCount=0,upsellFlag=false;
+      if(s.upsell.on){const sum=Math.max(0,n(q.upsellSum));upsellCount=sum>0?Math.max(1,Math.round(n(q.upsellCount))):0;const per=upsellCount?upsellBonus(sum/upsellCount,s.upsell):{bonus:0,flag:false};upsell=per.bonus*upsellCount;upsellFlag=per.flag;}
+      return {parts,raw,docsK,premium,upsell,upsellCount,upsellFlag,salary3:salary*3,total:salary*3+premium+upsell};
+    });
+    const sum=k=>quarters.reduce((a,q)=>a+q[k],0);
+    const year={premium:sum('premium'),upsell:sum('upsell')};
+    year.total=salary*12+year.premium+year.upsell;year.monthly=year.total/12;
+    return {salary,fund,wSum,quarters,year,planMonthly:salary+fund/3};
+  }
+
+  function asideHtml(){
+    return '<aside class="settings"><h2>Параметры</h2>'
+      +'<div class="setting-group"><p class="setting-title">1. Оклад '+H('salary')+'</p><label class="form-label">Оклад, ₽ / месяц'+numIn('salary.base',1000,'Оклад, ₽ / месяц')+'</label><label class="indexation-toggle"><input type="checkbox" data-s="salary.indexOn"><span>Добавить индексацию</span></label><label class="form-label">Индексация, %'+numIn('salary.indexRate',0.5,'Индексация, %',' max="100"')+'</label><p class="micro" data-o="index-status"></p></div>'
+      +'<div class="setting-group"><p class="setting-title">2. Премиальный фонд '+H('bonus')+'</p><label class="form-label">Как задаём премию<select class="form-select" data-s="bonus.mode"><option value="target">От целевого дохода в месяц</option><option value="percent">% от трёх окладов</option></select></label><label class="form-label" data-when="bonus.mode:target">Целевой доход при 100%, ₽ / месяц'+numIn('bonus.target',5000,'Целевой доход')+'</label><label class="form-label" data-when="bonus.mode:percent">Премия за квартал, % от 3 окладов'+numIn('bonus.rate',1,'Премия, % от трёх окладов',' max="300"')+'</label><p class="micro" data-o="bonus-derived"></p></div>'
+      +'<div class="setting-group"><p class="setting-title">3. Показатели и веса '+H('weights')+'</p><div data-o="ind-list"></div><div class="custom-add-row"><select class="form-select" data-o="add-type" aria-label="Тип нового показателя">'+Object.entries(TYPES).map(([k,v])=>'<option value="'+k+'">'+v+'</option>').join('')+'</select><button type="button" class="action" data-act="add-ind">Добавить</button></div><p class="micro" data-o="weights-sum"></p></div>'
+      +'<div class="setting-group"><p class="setting-title">4. Правила расчёта '+H('rules')+'</p><div class="compact-pair"><label class="form-label">Порог, %'+numIn('rules.threshold',5,'Порог, %',' max="100"')+'</label><label class="form-label">Потолок, %'+numIn('rules.cap',5,'Потолок, %',' min="100"')+'</label></div><div class="compact-pair" data-o="debt-rules"><label class="form-label">Просрочка ДЗ, мес.'+numIn('debtRule.months',1,'Просрочка ДЗ от, мес.')+'</label><label class="form-label">Допуск ДЗ, ₽'+numIn('debtRule.tolerance',10000,'Допуск ДЗ, ₽')+'</label></div></div>'
+      +'<div class="setting-group"><p class="setting-title">5. Понижающий коэффициент '+H('docs')+'</p><label class="indexation-toggle"><input type="checkbox" data-s="docs.on" data-rerender="1"><span>'+esc(cfg.docsLabel)+'</span></label><label class="form-label" data-when-true="docs.on">Коэффициент, если не выполнено'+numIn('docs.coef',0.05,'Коэффициент',' max="1"')+'</label></div>'
+      +'<div class="setting-group"><p class="setting-title">6. Личные допродажи '+H('upsell')+'</p><label class="indexation-toggle"><input type="checkbox" data-s="upsell.on" data-rerender="1"><span>Начислять бонус за допродажи</span></label><div data-when-true="upsell.on">'
+        +'<label class="form-label">Способ<select class="form-select" data-s="upsell.mode"><option value="scale">Регрессивная шкала</option><option value="percent">Один % от суммы</option><option value="fixed">Фикс за сделку</option></select></label>'
+        +'<label class="form-label" data-when="upsell.mode:fixed">Фикс за допродажу, ₽'+numIn('upsell.fixed',5000,'Фикс за допродажу, ₽')+'</label>'
+        +'<label class="form-label" data-when="upsell.mode:percent">Процент от суммы, %'+numIn('upsell.rate',0.5,'Процент от суммы, %',' max="100"')+'</label>'
+        +'<div data-when="upsell.mode:scale"><label class="form-label">Как применять шкалу<select class="form-select" data-s="upsell.scaleType"><option value="marginal">По частям суммы</option><option value="whole">Одна ставка на весь чек</option></select></label><div data-o="tiers"></div><button type="button" class="action" data-act="add-tier">+ Ступень</button>'
+        +'<label class="form-label" style="margin-top:16px">Выше последней границы<select class="form-select" data-s="upsell.aboveMode"><option value="agree">По согласованию</option><option value="rate">Своя ставка</option></select></label><label class="form-label" data-when="upsell.aboveMode:rate">Ставка выше границы, %'+numIn('upsell.aboveRate',0.1,'Ставка выше границы, %',' max="100"')+'</label></div>'
+        +'<p class="micro" data-o="upsell-explainer"></p><p class="micro" style="margin-top:8px">Суммы и количество допродаж вводятся в таблице кварталов.</p></div></div>'
+      +'</aside>';
+  }
+  function mainHtml(){
+    const card=(label,key)=>'<div><div class="summary-label">'+label+'</div><div class="summary-value" data-o="'+key+'">—</div><div class="summary-caption" data-o="'+key+'-caption"></div></div>';
+    return '<div class="variants-main"><div class="result-surface"><div class="result-header"><p class="result-kicker">'+esc(cfg.kicker)+'</p><div class="summary-grid">'+card('Оклад / месяц','hero-salary')+card('Премиальный фонд / квартал','hero-fund')+card('Средний доход / месяц','hero-monthly')+'</div><p class="micro fund-formula" data-o="fund-formula"></p></div>'
+      +'<div class="result-body"><div class="section-heading"><h2>Расчёт по кварталам</h2>'+H('table')+'</div><p class="micro" style="margin-bottom:16px">'+esc(cfg.tableIntro)+'</p><div class="warn role-warnings" data-o="warnings" role="alert"></div><div class="table-responsive"><table class="table q-table" data-o="qtable"></table></div></div></div>'
+      +'<p class="assumption">'+esc(cfg.assumption)+'</p>'
+      +'<section class="annual-totals result-surface"><div class="annual-heading"><div class="label-line"><h2>Итог за год</h2>'+H('annual')+'</div></div><div class="annual-compact" data-o="annual" aria-live="polite"></div></section></div>';
+  }
+
+  function renderIndList(){
+    out('ind-list').innerHTML=state.indicators.map((m,i)=>'<div class="ind-row"><textarea class="form-control ind-title" rows="2" maxlength="120" data-s="indicators.'+i+'.title" data-retable="1" aria-label="Название показателя"></textarea><div class="ind-row-meta"><span class="ind-type">'+TYPES[m.type]+'</span>'+(m.type==='ratio'?'<select class="form-select ind-unit" data-s="indicators.'+i+'.unit" data-rerender="1" aria-label="Единица"><option value="₽">₽</option><option value="шт.">шт.</option><option value="%">%</option></select>':'')+'</div><div class="ind-row-bottom"><label class="form-label">Вес, %'+numIn('indicators.'+i+'.weight',5,'Вес, %',' max="100"')+'</label><button type="button" class="icon-btn" data-act="rm-ind" data-i="'+i+'" aria-label="Удалить показатель">×</button></div></div>').join('')||'<p class="micro">Показателей нет — добавьте хотя бы один.</p>';
+  }
+  function renderTiers(){
+    out('tiers').innerHTML=state.upsell.tiers.map((t,i)=>'<div class="tier-row"><label class="form-label">Чек до, ₽'+numIn('upsell.tiers.'+i+'.upTo',1000000,'Граница ступени, ₽')+'</label><label class="form-label">Ставка, %'+numIn('upsell.tiers.'+i+'.rate',0.5,'Ставка ступени, %',' max="100"')+'</label><button type="button" class="icon-btn" data-act="rm-tier" data-i="'+i+'" aria-label="Удалить ступень">×</button></div>').join('')||'<p class="micro">Ступеней нет — добавьте хотя бы одну.</p>';
+  }
+  function renderTable(){
+    const hint=h=>h?'<span class="note">'+h+'</span>':'';
+    const inRow=(path,label,inc,h)=>'<tr><th scope="row">'+label+hint(h)+'</th>'+[0,1,2,3].map(i=>'<td>'+numIn('quarters.'+i+'.'+path,inc,label+', '+QN[i])+'</td>').join('')+'</tr>';
+    const outRow=(key,label,cls,h)=>'<tr class="'+(cls||'')+'"><th scope="row">'+label+hint(h)+'</th>'+[0,1,2,3].map(i=>'<td class="out" data-o="o-'+key+'-'+i+'">—</td>').join('')+'</tr>';
+    const group=t=>'<tr class="row-group"><th colspan="5">'+t+'</th></tr>';
+    let h='<thead><tr><th>Показатель</th>'+QN.map(q=>'<th class="text-end">'+q+'</th>').join('')+'</tr></thead><tbody>';
+    state.indicators.forEach(m=>{
+      const id=m.id,title=esc(m.title||'Без названия')+' · <span data-o="gw-'+id+'">'+num(m.weight)+'%</span>';
+      h+=group(title);
+      if(m.type==='ratio'){const u=m.unit||'₽';h+=inRow('v.'+id+'.plan','План, '+u,unitInc(u))+inRow('v.'+id+'.fact','Факт, '+u,unitInc(u))+outRow(id+'-k','Выполнение')+outRow(id+'-paid','Премия');}
+      else if(m.type==='tasks'){h+=inRow('v.'+id+'.new','Новые в плане, шт.',1)+outRow(id+'-carried','Перенесено из прошлого квартала')+inRow('v.'+id+'.removed','Снято с плана, шт.',1)+outRow(id+'-open','Всего задач в квартале')+inRow('v.'+id+'.done','Выполнено, шт.',1)+outRow(id+'-price','Цена одной задачи')+outRow(id+'-paid','Премия');}
+      else{h+=inRow('v.'+id+'.amount','Просроченная ДЗ на конец квартала, ₽',10000,'просрочка от <span data-o="debt-months-'+id+'"></span> мес.')+outRow(id+'-k','Условие')+outRow(id+'-paid','Премия');}
+    });
+    if(state.docs.on)h+=group('Понижающий коэффициент')+'<tr><th scope="row">'+esc(cfg.docsLabel)+'</th>'+[0,1,2,3].map(i=>'<td><select class="form-select q-select" data-s="quarters.'+i+'.docsOk" data-bool aria-label="'+esc(cfg.docsLabel)+', '+QN[i]+'"><option value="1">Да</option><option value="0">Нет</option></select></td>').join('')+'</tr>'+outRow('docs-k','Коэффициент к премии');
+    if(state.upsell.on)h+=group('Личные допродажи · разовая выплата')+inRow('upsellSum','Сумма допродаж, ₽',100000)+inRow('upsellCount','Сделок, шт.',1,'для шкалы: сумма делится на сделки')+outRow('upsell','Бонус за допродажи');
+    h+=group('Итог квартала')+(state.docs.on?outRow('raw','Премия до коэффициента'):'')+outRow('premium','Квартальная премия','strong')+(state.upsell.on?outRow('upsell2','Допродажи'):'')+outRow('salary3','Оклад за 3 месяца')+outRow('total','Доход за квартал','strong')+'</tbody>';
+    out('qtable').innerHTML=h;
+  }
+  function enhance(){
+    root.querySelectorAll('input[type="number"]').forEach(input=>{
+      if(!input.closest('.number-control')){
+        const w=document.createElement('span');w.className='number-control';input.before(w);w.append(input);
+        const b=document.createElement('span');b.className='number-step-buttons';
+        [1,-1].forEach(d=>{const x=document.createElement('button');x.type='button';x.className='number-step';x.dataset.stepDirection=d;x.tabIndex=-1;x.textContent=d>0?'▴':'▾';x.setAttribute('aria-label',(d>0?'Увеличить':'Уменьшить')+' на '+(input.dataset.increment||1));b.append(x);});
+        w.append(b);
+      }
+      input.closest('.number-control').querySelectorAll('.number-step').forEach(x=>x.disabled=input.disabled);
+    });
+  }
+  function stepNumber(input,d){
+    if(input.disabled)return;
+    const inc=Number(input.dataset.increment)||1,cur=input.value===''?0:Number(input.value);
+    let v=Number(((Number.isFinite(cur)?cur:0)+d*inc).toFixed(8));
+    if(input.min!=='')v=Math.max(Number(input.min),v);if(input.max!=='')v=Math.min(Number(input.max),v);
+    input.value=String(v);input.dispatchEvent(new Event('input',{bubbles:true}));input.focus({preventScroll:true});
+  }
+  function sync(){
+    root.querySelectorAll('[data-s]').forEach(el=>{
+      const v=getP(state,el.dataset.s);
+      if(el.type==='checkbox')el.checked=Boolean(v);
+      else if(el.hasAttribute('data-bool'))el.value=v===false?'0':'1';
+      else el.value=typeof v==='number'&&!Number.isFinite(v)?'':(v??'');
+    });
+  }
+  function renderStructure(){renderIndList();renderTiers();renderTable();enhance();sync();}
+  function save(){doc.data.roles[cfg.key]=state;doc.persist();}
+
+  function update(){
+    const s=state,u=s.upsell,r=calc(s),y=r.year;
+    root.querySelectorAll('[data-when]').forEach(el=>{const [p,v]=el.dataset.when.split(':');el.hidden=String(getP(s,p))!==v;});
+    root.querySelectorAll('[data-when-true]').forEach(el=>{el.hidden=!getP(s,el.dataset.whenTrue);});
+    out('debt-rules').hidden=!s.indicators.some(m=>m.type==='debt');
+    $('[data-s="salary.indexRate"]').disabled=!s.salary.indexOn;enhance();
+    out('index-status').textContent=s.salary.indexOn?money(s.salary.base)+' × '+(1+n(s.salary.indexRate)/100).toFixed(3)+' = '+money(r.salary):'Индексация выключена: расчёт от оклада';
+    out('bonus-derived').textContent=s.bonus.mode==='target'?'Премия в месяц '+money(r.fund/3)+', за квартал '+money(r.fund)+' — это '+num(r.salary>0?r.fund/(r.salary*3)*100:NaN)+'% от трёх окладов.':'Фонд за квартал '+money(r.fund)+', в месяц '+money(r.fund/3)+'. Доход при 100% — '+money(r.planMonthly)+' в месяц.';
+    const wBad=Math.abs(r.wSum-100)>0.01,ws=out('weights-sum');
+    ws.className=wBad?'warn':'micro';ws.textContent='Сумма весов: '+num(r.wSum)+'%'+(wBad?' — должна быть 100%.':'.');
+    out('hero-salary').textContent=money(r.salary);out('hero-salary-caption').textContent=s.salary.indexOn?'С индексацией '+num(s.salary.indexRate)+'%':'Без индексации';
+    out('hero-fund').textContent=money(r.fund);out('hero-fund-caption').textContent='При 100% · в месяц '+money(r.fund/3);
+    out('hero-monthly').textContent=money(y.monthly);out('hero-monthly-caption').textContent='По вводным · при 100% — '+money(r.planMonthly);
+    out('fund-formula').textContent=(s.bonus.mode==='target'?'Фонд = (целевой доход '+money(s.bonus.target)+' − оклад '+money(r.salary)+') × 3 = '+money(r.fund)+'.':'Фонд = оклад '+money(r.salary)+' × 3 × '+num(s.bonus.rate)+'% = '+money(r.fund)+'.')+' Из него: '+s.indicators.map(m=>(m.title||'без названия')+' '+money(r.fund*n(m.weight)/100)+' ('+num(m.weight)+'%)').join(', ')+'.';
+    const warns=[];
+    if(wBad)warns.push('Сумма весов '+num(r.wSum)+'%, а должна быть 100%.');
+    if(s.bonus.mode==='target'&&n(s.bonus.target)<=r.salary)warns.push('Целевой доход не больше оклада — премиальный фонд равен 0.');
+    r.quarters.forEach((q,i)=>s.indicators.forEach(m=>{const p=q.parts[m.id];if(p.over)warns.push(QN[i]+', «'+m.title+'»: выполнено больше, чем задач в квартале — учтено '+p.open+'.');}));
+    out('warnings').innerHTML=warns.map(esc).join('<br>');
+    const note=t=>t?'<span class="note">'+esc(t)+'</span>':'';
+    r.quarters.forEach((q,i)=>{
+      const set=(k,h)=>{const el=out('o-'+k+'-'+i);if(el)el.innerHTML=h;};
+      s.indicators.forEach(m=>{
+        const p=q.parts[m.id],id=m.id;
+        if(m.type==='ratio'){set(id+'-k',(p.ratio===null?'—':pct(p.ratio))+note(p.note||(p.ratio!==null?'коэффициент '+pct(p.k):'')));set(id+'-paid',money(p.paid)+note('фонд '+money(p.base)));}
+        else if(m.type==='tasks'){set(id+'-carried',num(p.carried));set(id+'-open',num(p.open));set(id+'-price',money(p.price));set(id+'-paid',money(p.paid)+note(p.done+' из '+p.open));}
+        else{set(id+'-k',(p.k?'Да':'Нет')+note(p.note));set(id+'-paid',money(p.paid)+note('фонд '+money(p.base)));}
+      });
+      set('docs-k','× '+num(q.docsK));set('raw',money(q.raw));set('premium',money(q.premium));
+      set('upsell',money(q.upsell)+(q.upsellFlag?note('выше границы — по согласованию'):q.upsellCount>1?note(q.upsellCount+' сделки'):''));set('upsell2',money(q.upsell));
+      set('salary3',money(q.salary3));set('total',money(q.total));
+    });
+    s.indicators.forEach(m=>{const g=out('gw-'+m.id);if(g)g.textContent=num(m.weight)+'%';const d=out('debt-months-'+m.id);if(d)d.textContent=num(s.debtRule.months);});
+    out('upsell-explainer').textContent=s.upsell.on?'Сейчас: '+upsellText(u)+'.':'';
+    out('annual').innerHTML='<div class="annual-figure"><span>Годовой доход</span><strong>'+money(y.total)+'</strong></div><div class="annual-figure"><span>Среднемесячный доход</span><strong>'+money(y.monthly)+'</strong></div>';
+    const live=document.querySelector('[data-live="'+cfg.key+'"]');
+    if(live)live.textContent='Настройки: оклад '+money(r.salary)+'/мес.'+(s.salary.indexOn?' (с индексацией '+num(s.salary.indexRate)+'%)':'')+'; премиальный фонд '+money(r.fund)+' за квартал ('+money(r.fund/3)+' в месяц); показатели: '+s.indicators.map(m=>(m.title||'без названия')+' — '+num(m.weight)+'%').join(', ')+'; порог '+num(s.rules.threshold)+'%, потолок '+num(s.rules.cap)+'%'+(s.indicators.some(m=>m.type==='debt')?'; ДЗ — просрочка от '+num(s.debtRule.months)+' мес., допуск '+money(s.debtRule.tolerance):'')+(s.docs.on?'; понижающий коэффициент '+num(s.docs.coef):'')+(s.upsell.on?'; допродажи — '+upsellText(u):'; без бонуса за допродажи')+'.';
+  }
+
+  // Keeps the total at 100%: the edited weight stays, the last indicator (or the first, if the last was edited) absorbs the rest.
+  function balanceWeights(path){
+    const m=/^indicators\.(\d+)\.weight$/.exec(path),list=state.indicators;
+    if(!m||list.length<2)return;
+    const i=Number(m[1]),j=i===list.length-1?0:list.length-1;
+    const others=list.reduce((a,x,k)=>k===j?a:a+n(x.weight),0);
+    list[j].weight=Math.max(0,Math.round((100-others)*100)/100);
+    const el=root.querySelector('[data-s="indicators.'+j+'.weight"]');if(el)el.value=list[j].weight;
+  }
+  function onField(el){
+    if(!el.dataset||!el.dataset.s)return;
+    let v;
+    if(el.type==='checkbox')v=el.checked;
+    else if(el.type==='number')v=el.value===''?NaN:Number(el.value);
+    else if(el.hasAttribute('data-bool'))v=el.value==='1';
+    else v=el.value;
+    setP(state,el.dataset.s,v);
+    balanceWeights(el.dataset.s);
+    if(el.dataset.rerender)renderStructure();
+    update();save();
+  }
+  root.addEventListener('input',e=>{if(e.target.type!=='checkbox'&&e.target.tagName!=='SELECT')onField(e.target);});
+  root.addEventListener('change',e=>{
+    if(e.target.type==='checkbox'||e.target.tagName==='SELECT')onField(e.target);
+    else if(e.target.dataset.retable){renderTable();enhance();sync();update();}
+  });
+  root.addEventListener('keydown',e=>{if(e.target.matches('input[type="number"]')&&['ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();stepNumber(e.target,e.key==='ArrowUp'?1:-1);}});
+  root.addEventListener('click',e=>{
+    const t=e.target.closest('button');if(!t||!root.contains(t))return;
+    if(t.dataset.stepDirection){e.preventDefault();stepNumber(t.closest('.number-control').querySelector('input'),Number(t.dataset.stepDirection));return;}
+    const act=t.dataset.act;if(!act)return;
+    if(act==='add-ind'){
+      const type=out('add-type').value,id='ind'+Date.now();
+      state.indicators.push({id,type,title:{ratio:'Новый показатель',tasks:'Топ-задачи',debt:'Просроченная ДЗ'}[type],unit:'₽',weight:0});normalize();
+    }else if(act==='rm-ind'){
+      state.indicators.splice(Number(t.dataset.i),1);
+      if(state.indicators.length){const last=state.indicators[state.indicators.length-1];last.weight=Math.max(0,100-state.indicators.slice(0,-1).reduce((a,x)=>a+n(x.weight),0));}
+    }else if(act==='add-tier'){const tiers=state.upsell.tiers,last=tiers.length?n(tiers[tiers.length-1].upTo):0,rate=tiers.length?n(tiers[tiers.length-1].rate):3;tiers.push({upTo:last?last*2:5000000,rate:Math.max(0,Math.round((rate-0.5)*10)/10)});}
+    else if(act==='rm-tier'){state.upsell.tiers.splice(Number(t.dataset.i),1);}
+    else return;
+    renderStructure();update();save();
+  });
+
+  const popup=document.getElementById('info-popover');let pinnedBtn=null,hideTimer;
+  function showHelp(btn,pin){clearTimeout(hideTimer);const item=cfg.help[btn.dataset.rhelp];if(!item)return;popup.innerHTML='<strong>'+item[0]+'</strong><div>'+item[1]+'</div>';popup.hidden=false;pinnedBtn=pin?btn:null;const r=btn.getBoundingClientRect(),w=popup.offsetWidth,h=popup.offsetHeight;popup.style.left=Math.max(12,Math.min(r.left,window.innerWidth-w-12))+'px';popup.style.top=Math.max(12,r.bottom+h+12>window.innerHeight?r.top-h-8:r.bottom+8)+'px';}
+  root.addEventListener('mouseover',e=>{const b=e.target.closest('[data-rhelp]');if(b&&!pinnedBtn)showHelp(b,false);});
+  root.addEventListener('mouseout',e=>{const b=e.target.closest('[data-rhelp]');if(b&&!pinnedBtn)hideTimer=setTimeout(()=>{popup.hidden=true;},180);});
+  root.addEventListener('click',e=>{const b=e.target.closest('[data-rhelp]');if(!b)return;e.preventDefault();if(pinnedBtn===b){popup.hidden=true;pinnedBtn=null;}else showHelp(b,true);});
+  document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-rhelp]')&&!popup.contains(e.target))pinnedBtn=null;});
+
+  root.innerHTML='<div class="calculator-grid">'+asideHtml()+mainHtml()+'</div>';
+  renderStructure();update();
+};
+
+</script>
+<script>
+(function(){
+  const scale={on:true,mode:'scale',fixed:50000,rate:2.5,scaleType:'marginal',tiers:[{upTo:5000000,rate:3},{upTo:20000000,rate:2},{upTo:50000000,rate:1}],aboveMode:'agree',aboveRate:0.5};
+  const help={
+    salary:['Оклад','Ежемесячный оклад. Индексация по желанию: оклад × (1 + % / 100).'],
+    bonus:['Премиальный фонд','Фонд — премия за квартал при 100% по всем показателям. «% от трёх окладов»: фонд = оклад × 3 × ставка / 100. «От целевого дохода»: фонд = (целевой доход − оклад) × 3.'],
+    weights:['Показатели и веса','Название и вес каждого показателя можно менять. Меняете вес одного — последний показатель подстраивается, чтобы сумма была 100% (если правите последний — подстраивается первый). Новый показатель добавляется кнопкой «Добавить»: план / факт в %, топ-задачи с переносом или просроченная ДЗ.'],
+    rules:['Правила расчёта','Порог и потолок действуют на показатели «план / факт»: ниже порога часть не платится, выше — пропорционально выполнению, но не больше потолка. Пример при пороге 80% и потолке 120%: 70% → 0; 90% → 90% части; 150% → 120% части. ДЗ: если просроченная ДЗ на конец квартала не больше допуска — часть платится полностью, иначе — 0.'],
+    docs:['Понижающий коэффициент','Если условие на конец квартала не выполнено, вся рассчитанная премия квартала умножается на коэффициент. Допродажи не снижаются. Отметка ставится в таблице по каждому кварталу.'],
+    upsell:['Личные допродажи','Разовый бонус за допродажи в своих регионах, вне квартальной премии. Шкала — как у РП: чем больше чек, тем ниже ставка. Сумма и количество сделок вводятся в таблице кварталов.'],
+    table:['Расчёт по кварталам','Каждый квартал считается отдельно, не накопительным итогом. Белые поля — ввод, остальное считается само. Топ-задачи: незаключённые переходят в следующий квартал и дешевеют.'],
+    annual:['Итог за год','Годовой доход = оклад × 12 + премии четырёх кварталов + бонусы за допродажи. Среднемесячный = годовой / 12.']
+  };
+  createRoleCalc({
+    key:'teamlead',rootId:'tl-calc',help,
+    kicker:'Квартальная премия тимлида РП · 2027',
+    docsLabel:'Паспорта и дорожные карты актуальны',
+    tableIntro:'Показатели команды — общий результат всех РП и личного портфеля тимлида. Введите план и факт по каждому кварталу; личные допродажи — внизу.',
+    assumption:'Суммы — на руки (уточнено на встрече 03.11). Цифры по умолчанию — пример для проверки механики, а не согласованные планы. Изменения сохраняются в этом браузере.',
+    defaults:{
+      version:1,
+      salary:{base:150000,indexOn:false,indexRate:10},
+      bonus:{mode:'percent',target:200000,rate:30},
+      rules:{threshold:80,cap:120},
+      debtRule:{months:2,tolerance:0},
+      docs:{on:true,coef:0.8},
+      upsell:scale,
+      indicators:[
+        {id:'rev',type:'ratio',title:'Актированная выручка команды',unit:'₽',weight:50},
+        {id:'cnt',type:'ratio',title:'Подписанные контракты команды',unit:'шт.',weight:30},
+        {id:'debt',type:'debt',title:'Просроченная ДЗ команды',unit:'₽',weight:20}
+      ],
+      quarters:[
+        {docsOk:true,upsellSum:0,upsellCount:0,v:{rev:{plan:30000000,fact:27000000},cnt:{plan:10,fact:9},debt:{amount:0}}},
+        {docsOk:true,upsellSum:0,upsellCount:0,v:{rev:{plan:40000000,fact:38000000},cnt:{plan:12,fact:12},debt:{amount:0}}},
+        {docsOk:false,upsellSum:5000000,upsellCount:1,v:{rev:{plan:50000000,fact:52000000},cnt:{plan:15,fact:14},debt:{amount:1500000}}},
+        {docsOk:true,upsellSum:0,upsellCount:0,v:{rev:{plan:60000000,fact:55000000},cnt:{plan:13,fact:12},debt:{amount:0}}}
+      ]
+    }
+  });
+  createRoleCalc({
+    key:'sales',rootId:'sales-calc',help,
+    kicker:'Квартальная премия менеджера по продажам · 2027 · черновик',
+    docsLabel:'Сделки в CRM ведутся по регламенту',
+    tableIntro:'Черновик для обсуждения: показатели продажника на встрече 03.11 не согласовывали. Введите план и факт по кварталам; показатели и веса меняются слева.',
+    assumption:'Суммы — на руки. Показатели, веса и цифры — стартовый вариант для обсуждения, не согласованы. Изменения сохраняются в этом браузере.',
+    defaults:{
+      version:1,
+      salary:{base:100000,indexOn:false,indexRate:10},
+      bonus:{mode:'percent',target:140000,rate:30},
+      rules:{threshold:50,cap:120},
+      debtRule:{months:2,tolerance:0},
+      docs:{on:false,coef:0.8},
+      upsell:{...scale,on:false},
+      indicators:[
+        {id:'contracted',type:'ratio',title:'Законтрактованная выручка по новым клиентам',unit:'₽',weight:50},
+        {id:'deals',type:'tasks',title:'Новые контракты (топ-задачи)',unit:'шт.',weight:50}
+      ],
+      quarters:[
+        {docsOk:true,upsellSum:0,upsellCount:0,v:{contracted:{plan:10000000,fact:8000000},deals:{new:2,removed:0,done:1}}},
+        {docsOk:true,upsellSum:0,upsellCount:0,v:{contracted:{plan:10000000,fact:12000000},deals:{new:2,removed:0,done:3}}},
+        {docsOk:true,upsellSum:0,upsellCount:0,v:{contracted:{plan:10000000,fact:10000000},deals:{new:3,removed:0,done:3}}},
+        {docsOk:true,upsellSum:0,upsellCount:0,v:{contracted:{plan:10000000,fact:9000000},deals:{new:3,removed:0,done:2}}}
+      ]
+    }
+  });
+})();
+
+</script>
+<script>
+(function(){
+  const doc=window.rpDocument,roles=['rp','teamlead','sales'];
+  function role(name){roles.forEach(k=>{const on=k===name;document.getElementById(k+'-workspace').hidden=!on;document.getElementById('role-'+k).setAttribute('aria-selected',String(on));});doc.data.activeRole=name;}
+  roles.forEach(k=>document.getElementById('role-'+k).addEventListener('click',()=>{role(k);doc.persist();}));
+  role(roles.includes(doc.data.activeRole)?doc.data.activeRole:'rp');
 })();
 </script>
-
 </body></html>
