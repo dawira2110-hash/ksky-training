@@ -47,6 +47,8 @@
 .ind-row{border:1px solid var(--line);border-radius:9px;padding:10px;margin-bottom:10px}.ind-row>.form-control{font-family:inherit;margin:0;font-size:13px;font-weight:550;line-height:1.35;resize:none;min-height:0;padding:8px 10px}.ind-row-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0 4px}.ind-type{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.ind-unit{width:auto;min-width:70px;min-height:30px;padding:4px 8px;margin:0;font-size:12px}.ind-row-bottom{display:grid;grid-template-columns:minmax(0,1fr) 34px;gap:8px;align-items:end}.ind-row-bottom .form-label{margin:0;font-size:11px}.q-select{min-height:34px;padding:6px 8px;margin:0;font-size:13px}.role-warnings:empty{display:none}.role-warnings{margin:0 0 14px}.custom-add-row .form-select{margin:0;min-width:0;font-size:12px}
 .annual-upsell-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:end}.annual-upsell-grid .form-label{margin:0}.annual-upsell-results{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);align-items:start}
 @media(max-width:700px){.annual-upsell-grid{grid-template-columns:1fr 1fr}}
+.num-mask{position:absolute;inset:0;display:flex;align-items:center;pointer-events:none;white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}.number-control input.masked{color:transparent!important;-webkit-text-fill-color:transparent}
+@media print{.num-mask{display:none}.number-control input.masked{color:inherit!important;-webkit-text-fill-color:currentColor}}
 .q-table{min-width:760px}.q-table th[scope=row]{font-weight:400;color:var(--ink);width:26%;padding-top:14px}.q-table td{padding:7px 6px!important}.q-table .number-control{margin:0}.q-table .form-control{min-height:34px;padding:7px 30px 7px 8px;font-size:13px;margin:0;text-align:right}.q-table .row-group th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);padding-top:22px!important;padding-bottom:8px!important;font-weight:600;border-bottom:1px solid var(--line)}.q-table .out{font-variant-numeric:tabular-nums;text-align:right;padding-top:14px!important;padding-right:10px!important}.q-table tr.strong th,.q-table tr.strong td{font-weight:600}.q-table tr.strong td{color:var(--accent)}.note{display:block;font-size:10px;line-height:1.5;color:var(--muted);font-weight:400}
 .tier-row{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr) 34px;gap:8px;align-items:end;margin-bottom:10px}.tier-row .form-label{margin:0;font-size:11px}.tier-row .form-control{font-size:12px;padding:8px 28px 8px 8px}.icon-btn{border:1px solid #d7dee5;background:#fff;border-radius:7px;width:34px;height:41px;color:var(--muted);font-size:16px;line-height:1}.icon-btn:hover{color:var(--red);border-color:var(--red)}
 .deal-row{display:grid;grid-template-columns:150px minmax(0,1fr) minmax(0,1fr) 34px;gap:14px;align-items:end;padding:12px 0;border-bottom:1px solid #edf0f3}.deal-row .form-label{margin:0}.deal-bonus{font-variant-numeric:tabular-nums;font-size:16px;font-weight:550;padding:8px 0 4px}
@@ -768,6 +770,37 @@ window.createRoleCalc=function(cfg){
   function role(name){roles.forEach(k=>{const on=k===name;document.getElementById(k+'-workspace').hidden=!on;document.getElementById('role-'+k).setAttribute('aria-selected',String(on));});doc.data.activeRole=name;}
   roles.forEach(k=>document.getElementById('role-'+k).addEventListener('click',()=>{role(k);doc.persist();}));
   role(roles.includes(doc.data.activeRole)?doc.data.activeRole:'rp');
+})();
+</script>
+<script>
+// Shows numbers in inputs with digit grouping (3 000 000) while the field is not being edited; the stored value stays a plain number.
+(function(){
+  const fmt=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2});
+  function refresh(input){
+    const mask=input._mask;if(!mask)return;
+    const raw=input.value,editing=document.activeElement===input;
+    mask.textContent=raw===''||editing?'':fmt.format(Number(raw));
+    mask.style.color=input.disabled?'#86919d':'var(--ink)';
+    input.classList.toggle('masked',!editing&&raw!=='');
+  }
+  function attach(input){
+    if(input._mask||!input.parentElement||!input.parentElement.classList.contains('number-control'))return;
+    const old=input.parentElement.querySelector(':scope > .num-mask');if(old)old.remove();
+    const cs=getComputedStyle(input),mask=document.createElement('span');
+    mask.className='num-mask';mask.setAttribute('aria-hidden','true');
+    const bw=parseFloat(cs.borderLeftWidth)||0;
+    mask.style.paddingLeft=(parseFloat(cs.paddingLeft)+bw)+'px';mask.style.paddingRight=(parseFloat(cs.paddingRight)+bw)+'px';
+    mask.style.fontSize=cs.fontSize;mask.style.fontWeight=cs.fontWeight;mask.style.fontFamily=cs.fontFamily;
+    mask.style.justifyContent=cs.textAlign==='right'||cs.textAlign==='end'?'flex-end':'flex-start';
+    input.after(mask);input._mask=mask;refresh(input);
+  }
+  const desc=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');
+  Object.defineProperty(HTMLInputElement.prototype,'value',{configurable:true,enumerable:desc.enumerable,get(){return desc.get.call(this);},set(v){desc.set.call(this,v);if(this._mask)refresh(this);}});
+  const scan=root=>root.querySelectorAll&&root.querySelectorAll('.number-control > input[type="number"]').forEach(attach);
+  scan(document);
+  new MutationObserver(list=>list.forEach(m=>m.addedNodes.forEach(nd=>{if(nd.nodeType!==1)return;if(nd.matches&&nd.matches('.number-control > input[type="number"]'))attach(nd);scan(nd);if(nd.classList&&nd.classList.contains('number-control'))nd.querySelectorAll('input[type="number"]').forEach(attach);}))).observe(document.body,{childList:true,subtree:true});
+  ['input','change','focusin','focusout'].forEach(t=>document.addEventListener(t,e=>{if(e.target._mask)setTimeout(()=>refresh(e.target));},true));
+  document.addEventListener('change',()=>setTimeout(()=>document.querySelectorAll('.number-control > input[type="number"]').forEach(i=>i._mask&&refresh(i))),true);
 })();
 </script>
 </body></html>
