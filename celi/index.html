@@ -215,7 +215,9 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   var embedded = JSON.parse(document.getElementById('tree-data').textContent);
   var saved = embedded, state = clone(embedded);
   var base = null, editing = false, busy = false, dirty = false;
+  /* Ключ правки: из ссылки ?key=…; один раз открытый — запоминается в этом браузере */
   var key = new URLSearchParams(location.search).get('key') || '';
+  try{ if(key) localStorage.setItem('ksky-celi-key', key); else key = localStorage.getItem('ksky-celi-key') || ''; }catch(e){}
   var canEdit = !!(key && SCRIPT_URL);
   var root = document.getElementById('root');
   var note = '';
@@ -393,7 +395,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
         busy=false;
         if(res.ok){ apply(res.data); editing=false; dirty=false; note='Сохранено. Правки видят все, кто откроет ссылку.'; render(); return; }
         if(res.error==='conflict'){ apply(res.data); editing=false; dirty=false; note='Пока вы правили, кто-то сохранил свою версию. Показана она — внесите правку ещё раз.'; render(); return; }
-        if(res.error==='bad_key'){ canEdit=false; editing=false; note='Эта ссылка только для просмотра. Правки не сохранены.'; render(); return; }
+        if(res.error==='bad_key'){ try{localStorage.removeItem('ksky-celi-key');}catch(e){} canEdit=false; editing=false; note='Эта ссылка только для просмотра. Правки не сохранены.'; render(); return; }
         msg('Не сохранилось. Попробуйте ещё раз через минуту.');
       })
       .catch(function(){ busy=false; msg('Нет связи с таблицей. Правки на странице, попробуйте сохранить ещё раз.'); });
