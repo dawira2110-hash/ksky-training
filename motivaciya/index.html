@@ -55,9 +55,23 @@
 .warn{color:var(--orange);font-size:12px;line-height:1.6;margin:0}#rp-warnings:empty{display:none}#rp-warnings{margin:0 0 14px}
 @media(max-width:600px){.deal-row{grid-template-columns:1fr 1fr}.deal-row .icon-btn{justify-self:end}}
 @media print{.icon-btn,#add-tier,#add-deal,.custom-indicator-add{display:none!important}.q-table{min-width:0}.q-table .form-control{border:0;padding:0;min-height:0;background:transparent}}
+
+.role-tabs{flex-wrap:wrap;max-width:100%}
+.grades-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.grades-level{border:1px solid var(--line);border-radius:9px;padding:16px}
+.grades-level h4{font-size:15px;line-height:1.45;margin:0}
+.grades-level p,.grades-level dl{margin:10px 0 0}
+.grades-level dl{font-size:13px;line-height:1.6}
+.grades-level dt{font-weight:600;margin-top:10px}
+.grades-level dd{margin:2px 0 0;color:var(--muted)}
+.grades-table th[scope=row]{width:24%;font-weight:600;}
+.grades-document ol{padding-left:22px}
+.grades-document li+li{margin-top:8px}
+@media(max-width:740px){.grades-levels{grid-template-columns:1fr}.role-tab{padding-inline:12px}}
+@media print{.grades-levels{display:block}.grades-level{break-inside:avoid;margin-bottom:8px}}
 </style></head><body>
 <header class="topbar"><div class="brand">К–СКАЙ <span>Рабочие материалы</span></div><div class="actions"><button class="action" id="edit-notes" aria-pressed="false">Править текст</button><button class="action" id="print-doc">Печать / PDF</button><button class="action primary" id="download-doc">Скачать с правками</button></div></header>
-<main class="page"><div class="hero compact-hero"><h1>Квартальная мотивация · 2027</h1><nav class="role-tabs" aria-label="Роль"><button class="role-tab" id="role-rp" role="tab" aria-controls="rp-workspace" aria-selected="true">РП</button><button class="role-tab" id="role-teamlead" role="tab" aria-controls="teamlead-workspace" aria-selected="false">Тимлид РП</button><button class="role-tab" id="role-sales" role="tab" aria-controls="sales-workspace" aria-selected="false">Продажи</button></nav></div>
+<main class="page"><div class="hero compact-hero"><h1>Квартальная мотивация · 2027</h1><nav class="role-tabs" aria-label="Роль"><button class="role-tab" id="role-rp" role="tab" aria-controls="rp-workspace" aria-selected="true">РП</button><button class="role-tab" id="role-teamlead" role="tab" aria-controls="teamlead-workspace" aria-selected="false">Тимлид РП</button><button class="role-tab" id="role-grades" role="tab" aria-controls="grades-workspace" aria-selected="false">Система грейдов РП</button><button class="role-tab" id="role-sales" role="tab" aria-controls="sales-workspace" aria-selected="false">Продажи</button></nav></div>
 <div id="rp-workspace" class="role-workspace" role="tabpanel" aria-labelledby="role-rp"><nav class="tabs" aria-label="Разделы"><button class="tab" id="tab-calculator" data-panel="calculator-panel" role="tab" aria-controls="calculator-panel" aria-selected="true">Калькулятор</button><button class="tab" id="tab-proposal" data-panel="proposal-panel" role="tab" aria-controls="proposal-panel" aria-selected="false">Предложения и правила</button></nav>
 <section class="tab-panel" id="calculator-panel" role="tabpanel" aria-labelledby="tab-calculator"><div id="rp-motivation-2027"><div class="calculator-grid">
 <aside class="settings"><h2>Параметры</h2>
@@ -117,6 +131,83 @@
 <div class="document-section"><h3 data-edit="tl-s3-title-v2">03. Допродажи отдела — годовой показатель</h3><p data-edit="tl-s3-text-v2">Вместо личных допродаж тимлид получает годовой бонус за выполнение плана по допродажам отдела (только B2G-регионы). Он считается по итогам года, вне квартальной премии. Бонус = факт допродаж отдела за год × ставка, которая зависит от среднего чека: до 5 млн ₽ — 0,3%; от 5 до 20 млн ₽ — 0,2%; от 20 до 50 млн ₽ — 0,1%.</p></div>
 <div class="document-section"><h3 data-edit="tl-s5-title-v2">04. Что осталось согласовать</h3><p data-edit="tl-s5-text-v2">Срок просрочки ДЗ: 1 или 2 месяца (при весе 20% склонились к двум); нужен ли допуск по сумме ДЗ; оклад и размер премии тимлида; условие годового бонуса при невыполнении плана по допродажам отдела и ставка для среднего чека свыше 50 млн ₽; итоговые суммы с Романом. После доработки — получасовая встреча, на которой тимлида и продажника прокручивают вместе и утверждают.</p><p class="source-links">Источник: Plaud, «Совещание: модели вознаграждения и калькуляторы премий», 03.11.2026: 13:54–14:13 — калькуляторы тимлида и продаж; 18:03–18:20 — разбивка по кварталам; 20:52–23:34 — дебиторская задолженность; 23:56–26:40 — убрать показатели 4 и 5; 28:40–30:06 — веса 50 / 30 / 20. Годовой показатель по допродажам отдела, отмена понижающего коэффициента и учёт только B2G — уточнения от 09.11.2026.</p></div>
 </article></section></div>
+<section id="grades-workspace" class="role-workspace" role="tabpanel" aria-labelledby="role-grades" hidden>
+  <div class="edit-hint">Нажмите на текст, чтобы изменить формулировку. Изменения сохраняются в этом браузере.</div>
+  <article class="document grades-document">
+    <header class="document-section">
+      <h2 data-edit="rp-grades-title">Система грейдов руководителей проектов К‑Скай</h2>
+      <p data-edit="rp-grades-intro">Грейды общие для двух направлений: регионального B2G и уникальных проектов — нестандартного B2G, грантов и B2B. Направление показывает, <strong>с какими проектами человек работает</strong>, а грейд — <strong>какую ответственность он может взять и насколько самостоятельно справляется</strong>.</p>
+      <p data-edit="rp-grades-lead">Тимлид — отдельная роль с ответственностью за работу команды.</p>
+      <p data-edit="rp-grades-expert">РП III может развиваться как ведущий эксперт без подчинённых.</p>
+    </header>
+    <section class="document-section">
+      <h3 data-edit="rp-grades-criteria-title">Грейды и критерии</h3>
+      <div class="grades-levels">
+        <section class="grades-level">
+          <h4 data-edit="rp-grades-level1">РП I. Ведёт проект по согласованному плану</h4>
+          <p data-edit="rp-grades-level1-criteria">Ведёт типовой проект или отдельный этап. Координирует текущие задачи, следит за сроками, заранее сообщает о рисках. Согласовывает изменения, которые влияют на сроки, объём работ или обязательства перед заказчиком. Доводит свою часть работ до приёмки.</p>
+          <dl>
+            <dt>Региональный B2G</dt><dd data-edit="rp-grades-level1-b2g">Ведёт типовое внедрение и готовит документы к приёмке.</dd>
+            <dt>Уникальные проекты</dt><dd data-edit="rp-grades-level1-unique">Ведёт отдельный этап гранта или B2B-проекта с понятным результатом.</dd>
+          </dl>
+        </section>
+        <section class="grades-level">
+          <h4 data-edit="rp-grades-level2">РП II. Самостоятельно ведёт проект или портфель</h4>
+          <p data-edit="rp-grades-level2-criteria">Отвечает за весь цикл в своей зоне — от планирования до приёмки. Согласовывает ожидания с заказчиком, координирует внутренние команды, управляет рисками и изменениями. При отклонениях предлагает решение и доводит проект до согласованного результата.</p>
+          <dl>
+            <dt>Региональный B2G</dt><dd data-edit="rp-grades-level2-b2g">Ведёт несколько регионов с пересекающимися сроками и перестраивает план при возникновении зависимостей.</dd>
+            <dt>Уникальные проекты</dt><dd data-edit="rp-grades-level2-unique">Ведёт нестандартный B2G-, грантовый или B2B-проект от уточнения требований до приёмки или отчётности.</dd>
+          </dl>
+        </section>
+        <section class="grades-level">
+          <h4 data-edit="rp-grades-level3">РП III. Ведёт сложные проекты и развивает практику команды</h4>
+          <p data-edit="rp-grades-level3-criteria">Берёт ответственность за проекты с высокой неопределённостью, сложными зависимостями или серьёзными последствиями ошибок. Выстраивает подход к работе, согласует интересы нескольких сторон и доводит проект до результата. Помогает другим РП решать сложные задачи и передаёт команде подходы, которые коллеги применяют в работе.</p>
+          <dl>
+            <dt>Региональный B2G</dt><dd data-edit="rp-grades-level3-b2g">Координирует запуск в нескольких регионах с общими ресурсами или выстраивает процесс приёмки, который используют другие РП.</dd>
+            <dt>Уникальные проекты</dt><dd data-edit="rp-grades-level3-unique">Ведёт проект с конфликтующими требованиями, несколькими центрами принятия решений или нестандартными условиями финансирования и приёмки.</dd>
+          </dl>
+        </section>
+      </div>
+    </section>
+    <section class="document-section">
+      <h3 data-edit="rp-grades-transition-title">Условия перехода</h3>
+      <table class="table grades-table">
+        <thead><tr><th scope="col">Уровень грейда</th><th scope="col">Критерии перехода</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">РП I → РП II</th><td data-edit="rp-grades-transition1"><strong>Не менее трёх подтверждённых успешных кейсов следующего уровня как минимум в двух кварталах.</strong> В каждом РП самостоятельно провёл проект или существенный этап от планирования до принятого результата, координировал участников и управлял рисками или отклонениями.</td></tr>
+          <tr><th scope="row">РП II → РП III</th><td data-edit="rp-grades-transition2"><strong>Не менее трёх подтверждённых успешных кейсов следующего уровня как минимум в двух кварталах.</strong> Как минимум два из них — проекты или существенные этапы высокой сложности. Дополнительно нужен подтверждённый вклад в работу команды: коллеги применили предложенный РП подход или с его помощью довели сложную задачу до результата.</td></tr>
+        </tbody>
+      </table>
+      <p data-edit="rp-grades-case"><strong>Успешный кейс</strong> — проект или существенный этап, по которому достигнут и принят согласованный результат. Подтверждением может быть акт, протокол приёмки, подтверждение запуска или принятый грантодателем отчёт. В описании кейса фиксируем, за что отвечал РП, какие решения принял и что получилось. Для длинного проекта можно зачесть существенный этап с собственным результатом и отдельной приёмкой. Если сроки или объём менялись, учитываем, как РП выявил риск, согласовал изменения и довёл работу до приёмки.</p>
+    </section>
+    <section class="document-section">
+      <h3 data-edit="rp-grades-income-title">Уровень дохода по грейду</h3>
+      <p data-edit="rp-grades-income">Грейд определяет уровень оклада. При переходе на следующий грейд оклад повышается. Квартальная премия рассчитывается по KPI за период.</p>
+      <table class="table grades-table">
+        <thead><tr><th scope="col">Уровень грейда</th><th scope="col">Оклад в месяц</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">РП I</th><td data-edit="rp-grades-salary1">от 90 000 ₽</td></tr>
+          <tr><th scope="row">РП II</th><td data-edit="rp-grades-salary2">определяется отдельно</td></tr>
+          <tr><th scope="row">РП III</th><td data-edit="rp-grades-salary3">120 000 ₽</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="document-section">
+      <h3 data-edit="rp-grades-review-title">Пересмотр грейдов</h3>
+      <p data-edit="rp-grades-quarterly"><strong>На квартальном ревью</strong> РП и руководитель фиксируют принятые результаты, отмечают кейсы следующего уровня и договариваются, какую задачу или зону ответственности РП возьмёт в следующем квартале.</p>
+      <p data-edit="rp-grades-annual"><strong>На ревью IV квартала</strong> руководитель проектной функции и HR сверяют оценки по команде и принимают решение о грейде на основе подтверждённых кейсов. Пересмотр проводится <strong>раз в год</strong>, между повышениями — <strong>не менее 12 месяцев</strong>. Каждый РП получает решение с обоснованием и конкретные ожидания к следующему пересмотру.</p>
+    </section>
+    <section class="document-section">
+      <h3 data-edit="rp-grades-launch-title">Внедрение системы грейдов</h3>
+      <ol>
+        <li data-edit="rp-grades-launch1"><strong>Проверить критерии на реальных проектах К‑Скай.</strong> Взять примеры из обоих направлений и определить, какой уровень ответственности и сложности соответствует каждому грейду.</li>
+        <li data-edit="rp-grades-launch2"><strong>Провести первичную оценку команды.</strong> Руководитель проектной функции и HR сверяют оценки по подтверждённым результатам за последние 12 месяцев и определяют стартовый грейд каждого РП.</li>
+        <li data-edit="rp-grades-launch3"><strong>Рассчитать бюджет и согласовать даты перехода.</strong> Сопоставить стартовые грейды с текущими окладами и оценить влияние изменений на фонд оплаты труда.</li>
+        <li data-edit="rp-grades-launch4"><strong>Обсудить результаты с каждым РП.</strong> На ближайшем квартальном ревью объяснить решение и определить, какие задачи помогут подтвердить следующий уровень.</li>
+      </ol>
+    </section>
+  </article>
+</section>
 <div id="sales-workspace" class="role-workspace" role="tabpanel" aria-labelledby="role-sales" hidden><nav class="tabs" aria-label="Разделы"><button class="tab" role="tab" data-panel="sales-calc-panel" aria-selected="true">Калькулятор</button><button class="tab" role="tab" data-panel="sales-proposal-panel" aria-selected="false">Предложения и правила</button></nav>
 <section class="tab-panel" id="sales-calc-panel" role="tabpanel"><div id="sales-calc"></div></section>
 <section class="tab-panel" id="sales-proposal-panel" role="tabpanel" hidden><div class="edit-hint">Нажмите на текст, чтобы изменить формулировку. Изменения сохраняются в этом браузере.</div><article class="document">
@@ -392,12 +483,16 @@
   let editing=false;
   function showPanel(btn){btn.closest('nav.tabs').querySelectorAll('.tab[data-panel]').forEach(b=>{const on=b===btn;b.setAttribute('aria-selected',String(on));document.getElementById(b.dataset.panel).hidden=!on;});}
   document.querySelectorAll('.tab[data-panel]').forEach(b=>b.addEventListener('click',()=>showPanel(b)));
-  function showProposal(){const ws=[...document.querySelectorAll('.role-workspace')].find(w=>!w.hidden);if(!ws)return null;const tabs=ws.querySelectorAll(':scope > nav.tabs .tab[data-panel]');showPanel(tabs[tabs.length-1]);return document.getElementById(tabs[tabs.length-1].dataset.panel);}
+  function showProposal(){const ws=[...document.querySelectorAll('.role-workspace')].find(w=>!w.hidden);if(!ws)return null;const tabs=ws.querySelectorAll(':scope > nav.tabs .tab[data-panel]');if(!tabs.length)return ws;showPanel(tabs[tabs.length-1]);return document.getElementById(tabs[tabs.length-1].dataset.panel);}
   editButton.addEventListener('click',()=>{editing=!editing;document.body.classList.toggle('editing',editing);editButton.setAttribute('aria-pressed',String(editing));editButton.textContent=editing?'Готово':'Править текст';editable.forEach(el=>{if(editing)el.setAttribute('contenteditable','plaintext-only');else el.removeAttribute('contenteditable');});if(editing){const panel=showProposal();const first=panel&&panel.querySelector('[data-edit]');if(first)first.focus();}});
   document.addEventListener('input',e=>{const el=e.target.closest('[data-edit]');if(el){doc.data.notes[el.dataset.edit]=el.textContent;doc.persist();}});
   document.getElementById('print-doc').addEventListener('click',()=>window.print());
   document.getElementById('download-doc').addEventListener('click',()=>{
-    editable.forEach(el=>doc.data.notes[el.dataset.edit]=el.textContent);
+    editable.forEach(el=>{
+      if(!el.closest('#grades-workspace')||Object.prototype.hasOwnProperty.call(doc.data.notes,el.dataset.edit)){
+        doc.data.notes[el.dataset.edit]=el.textContent;
+      }
+    });
     const snapshot={...doc.data,documentId:crypto.randomUUID?crypto.randomUUID():'rp-'+Date.now(),savedAt:Date.now()};
     const clone=document.documentElement.cloneNode(true);
     clone.querySelector('#rp-file-state').textContent=JSON.stringify(snapshot).replace(/</g,'\\u003c');
@@ -766,7 +861,7 @@ window.createRoleCalc=function(cfg){
 </script>
 <script>
 (function(){
-  const doc=window.rpDocument,roles=['rp','teamlead','sales'];
+  const doc=window.rpDocument,roles=['rp','teamlead','grades','sales'];
   function role(name){roles.forEach(k=>{const on=k===name;document.getElementById(k+'-workspace').hidden=!on;document.getElementById('role-'+k).setAttribute('aria-selected',String(on));});doc.data.activeRole=name;}
   roles.forEach(k=>document.getElementById('role-'+k).addEventListener('click',()=>{role(k);doc.persist();}));
   role(roles.includes(doc.data.activeRole)?doc.data.activeRole:'rp');
