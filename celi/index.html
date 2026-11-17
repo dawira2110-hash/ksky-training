@@ -78,6 +78,14 @@ li.has-k:hover .tt{text-decoration:underline;text-decoration-color:var(--muted);
 .caret{border:0;background:none;padding:0 3px;color:var(--muted);font-size:10px;line-height:1;cursor:pointer;transition:transform .15s}
 li.open > .caret{transform:rotate(90deg);color:var(--fg)}
 @media (prefers-reduced-motion: reduce){.caret{transition:none}}
+.filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.filters .lvl{margin-right:2px}
+.chip{font-size:10.5px;font-weight:600;padding:3px 9px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.chip .c{color:var(--muted);margin-left:5px;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip[aria-pressed="true"] .c{color:var(--bg);opacity:.7}
+.chip.reset{border-style:dashed;color:var(--muted)}
+.empty{color:var(--muted);font-size:11px;padding:6px 2px}
 ul.kpi{grid-column:2 / -1;gap:3px;margin:2px 0 4px;padding-left:8px;border-left:2px solid var(--line)}
 ul.kpi li{grid-template-columns:14px minmax(0,1fr) auto;font-size:10.5px;cursor:default}
 .ky{font-size:9.5px;font-weight:800;color:var(--muted)}
@@ -212,6 +220,29 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   var root = document.getElementById('root');
   var note = '';
   var openSet = {};
+  var NAMES = {'КД':'Коммерция','РП':'Реализация и РП','Вн':'Внедрение','Разр':'Разработка','ИИ':'ИИ','Прод':'Продукт','Инфра':'Инфраструктура','ИБ':'ИБ','МедЭ':'Медэкспертиза','Юр':'Юристы','Фин':'Финансы','HR':'HR','СМК':'СМК','Марк':'Маркетинг'};
+  var params = new URLSearchParams(location.search);
+  var filter = {};
+  (params.get('f')||'').split(',').filter(String).forEach(function(f){filter[f]=true;});
+  function filterOn(){return Object.keys(filter).length>0;}
+  function visible(it){return editing || !filterOn() || !!filter[it.fn];}
+  function fnList(){
+    var cnt={}, order=Object.keys(NAMES);
+    eachItem(function(it){ if(!it.kind) cnt[it.fn]=(cnt[it.fn]||0)+1; });
+    var list=order.filter(function(f){return cnt[f];});
+    Object.keys(cnt).forEach(function(f){ if(list.indexOf(f)<0) list.push(f); });
+    return list.map(function(f){return {fn:f,n:cnt[f]};});
+  }
+  function syncUrl(){
+    var p=new URLSearchParams(location.search), f=Object.keys(filter).join(',');
+    if(f) p.set('f',f); else p['delete']('f');
+    var q=p.toString().replace(/%2C/g,',');
+    try{ history.replaceState(null,'',location.pathname+(q?'?'+q:'')); }catch(e){}
+  }
+  function openFiltered(){
+    openSet={};
+    if(filterOn()) eachItem(function(it,p){ if(!it.kind && filter[it.fn] && it.kpi && it.kpi.length) openSet[p]=true; });
+  }
 
   function clone(o){return JSON.parse(JSON.stringify(o));}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
@@ -228,6 +259,11 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   function allOpen(){var a=kpiPaths();return a.length>0&&a.every(function(p){return openSet[p];});}
   function counts(){
     var v=0,g=0,k=0;
+    if(filterOn() && !editing){
+      state.goals.forEach(function(goal){goal.vectors.forEach(function(vec){var hit=false;vec.items.forEach(function(it){if(!it.kind&&filter[it.fn]){g++;hit=true;k+=(it.kpi||[]).length;}});if(hit)v++;});});
+      function pl(n,a,b,c){var m=n%10,mm=n%100;return n+' '+(m===1&&mm!==11?a:(m>=2&&m<=4&&(mm<12||mm>14)?b:c));}
+      return 'выбрано: '+pl(g,'цель','цели','целей')+' · '+pl(v,'вектор','вектора','векторов')+' · '+k+' KPI';
+    }
     state.goals.forEach(function(goal){goal.vectors.forEach(function(vec){v++;vec.items.forEach(function(it){if(!it.kind)g++;k+=(it.kpi||[]).length;});});});
     return state.goals.length+' цели · '+v+' векторов · '+g+' целей функций · '+k+' KPI';
   }
@@ -261,18 +297,28 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     if(canEdit && !editing) h += '<button id="b-edit">Редактировать</button>';
     if(editing) h += '<button class="primary" id="b-save">Сохранить для всех</button><button id="b-cancel">Отменить</button><span class="status">Нажмите на текст, чтобы изменить. «+ цель» и «+ KPI» добавляют строку, × удаляет. Тип KPI: Р или О.</span>';
     h += '<span class="status" id="msg">'+esc(note)+'</span></div>';
+    if(!editing){
+      h += '<div class="filters" role="group" aria-label="Фильтр по функциям"><span class="lvl">Функция</span>';
+      fnList().forEach(function(x){ h += '<button class="chip" data-act="fn" data-fn="'+esc(x.fn)+'" aria-pressed="'+(filter[x.fn]?'true':'false')+'" title="'+esc(NAMES[x.fn]||x.fn)+'">'+esc(NAMES[x.fn]||x.fn)+'<span class="c">'+x.n+'</span></button>'; });
+      if(filterOn()) h += '<button class="chip reset" data-act="fn-reset">Все функции</button>';
+      h += '</div>';
+    }
     h += '<div class="l0"><span class="lvl">L0 · видение</span><b>'+ed('l0.title',state.l0.title)+'</b>'+ed('l0.sub',state.l0.sub,'span','meta')+'</div>';
     h += '<div class="grid">';
     state.goals.forEach(function(goal,gi){
       var gp='goals.'+gi;
       h += '<section class="goal"><div class="goal-h"><span class="n">L1 · цель '+(gi+1)+'</span>'+ed(gp+'.title',goal.title,'h2')+ed(gp+'.metric',goal.metric,'p')+'</div><div class="goal-b">';
+      var shown=0;
       goal.vectors.forEach(function(vec,vi){
         var vp=gp+'.vectors.'+vi, main='', contrib='';
-        vec.items.forEach(function(it,ii){ var s=item(it,vp+'.items.'+ii); if(it.kind==='contrib') contrib+=s; else main+=s; });
+        vec.items.forEach(function(it,ii){ if(!visible(it)) return; var s=item(it,vp+'.items.'+ii); if(it.kind==='contrib') contrib+=s; else main+=s; });
+        if(!editing && filterOn() && !main && !contrib) return;
+        shown++;
         h += '<div class="vec"><h3><span class="code">'+esc(vec.code)+'</span>'+ed(vp+'.title',vec.title)+'</h3><ul>'+main+'</ul>';
         if(contrib) h += '<div class="sub">вклады функций</div><ul>'+contrib+'</ul>';
         h += '<button class="add" data-act="add" data-path="'+vp+'">+ цель</button></div>';
       });
+      if(!shown) h += '<div class="empty">У выбранных функций нет целей в этом блоке</div>';
       h += '</div></section>';
     });
     h += '</div>';
@@ -308,6 +354,8 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     if(b.id==='b-cancel'){ state=clone(saved); editing=false; dirty=false; note=''; render(); return; }
     if(b.id==='b-save'){ save(); return; }
     var act=b.dataset.act, path=b.dataset.path;
+    if(act==='fn'){ var f=b.dataset.fn; if(filter[f]) delete filter[f]; else filter[f]=true; openFiltered(); syncUrl(); render(); return; }
+    if(act==='fn-reset'){ filter={}; openSet={}; syncUrl(); render(); return; }
     if(act==='toggle'){ openSet[path]=!openSet[path]; render(); return; }
     if(act==='del'){ var ks=path.split('.'), idx=+ks.pop(); getPath(ks.join('.')).splice(idx,1); dirty=true; render(); return; }
     if(act==='add'){ getPath(path).items.push({fn:'Функция',t:'Новая цель',kpi:[]}); dirty=true; render(); return; }
@@ -328,7 +376,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     if(data && !data.empty && data.tree && data.tree.goals){
       var kc=0; data.tree.goals.forEach(function(g){g.vectors.forEach(function(v){v.items.forEach(function(it){kc+=(it.kpi||[]).length;});});});
       if(!data.kpiColumn || kc===0) mergeKpi(data.tree);
-      saved = data.tree; state = clone(saved); base = data.stamp;
+      saved = data.tree; state = clone(saved); base = data.stamp; openFiltered();
     }
   }
   function load(){
@@ -351,6 +399,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
       .catch(function(){ busy=false; msg('Нет связи с таблицей. Правки на странице, попробуйте сохранить ещё раз.'); });
   }
 
+  openFiltered();
   render();
   load();
 })();
