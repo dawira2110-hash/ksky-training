@@ -73,11 +73,18 @@ li.lead .t{color:var(--muted)}
 
 footer{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);font-size:10.5px;border-top:1px solid var(--line);padding-top:10px}
 footer span{display:inline-flex;gap:5px;align-items:baseline}
+li.has-k{cursor:pointer}
+li.has-k:hover .tt{text-decoration:underline;text-decoration-color:var(--muted);text-underline-offset:3px}
+.caret{border:0;background:none;padding:0 3px;color:var(--muted);font-size:10px;line-height:1;cursor:pointer;transition:transform .15s}
+li.open > .caret{transform:rotate(90deg);color:var(--fg)}
+@media (prefers-reduced-motion: reduce){.caret{transition:none}}
+ul.kpi{grid-column:2 / -1;gap:3px;margin:2px 0 4px;padding-left:8px;border-left:2px solid var(--line)}
+ul.kpi li{grid-template-columns:14px minmax(0,1fr) auto;font-size:10.5px;cursor:default}
+.ky{font-size:9.5px;font-weight:800;color:var(--muted)}
+.draft{border:1px solid var(--muted);color:var(--muted);font-size:9px;font-weight:700;padding:0 3px;margin-left:3px;white-space:nowrap}
 </style>
 </head>
-
 <body>
-
 <div class="wrap" id="root"></div>
 <script type="application/json" id="tree-data">
 {"updated":"17.11.2026",
@@ -85,64 +92,126 @@ footer span{display:inline-flex;gap:5px;align-items:baseline}
 "goals":[
 {"title":"Выручка","metric":"сумма контрактов + актированная выручка","vectors":[
  {"code":"1.1","title":"Новые регионы и клиенты","items":[
-  {"fn":"КД","t":"Расширить географию и клиентскую базу"},
-  {"fn":"Марк","t":"Поток квалифицированных лидов"}]},
+  {"fn":"КД","t":"Расширить географию и клиентскую базу","kpi":[
+   {"y":"Р","n":"Сумма заключённых контрактов по направлениям (новые регионы, ТП, допродажи, B2G прочее, B2B), ₽"},
+   {"y":"Р","n":"Кол-во законтрактованных регионов (новые / действующие), шт."}]},
+  {"fn":"Марк","t":"Поток квалифицированных лидов","kpi":[
+   {"y":"Р","n":"Квалифицированные лиды из B2B-сегментов, принятые продажами в работу, шт."},
+   {"y":"О","n":"Продукты с готовыми материалами для продаж, шт."}]}]},
  {"code":"1.2","title":"Действующая база","items":[
-  {"fn":"РП","t":"Сохранить клиентскую базу (продление ТП)"},
-  {"fn":"РП","t":"Допродажи действующим регионам"},
-  {"fn":"Разр","t":"Функционал под контракты и допродажи"}]},
+  {"fn":"РП","t":"Сохранить клиентскую базу (продление ТП)","kpi":[
+   {"y":"Р","n":"Кол-во продлённых контрактов ТП, шт. (план по регионам со сроком продления)"},
+   {"y":"Р","n":"Удержанная выручка, ₽"}]},
+  {"fn":"РП","t":"Допродажи действующим регионам","kpi":[
+   {"y":"Р","n":"Сумма допродаж регионам ТП, ₽"},
+   {"y":"Р","n":"Доля допродаж в выручке региона, %"}]},
+  {"fn":"Разр","t":"Функционал под контракты и допродажи","kpi":[
+   {"y":"Р","n":"Приоритетные релизы, выпущенные в срок без критических дефектов, шт./кв."},
+   {"y":"О","n":"Скорость выпуска нового функционала"}]}]},
  {"code":"1.3","title":"Новые направления и продукты","items":[
-  {"fn":"КД","t":"Позиции в B2B фарме и проме"},
-  {"fn":"Прод","t":"Новые продукты приносят выручку: выпуск → использование → выручка"},
-  {"fn":"ИИ","t":"ИИ-компетенции для фармы и продуктов"},
-  {"fn":"МедЭ","t":"Медэкспертиза для фармы (RWD/RWE)"},
+  {"fn":"КД","t":"Позиции в B2B фарме и проме","kpi":[
+   {"y":"Р","n":"Сумма и кол-во контрактов B2B фарма и B2B пром, ₽ / шт."},
+   {"y":"Р","n":"Доля направлений в выручке, %"}]},
+  {"fn":"Прод","t":"Новые продукты приносят выручку: выпуск → использование → выручка","kpi":[
+   {"y":"О","n":"Выпущено продуктов по плану, шт./кв."},
+   {"y":"О","n":"Клиенты, которые взяли продукт и работают с ним, шт."},
+   {"y":"Р","n":"Выручка от новых продуктов, % плана"}]},
+  {"fn":"ИИ","t":"ИИ-компетенции для фармы и продуктов","kpi":[
+   {"y":"Р","n":"Этапы ИИ в коммерческих проектах, принятые в срок, шт./кв."}]},
+  {"fn":"МедЭ","t":"Медэкспертиза для фармы (RWD/RWE)","kpi":[
+   {"y":"Р","n":"Готовность медэкспертизы к дате первого фармпроекта (да / нет)"},
+   {"y":"Р","n":"Кол-во и сумма фармконтрактов с использованием экспертизы"}]},
   {"fn":"ИИ","t":"опережающая: публикации и цитирования","kind":"lead"}]}]},
 {"title":"Объёмы","metric":"проекты в договорный срок, регионы без срывов","vectors":[
  {"code":"2.1","title":"Исполнимые контракты на входе","items":[
-  {"fn":"КД","t":"Передача сделок, исполнимых без потерь","shared":true},
-  {"fn":"РП","t":"Контракты с выполнимыми условиями (ТЗ до закупки)"},
-  {"fn":"Инфра","t":"Инфраструктура не ограничивает продажи"}]},
+  {"fn":"КД","t":"Передача сделок, исполнимых без потерь","shared":true,"kpi":[
+   {"y":"Р","n":"⇄ Доля сделок, принятых РП без возврата, %"},
+   {"y":"О","n":"Сделки, переданные РП с полным комплектом требований, шт./мес."}]},
+  {"fn":"РП","t":"Контракты с выполнимыми условиями (ТЗ до закупки)","kpi":[
+   {"y":"О","n":"Приоритетные ТЗ, проверенные с технической функцией до закупки, шт./мес."},
+   {"y":"Р","n":"Доля контрактов, исполненных без пересмотра условий и убытков, %"}]},
+  {"fn":"Инфра","t":"Инфраструктура не ограничивает продажи","kpi":[
+   {"y":"Р","n":"Пилоты с готовой инфраструктурой к согласованной дате, шт./мес."},
+   {"y":"Р","n":"Сделки, задержанные из-за инфраструктуры, шт."}]}]},
  {"code":"2.2","title":"Запуск в срок","items":[
-  {"fn":"Вн","t":"Быстрый старт проектов"},
-  {"fn":"РП","t":"Исполнение без срывов","shared":true},
-  {"fn":"РП","t":"Актирование этапов в срок","new":true}]},
+  {"fn":"Вн","t":"Быстрый старт проектов","kpi":[
+   {"y":"Р","n":"Проекты, принятые заказчиком в договорный срок, шт./мес."},
+   {"y":"О","n":"Средний срок запуска проекта"}]},
+  {"fn":"РП","t":"Исполнение без срывов","shared":true,"kpi":[
+   {"y":"Р","n":"⇄ Доля сделок, принятых РП без возврата, %"},
+   {"y":"Р","n":"Регионы, где риск перерос в проблему (срыв сроков, претензия, штраф), шт."},
+   {"y":"О","n":"Регионы в жёлтой / красной зоне с ответственным, действием и сроком, шт./мес."}]},
+  {"fn":"РП","t":"Актирование этапов в срок","new":true,"kpi":[
+   {"y":"Р","n":"Доля этапов, актированных в договорный срок, %"},
+   {"y":"Р","n":"Актированная выручка к плану, %"}]}]},
  {"code":"2.3","title":"Ресурсы под план","items":[
-  {"fn":"HR","t":"Люди под план роста (критические роли)"}]}]},
+  {"fn":"HR","t":"Люди под план роста (критические роли)","kpi":[
+   {"y":"Р","n":"Критические вакансии, закрытые к дате потребности, шт./мес."},
+   {"y":"Р","n":"Укомплектованность по плану, %"},
+   {"y":"О","n":"Текучесть в ключевых командах, %"}]}]}]},
 {"title":"Стабильность","metric":"доступность у клиентов, критические обращения в SLA","vectors":[
  {"code":"3.1","title":"Надёжность и скорость","items":[
-  {"fn":"Разр","t":"Качество и скорость платформы"},
-  {"fn":"Разр","t":"Непрерывность работы промплощадки"},
-  {"fn":"ИИ","t":"Достоверные и быстрые ИИ-оценки"},
-  {"fn":"Вн","t":"Быстрая платформа у клиентов (время отклика)"}]},
+  {"fn":"Разр","t":"Качество и скорость платформы","kpi":[
+   {"y":"Р","n":"Время формирования и открытия оценки, ч / сек (еженедельно)"},
+   {"y":"Р","n":"Критические дефекты у клиентов, шт."}]},
+  {"fn":"Разр","t":"Непрерывность работы промплощадки","kpi":[
+   {"y":"Р","n":"Время недоступности промплощадки, ч/мес."},
+   {"y":"Р","n":"Доступность промплатформы, %"}]},
+  {"fn":"ИИ","t":"Достоверные и быстрые ИИ-оценки","kpi":[
+   {"y":"Р","n":"Оценки с превышением целевого времени формирования, шт./нед."},
+   {"y":"Р","n":"Доля корректных оценок по контрольной выборке, %"}]},
+  {"fn":"Вн","t":"Быстрая платформа у клиентов (время отклика)","kpi":[
+   {"y":"Р","n":"Время отклика ключевых операций у клиента (формула не задана)"}]}]},
  {"code":"3.2","title":"Поддержка и передача данных","items":[
-  {"fn":"Вн","t":"Стабильная эксплуатация в любой схеме"},
-  {"fn":"Вн","t":"Качество поддержки (SLA, повторные)"}]},
+  {"fn":"Вн","t":"Стабильная эксплуатация в любой схеме","kpi":[
+   {"y":"Р","n":"Время простоя передачи данных, ч/мес."},
+   {"y":"Р","n":"Инциденты по передаче данных, шт."}]},
+  {"fn":"Вн","t":"Качество поддержки (SLA, повторные)","kpi":[
+   {"y":"Р","n":"Критические обращения, закрытые в срок по ServiceDesk, шт./мес."},
+   {"y":"О","n":"Доля повторных обращений по одной причине, %"}]}]},
  {"code":"3.3","title":"Допуск к рынку","items":[
-  {"fn":"СМК","t":"Соответствие обязательным требованиям"},
-  {"fn":"Юр","t":"Юридическая безопасность сделок","new":true},
-  {"fn":"ИБ","t":"Информационная безопасность компании","new":true}]}]},
+  {"fn":"СМК","t":"Соответствие обязательным требованиям","kpi":[
+   {"y":"Р","n":"Обязательные процедуры и аудиты, завершённые в срок, шт./кв."},
+   {"y":"Р","n":"Несоответствия по аудитам, шт."}]},
+  {"fn":"Юр","t":"Юридическая безопасность сделок","new":true,"draft":true,"kpi":[
+   {"y":"Р","n":"Претензии и штрафы по контрактам, шт. / ₽"},
+   {"y":"О","n":"Доля контрактов с юридической проверкой до подписания, %"}]},
+  {"fn":"ИБ","t":"Информационная безопасность компании","new":true,"draft":true,"kpi":[
+   {"y":"Р","n":"Инциденты ИБ, в том числе затронувшие клиентов, шт."},
+   {"y":"О","n":"Приоритетные сделки с оценкой требований ИБ до КП, шт./мес."}]}]}]},
 {"title":"Финансовая устойчивость","metric":"отклонение поступлений от прогноза, кассовый разрыв, ДЗ","vectors":[
  {"code":"4.1","title":"Предсказуемый денежный поток","items":[
-  {"fn":"Фин","t":"Предсказуемый ДДС"},
+  {"fn":"Фин","t":"Предсказуемый ДДС","kpi":[
+   {"y":"Р","n":"Отклонение фактических поступлений от прогноза, % (по месяцам)"},
+   {"y":"Р","n":"Кассовый разрыв, ₽"},
+   {"y":"Р","n":"Дебиторская задолженность, ₽"}]},
   {"fn":"КД","t":"условия оплаты по стандарту","kind":"contrib"},
   {"fn":"РП","t":"дебиторская задолженность по региону","kind":"contrib"}]},
  {"code":"4.2","title":"Эффективность ресурсов","items":[
-  {"fn":"Фин","t":"Распределение ресурсов под план"},
-  {"fn":"HR","t":"Эффективность команд"},
-  {"fn":"HR","t":"Автоматизация процессов"}]}]}
+  {"fn":"Фин","t":"Распределение ресурсов под план","kpi":[
+   {"y":"Р","n":"Исполнение бюджета, %"},
+   {"y":"О","n":"Ресурсные запросы с расчётом стоимости и эффекта, шт./кв."}]},
+  {"fn":"HR","t":"Эффективность команд","kpi":[
+   {"y":"Р","n":"Выручка или кол-во проектов на одного сотрудника"},
+   {"y":"О","n":"Ключевые функции с утверждённым расчётом объёма работ и численности, шт./кв."}]},
+  {"fn":"HR","t":"Автоматизация процессов","kpi":[
+   {"y":"Р","n":"Трудоёмкость или время цикла ключевых процессов"},
+   {"y":"О","n":"Кол-во автоматизированных функций (формула не задана)"}]}]}]}
 ]}
 </script>
+
 <script>
 /* Адрес веб-приложения Apps Script (таблица «К-Скай_Дерево целей 2027 (данные сайта)»). Ключ правки на сайте не хранится: он приходит в ссылке ?key=… */
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSXxX7R77L61_bGbkHOGfIOulFYp1fwnU3mZl--NL-mzyhy5/exec';
 (function(){
   var embedded = JSON.parse(document.getElementById('tree-data').textContent);
   var saved = embedded, state = clone(embedded);
-  var base = null, source = 'embedded', editing = false, busy = false, dirty = false;
+  var base = null, editing = false, busy = false, dirty = false;
   var key = new URLSearchParams(location.search).get('key') || '';
   var canEdit = !!(key && SCRIPT_URL);
   var root = document.getElementById('root');
   var note = '';
+  var openSet = {};
 
   function clone(o){return JSON.parse(JSON.stringify(o));}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
@@ -152,23 +221,45 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   }
   function getPath(p){return p.split('.').reduce(function(o,k){return o[k];},state);}
   function setPath(p,v){var ks=p.split('.'),last=ks.pop();ks.reduce(function(o,k){return o[k];},state)[last]=v;}
-  function counts(){
-    var v=0,g=0;
-    state.goals.forEach(function(goal){goal.vectors.forEach(function(vec){v++;vec.items.forEach(function(it){if(!it.kind)g++;});});});
-    return state.goals.length+' цели · '+v+' векторов · '+g+' целей функций';
+  function eachItem(fn){
+    state.goals.forEach(function(g,gi){g.vectors.forEach(function(v,vi){v.items.forEach(function(it,ii){fn(it,'goals.'+gi+'.vectors.'+vi+'.items.'+ii);});});});
   }
+  function kpiPaths(){var a=[];eachItem(function(it,p){if(it.kpi&&it.kpi.length)a.push(p);});return a;}
+  function allOpen(){var a=kpiPaths();return a.length>0&&a.every(function(p){return openSet[p];});}
+  function counts(){
+    var v=0,g=0,k=0;
+    state.goals.forEach(function(goal){goal.vectors.forEach(function(vec){v++;vec.items.forEach(function(it){if(!it.kind)g++;k+=(it.kpi||[]).length;});});});
+    return state.goals.length+' цели · '+v+' векторов · '+g+' целей функций · '+k+' KPI';
+  }
+
   function item(it, path){
-    return '<li class="'+(it.kind||'')+'">'+ed(path+'.fn',it.fn,'span','fn')+
-      '<span class="t">'+ed(path+'.t',it.t)+(it.shared?'<span class="shared" title="Общая метрика КД и РП">⇄</span>':'')+(it['new']?'<span class="new">новое</span>':'')+'</span>'+
-      '<button class="del" data-act="del" data-path="'+path+'" aria-label="Удалить цель">×</button></li>';
+    var isGoal = !it.kind, hasK = isGoal && it.kpi && it.kpi.length;
+    var open = isGoal && (editing || (hasK && openSet[path]));
+    var cls = (it.kind||'') + (hasK && !editing ? ' has-k' : '') + (open && hasK ? ' open' : '');
+    var h = '<li class="'+cls+'" data-item="'+path+'">'+ed(path+'.fn',it.fn,'span','fn')+
+      '<span class="t">'+ed(path+'.t',it.t,'span','tt')+(it.shared?'<span class="shared" title="Общая метрика КД и РП">⇄</span>':'')+(it['new']?'<span class="new">новое</span>':'')+(it.draft?'<span class="draft" title="KPI предложены JTBD, нужно подтверждение">черновик KPI</span>':'')+'</span>';
+    if(editing) h += '<button class="del" data-act="del" data-path="'+path+'" aria-label="Удалить цель">×</button>';
+    else if(hasK) h += '<button class="caret" data-act="toggle" data-path="'+path+'" aria-expanded="'+(open?'true':'false')+'" aria-label="Показать KPI">▸</button>';
+    else h += '<span></span>';
+    if(open){
+      h += '<ul class="kpi">';
+      (it.kpi||[]).forEach(function(k,ki){
+        var kp = path+'.kpi.'+ki;
+        h += '<li>'+ed(kp+'.y',k.y,'span','ky')+ed(kp+'.n',k.n,'span','kn')+(editing?'<button class="del" data-act="del" data-path="'+kp+'" aria-label="Удалить KPI">×</button>':'<span></span>')+'</li>';
+      });
+      if(editing) h += '<li class="kadd"><span></span><button class="add" data-act="addk" data-path="'+path+'">+ KPI</button><span></span></li>';
+      h += '</ul>';
+    }
+    return h + '</li>';
   }
 
   function render(){
     var h = '';
     h += '<header><h1>К-Скай · <mark>дерево целей 2027</mark></h1><div class="meta">проект для обсуждения · '+counts()+' · обновлено '+esc(state.updated)+'</div></header>';
     h += '<div class="bar">';
+    if(!editing && kpiPaths().length) h += '<button id="b-all" aria-pressed="'+(allOpen()?'true':'false')+'">'+(allOpen()?'Свернуть все KPI':'Раскрыть все KPI')+'</button>';
     if(canEdit && !editing) h += '<button id="b-edit">Редактировать</button>';
-    if(editing) h += '<button class="primary" id="b-save">Сохранить для всех</button><button id="b-cancel">Отменить</button><span class="status">Нажмите на текст, чтобы изменить. «+ цель» добавляет строку, × удаляет.</span>';
+    if(editing) h += '<button class="primary" id="b-save">Сохранить для всех</button><button id="b-cancel">Отменить</button><span class="status">Нажмите на текст, чтобы изменить. «+ цель» и «+ KPI» добавляют строку, × удаляет. Тип KPI: Р или О.</span>';
     h += '<span class="status" id="msg">'+esc(note)+'</span></div>';
     h += '<div class="l0"><span class="lvl">L0 · видение</span><b>'+ed('l0.title',state.l0.title)+'</b>'+ed('l0.sub',state.l0.sub,'span','meta')+'</div>';
     h += '<div class="grid">';
@@ -185,7 +276,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
       h += '</div></section>';
     });
     h += '</div>';
-    h += '<footer><span><b>⇄</b> общая метрика КД и РП: доля сделок, принятых РП без возврата</span><span><span class="new">новое</span> добавлено в этой версии</span><span><i>курсив</i> — метрика-вклад, не отдельная цель</span><span>КД — коммерческий департамент · Вн — внедрение и поддержка · Разр — разработка · Инфра — инфраструктура · МедЭ — медэкспертиза · Юр — юридическая функция</span></footer>';
+    h += '<footer><span>▸ нажмите на цель, чтобы раскрыть её KPI</span><span><b>Р</b> — результирующий KPI · <b>О</b> — опережающий</span><span><b>⇄</b> общая метрика КД и РП: доля сделок, принятых РП без возврата</span><span><span class="new">новое</span> добавлено в этой версии</span><span><span class="draft">черновик KPI</span> KPI предложены JTBD, нужно подтверждение</span><span><i>курсив</i> — метрика-вклад, не отдельная цель</span><span>КД — коммерческий департамент · Вн — внедрение и поддержка · Разр — разработка · Инфра — инфраструктура · МедЭ — медэкспертиза · Юр — юридическая функция</span></footer>';
     root.innerHTML = h;
     root.classList.toggle('editing', editing);
   }
@@ -204,28 +295,47 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     document.execCommand('insertText', false, (e.clipboardData||window.clipboardData).getData('text').replace(/\s+/g,' '));
   });
   root.addEventListener('click', function(e){
-    var b = e.target.closest('button'); if(!b || busy) return;
+    if(busy) return;
+    var b = e.target.closest('button');
+    if(!b){
+      if(editing || e.target.closest('.kpi')) return;
+      var li = e.target.closest('li.has-k');
+      if(li){ var p=li.dataset.item; openSet[p]=!openSet[p]; render(); }
+      return;
+    }
+    if(b.id==='b-all'){ var on=!allOpen(); openSet={}; if(on) kpiPaths().forEach(function(p){openSet[p]=true;}); render(); return; }
     if(b.id==='b-edit'){ editing=true; note=''; render(); return; }
     if(b.id==='b-cancel'){ state=clone(saved); editing=false; dirty=false; note=''; render(); return; }
     if(b.id==='b-save'){ save(); return; }
-    if(b.dataset.act==='del'){ var ks=b.dataset.path.split('.'), idx=+ks.pop(); getPath(ks.join('.')).splice(idx,1); dirty=true; render(); return; }
-    if(b.dataset.act==='add'){ getPath(b.dataset.path).items.push({fn:'Функция',t:'Новая цель'}); dirty=true; render(); return; }
+    var act=b.dataset.act, path=b.dataset.path;
+    if(act==='toggle'){ openSet[path]=!openSet[path]; render(); return; }
+    if(act==='del'){ var ks=path.split('.'), idx=+ks.pop(); getPath(ks.join('.')).splice(idx,1); dirty=true; render(); return; }
+    if(act==='add'){ getPath(path).items.push({fn:'Функция',t:'Новая цель',kpi:[]}); dirty=true; render(); return; }
+    if(act==='addk'){ var it=getPath(path); (it.kpi=it.kpi||[]).push({y:'Р',n:'Новый KPI'}); dirty=true; render(); return; }
   });
   window.addEventListener('beforeunload', function(e){ if(editing && dirty){ e.preventDefault(); e.returnValue=''; } });
 
+  /* Таблица, заполненная до появления колонки KPI: KPI берём из встроенной версии по совпадению вектора, функции и формулировки */
+  function mergeKpi(tree){
+    var map={};
+    embedded.goals.forEach(function(g){g.vectors.forEach(function(v){v.items.forEach(function(it){map[v.code+'|'+it.fn+'|'+it.t]=it;});});});
+    tree.goals.forEach(function(g){g.vectors.forEach(function(v){v.items.forEach(function(it){
+      var src=map[v.code+'|'+it.fn+'|'+it.t];
+      if(src){ if(src.kpi) it.kpi=clone(src.kpi); if(src.draft) it.draft=true; }
+    });});});
+  }
   function apply(data){
     if(data && !data.empty && data.tree && data.tree.goals){
-      saved = data.tree; state = clone(saved); base = data.stamp; source = 'table';
+      if(!data.kpiColumn) mergeKpi(data.tree);
+      saved = data.tree; state = clone(saved); base = data.stamp;
     }
   }
-
   function load(){
     if(!SCRIPT_URL){ render(); return; }
     fetch(SCRIPT_URL, {cache:'no-store'}).then(function(r){return r.json();}).then(function(data){
       apply(data); if(!editing) render();
     }).catch(function(){ msg('Таблица недоступна, показана версия от '+embedded.updated+'.'); });
   }
-
   function save(){
     busy=true; msg('Сохраняю…');
     fetch(SCRIPT_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({key:key, base:base, tree:state})})
