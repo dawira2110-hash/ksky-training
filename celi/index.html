@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Дерево целей К-Скай 2027</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap">
+<style>body{margin:0}[hidden]{display:none!important}</style>
+<style id="page-style">
+/* Layout: L0 bar → 4 columns of company goals (headers aligned via subgrid); each column stacks vectors with function goals */
+:root{
+  --bg:#FFFFFF; --fg:#242525; --muted:#7F8185; --line:#CED2DA;
+  --head-bg:#242525; --head-fg:#FFFFFF; --accent:#F2F84C; --accent-fg:#242525;
+  --font:'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#242525; --fg:#FFFFFF; --muted:#CED2DA; --line:#7F8185; --head-bg:#FFFFFF; --head-fg:#242525; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#242525; --fg:#FFFFFF; --muted:#CED2DA; --line:#7F8185; --head-bg:#FFFFFF; --head-fg:#242525; color-scheme:dark}
+
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-weight:500;font-size:12px;line-height:1.35}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 28px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
+  display:flex;flex-direction:column;gap:14px}
+
+header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
+h1{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+h1 mark{background:var(--accent);color:var(--accent-fg);padding:0 .25em}
+.meta{color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bar[hidden]{display:none}
+button{font:inherit;font-size:11.5px;font-weight:700;border:1.5px solid var(--fg);background:var(--bg);color:var(--fg);padding:5px 12px;cursor:pointer}
+button.primary{background:var(--fg);color:var(--bg)}
+button:focus-visible,[contenteditable]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:disabled{opacity:.5;cursor:default}
+.status{color:var(--muted);font-size:11px}
+
+.l0{border:1.5px solid var(--fg);padding:8px 12px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.lvl{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.l0 b{font-size:13px;font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:auto;gap:12px;align-items:start}
+@media (max-width:980px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.grid{grid-template-columns:minmax(0,1fr)}}
+
+.goal{display:grid;grid-row:span 2;grid-template-rows:subgrid;row-gap:8px;min-width:0}
+.goal-h{background:var(--head-bg);color:var(--head-fg);padding:9px 11px 10px;display:flex;flex-direction:column;gap:3px;align-self:stretch}
+.goal-h .n{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
+.goal-h h2{margin:0;font-size:15px;font-weight:800}
+.goal-h p{margin:0;font-size:10.5px;opacity:.85}
+.goal-b{display:flex;flex-direction:column;gap:8px;min-width:0}
+
+.vec{border:1px solid var(--line);background:var(--bg);padding:8px 10px 9px;display:flex;flex-direction:column;gap:6px}
+.vec h3{margin:0;font-size:11.5px;font-weight:700;display:flex;gap:6px;align-items:baseline}
+.vec h3 .code{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}
+ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+li{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:6px;align-items:baseline}
+.fn{font-size:9.5px;font-weight:700;letter-spacing:.03em;color:var(--muted);text-transform:uppercase;min-width:0;overflow-wrap:anywhere}
+.t{min-width:0}
+.new{background:var(--accent);color:var(--accent-fg);font-size:9px;font-weight:700;padding:0 4px;margin-left:3px;white-space:nowrap}
+.shared{font-weight:700;margin-left:3px}
+li.contrib .t{color:var(--muted);font-style:italic}
+li.lead .t{color:var(--muted)}
+.sub{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-top:1px dashed var(--line);padding-top:5px}
+
+.del,.add{display:none}
+.editing [contenteditable="true"]{outline:1px dashed var(--line);outline-offset:1px;cursor:text}
+.editing .goal-h [contenteditable="true"]{outline-color:var(--muted)}
+.editing .del{display:inline-block;border:0;background:none;color:var(--muted);padding:0 2px;font-size:13px;line-height:1}
+.editing .add{display:inline-block;align-self:flex-start;border:1px dashed var(--muted);color:var(--muted);padding:2px 8px;font-size:10.5px}
+
+footer{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);font-size:10.5px;border-top:1px solid var(--line);padding-top:10px}
+footer span{display:inline-flex;gap:5px;align-items:baseline}
+</style>
+</head>
+
+<body>
+
+<div class="wrap" id="root"></div>
+<script type="application/json" id="tree-data">
+{"updated":"17.11.2026",
+"l0":{"title":"Видение собственников 2027","sub":"Совет директоров"},
+"goals":[
+{"title":"Выручка","metric":"сумма контрактов + актированная выручка","vectors":[
+ {"code":"1.1","title":"Новые регионы и клиенты","items":[
+  {"fn":"КД","t":"Расширить географию и клиентскую базу"},
+  {"fn":"Марк","t":"Поток квалифицированных лидов"}]},
+ {"code":"1.2","title":"Действующая база","items":[
+  {"fn":"РП","t":"Сохранить клиентскую базу (продление ТП)"},
+  {"fn":"РП","t":"Допродажи действующим регионам"},
+  {"fn":"Разр","t":"Функционал под контракты и допродажи"}]},
+ {"code":"1.3","title":"Новые направления и продукты","items":[
+  {"fn":"КД","t":"Позиции в B2B фарме и проме"},
+  {"fn":"Прод","t":"Новые продукты приносят выручку: выпуск → использование → выручка"},
+  {"fn":"ИИ","t":"ИИ-компетенции для фармы и продуктов"},
+  {"fn":"МедЭ","t":"Медэкспертиза для фармы (RWD/RWE)"},
+  {"fn":"ИИ","t":"опережающая: публикации и цитирования","kind":"lead"}]}]},
+{"title":"Объёмы","metric":"проекты в договорный срок, регионы без срывов","vectors":[
+ {"code":"2.1","title":"Исполнимые контракты на входе","items":[
+  {"fn":"КД","t":"Передача сделок, исполнимых без потерь","shared":true},
+  {"fn":"РП","t":"Контракты с выполнимыми условиями (ТЗ до закупки)"},
+  {"fn":"Инфра","t":"Инфраструктура не ограничивает продажи"}]},
+ {"code":"2.2","title":"Запуск в срок","items":[
+  {"fn":"Вн","t":"Быстрый старт проектов"},
+  {"fn":"РП","t":"Исполнение без срывов","shared":true},
+  {"fn":"РП","t":"Актирование этапов в срок","new":true}]},
+ {"code":"2.3","title":"Ресурсы под план","items":[
+  {"fn":"HR","t":"Люди под план роста (критические роли)"}]}]},
+{"title":"Стабильность","metric":"доступность у клиентов, критические обращения в SLA","vectors":[
+ {"code":"3.1","title":"Надёжность и скорость","items":[
+  {"fn":"Разр","t":"Качество и скорость платформы"},
+  {"fn":"Разр","t":"Непрерывность работы промплощадки"},
+  {"fn":"ИИ","t":"Достоверные и быстрые ИИ-оценки"},
+  {"fn":"Вн","t":"Быстрая платформа у клиентов (время отклика)"}]},
+ {"code":"3.2","title":"Поддержка и передача данных","items":[
+  {"fn":"Вн","t":"Стабильная эксплуатация в любой схеме"},
+  {"fn":"Вн","t":"Качество поддержки (SLA, повторные)"}]},
+ {"code":"3.3","title":"Допуск к рынку","items":[
+  {"fn":"СМК","t":"Соответствие обязательным требованиям"},
+  {"fn":"Юр","t":"Юридическая безопасность сделок","new":true},
+  {"fn":"ИБ","t":"Информационная безопасность компании","new":true}]}]},
+{"title":"Финансовая устойчивость","metric":"отклонение поступлений от прогноза, кассовый разрыв, ДЗ","vectors":[
+ {"code":"4.1","title":"Предсказуемый денежный поток","items":[
+  {"fn":"Фин","t":"Предсказуемый ДДС"},
+  {"fn":"КД","t":"условия оплаты по стандарту","kind":"contrib"},
+  {"fn":"РП","t":"дебиторская задолженность по региону","kind":"contrib"}]},
+ {"code":"4.2","title":"Эффективность ресурсов","items":[
+  {"fn":"Фин","t":"Распределение ресурсов под план"},
+  {"fn":"HR","t":"Эффективность команд"},
+  {"fn":"HR","t":"Автоматизация процессов"}]}]}
+]}
+</script>
+<script>
+/* Адрес веб-приложения Apps Script (таблица «К-Скай_Дерево целей 2027 (данные сайта)»). Ключ правки на сайте не хранится: он приходит в ссылке ?key=… */
+var SCRIPT_URL = '';
+(function(){
+  var embedded = JSON.parse(document.getElementById('tree-data').textContent);
+  var saved = embedded, state = clone(embedded);
+  var base = null, source = 'embedded', editing = false, busy = false, dirty = false;
+  var key = new URLSearchParams(location.search).get('key') || '';
+  var canEdit = !!(key && SCRIPT_URL);
+  var root = document.getElementById('root');
+  var note = '';
+
+  function clone(o){return JSON.parse(JSON.stringify(o));}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function ed(path, text, tag, cls){
+    tag = tag || 'span';
+    return '<'+tag+(cls?' class="'+cls+'"':'')+' data-path="'+path+'"'+(editing?' contenteditable="true" spellcheck="false"':'')+'>'+esc(text)+'</'+tag+'>';
+  }
+  function getPath(p){return p.split('.').reduce(function(o,k){return o[k];},state);}
+  function setPath(p,v){var ks=p.split('.'),last=ks.pop();ks.reduce(function(o,k){return o[k];},state)[last]=v;}
+  function counts(){
+    var v=0,g=0;
+    state.goals.forEach(function(goal){goal.vectors.forEach(function(vec){v++;vec.items.forEach(function(it){if(!it.kind)g++;});});});
+    return state.goals.length+' цели · '+v+' векторов · '+g+' целей функций';
+  }
+  function item(it, path){
+    return '<li class="'+(it.kind||'')+'">'+ed(path+'.fn',it.fn,'span','fn')+
+      '<span class="t">'+ed(path+'.t',it.t)+(it.shared?'<span class="shared" title="Общая метрика КД и РП">⇄</span>':'')+(it['new']?'<span class="new">новое</span>':'')+'</span>'+
+      '<button class="del" data-act="del" data-path="'+path+'" aria-label="Удалить цель">×</button></li>';
+  }
+
+  function render(){
+    var h = '';
+    h += '<header><h1>К-Скай · <mark>дерево целей 2027</mark></h1><div class="meta">проект для обсуждения · '+counts()+' · обновлено '+esc(state.updated)+'</div></header>';
+    h += '<div class="bar">';
+    if(canEdit && !editing) h += '<button id="b-edit">Редактировать</button>';
+    if(editing) h += '<button class="primary" id="b-save">Сохранить для всех</button><button id="b-cancel">Отменить</button><span class="status">Нажмите на текст, чтобы изменить. «+ цель» добавляет строку, × удаляет.</span>';
+    h += '<span class="status" id="msg">'+esc(note)+'</span></div>';
+    h += '<div class="l0"><span class="lvl">L0 · видение</span><b>'+ed('l0.title',state.l0.title)+'</b>'+ed('l0.sub',state.l0.sub,'span','meta')+'</div>';
+    h += '<div class="grid">';
+    state.goals.forEach(function(goal,gi){
+      var gp='goals.'+gi;
+      h += '<section class="goal"><div class="goal-h"><span class="n">L1 · цель '+(gi+1)+'</span>'+ed(gp+'.title',goal.title,'h2')+ed(gp+'.metric',goal.metric,'p')+'</div><div class="goal-b">';
+      goal.vectors.forEach(function(vec,vi){
+        var vp=gp+'.vectors.'+vi, main='', contrib='';
+        vec.items.forEach(function(it,ii){ var s=item(it,vp+'.items.'+ii); if(it.kind==='contrib') contrib+=s; else main+=s; });
+        h += '<div class="vec"><h3><span class="code">'+esc(vec.code)+'</span>'+ed(vp+'.title',vec.title)+'</h3><ul>'+main+'</ul>';
+        if(contrib) h += '<div class="sub">вклады функций</div><ul>'+contrib+'</ul>';
+        h += '<button class="add" data-act="add" data-path="'+vp+'">+ цель</button></div>';
+      });
+      h += '</div></section>';
+    });
+    h += '</div>';
+    h += '<footer><span><b>⇄</b> общая метрика КД и РП: доля сделок, принятых РП без возврата</span><span><span class="new">новое</span> добавлено в этой версии</span><span><i>курсив</i> — метрика-вклад, не отдельная цель</span><span>КД — коммерческий департамент · Вн — внедрение и поддержка · Разр — разработка · Инфра — инфраструктура · МедЭ — медэкспертиза · Юр — юридическая функция</span></footer>';
+    root.innerHTML = h;
+    root.classList.toggle('editing', editing);
+  }
+  function msg(t){note=t; var m=document.getElementById('msg'); if(m) m.textContent=t;}
+
+  root.addEventListener('input', function(e){
+    var el = e.target.closest('[data-path]');
+    if(el && el.isContentEditable){ setPath(el.dataset.path, el.textContent.replace(/\s+/g,' ').trim()); dirty=true; }
+  });
+  root.addEventListener('keydown', function(e){
+    if(e.key==='Enter' && e.target.isContentEditable){ e.preventDefault(); e.target.blur(); }
+  });
+  root.addEventListener('paste', function(e){
+    if(!e.target.isContentEditable) return;
+    e.preventDefault();
+    document.execCommand('insertText', false, (e.clipboardData||window.clipboardData).getData('text').replace(/\s+/g,' '));
+  });
+  root.addEventListener('click', function(e){
+    var b = e.target.closest('button'); if(!b || busy) return;
+    if(b.id==='b-edit'){ editing=true; note=''; render(); return; }
+    if(b.id==='b-cancel'){ state=clone(saved); editing=false; dirty=false; note=''; render(); return; }
+    if(b.id==='b-save'){ save(); return; }
+    if(b.dataset.act==='del'){ var ks=b.dataset.path.split('.'), idx=+ks.pop(); getPath(ks.join('.')).splice(idx,1); dirty=true; render(); return; }
+    if(b.dataset.act==='add'){ getPath(b.dataset.path).items.push({fn:'Функция',t:'Новая цель'}); dirty=true; render(); return; }
+  });
+  window.addEventListener('beforeunload', function(e){ if(editing && dirty){ e.preventDefault(); e.returnValue=''; } });
+
+  function apply(data){
+    if(data && !data.empty && data.tree && data.tree.goals){
+      saved = data.tree; state = clone(saved); base = data.stamp; source = 'table';
+    }
+  }
+
+  function load(){
+    if(!SCRIPT_URL){ render(); return; }
+    fetch(SCRIPT_URL, {cache:'no-store'}).then(function(r){return r.json();}).then(function(data){
+      apply(data); if(!editing) render();
+    }).catch(function(){ msg('Таблица недоступна, показана версия от '+embedded.updated+'.'); });
+  }
+
+  function save(){
+    busy=true; msg('Сохраняю…');
+    fetch(SCRIPT_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({key:key, base:base, tree:state})})
+      .then(function(r){return r.json();})
+      .then(function(res){
+        busy=false;
+        if(res.ok){ apply(res.data); editing=false; dirty=false; note='Сохранено. Правки видят все, кто откроет ссылку.'; render(); return; }
+        if(res.error==='conflict'){ apply(res.data); editing=false; dirty=false; note='Пока вы правили, кто-то сохранил свою версию. Показана она — внесите правку ещё раз.'; render(); return; }
+        if(res.error==='bad_key'){ canEdit=false; editing=false; note='Эта ссылка только для просмотра. Правки не сохранены.'; render(); return; }
+        msg('Не сохранилось. Попробуйте ещё раз через минуту.');
+      })
+      .catch(function(){ busy=false; msg('Нет связи с таблицей. Правки на странице, попробуйте сохранить ещё раз.'); });
+  }
+
+  render();
+  load();
+})();
+</script>
+</body>
+</html>
