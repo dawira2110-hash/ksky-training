@@ -315,7 +315,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   });
   window.addEventListener('beforeunload', function(e){ if(editing && dirty){ e.preventDefault(); e.returnValue=''; } });
 
-  /* Таблица, заполненная до появления колонки KPI: KPI берём из встроенной версии по совпадению вектора, функции и формулировки */
+  /* Таблица без KPI (заполнена до появления колонки или колонка пустая): KPI берём из встроенной версии по совпадению вектора, функции и формулировки */
   function mergeKpi(tree){
     var map={};
     embedded.goals.forEach(function(g){g.vectors.forEach(function(v){v.items.forEach(function(it){map[v.code+'|'+it.fn+'|'+it.t]=it;});});});
@@ -326,7 +326,8 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   }
   function apply(data){
     if(data && !data.empty && data.tree && data.tree.goals){
-      if(!data.kpiColumn) mergeKpi(data.tree);
+      var kc=0; data.tree.goals.forEach(function(g){g.vectors.forEach(function(v){v.items.forEach(function(it){kc+=(it.kpi||[]).length;});});});
+      if(!data.kpiColumn || kc===0) mergeKpi(data.tree);
       saved = data.tree; state = clone(saved); base = data.stamp;
     }
   }
