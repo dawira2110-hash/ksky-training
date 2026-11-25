@@ -275,7 +275,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     var open = isGoal && (editing || (hasK && openSet[path]));
     var cls = (it.kind||'') + (hasK && !editing ? ' has-k' : '') + (open && hasK ? ' open' : '');
     var h = '<li class="'+cls+'" data-item="'+path+'">'+ed(path+'.fn',it.fn,'span','fn')+
-      '<span class="t">'+ed(path+'.t',it.t,'span','tt')+(it.shared?'<span class="shared" title="Общая метрика КД и РП">⇄</span>':'')+(it['new']?'<span class="new">новое</span>':'')+(it.draft?'<span class="draft" title="KPI предложены JTBD, нужно подтверждение">черновик KPI</span>':'')+'</span>';
+      '<span class="t">'+ed(path+'.t',it.t,'span','tt')+(it.shared?'<span class="shared" title="Общая метрика КД и РП">⇄</span>':'')+(it.draft?'<span class="draft" title="KPI предложены JTBD, нужно подтверждение">черновик KPI</span>':'')+'</span>';
     if(editing) h += '<button class="del" data-act="del" data-path="'+path+'" aria-label="Удалить цель">×</button>';
     else if(hasK) h += '<button class="caret" data-act="toggle" data-path="'+path+'" aria-expanded="'+(open?'true':'false')+'" aria-label="Показать KPI">▸</button>';
     else h += '<span></span>';
@@ -324,7 +324,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
       h += '</div></section>';
     });
     h += '</div>';
-    h += '<footer><span>▸ нажмите на цель, чтобы раскрыть её KPI</span><span><b>Р</b> — результирующий KPI · <b>О</b> — опережающий</span><span><b>⇄</b> общая метрика КД и РП: доля сделок, принятых РП без возврата</span><span><span class="new">новое</span> добавлено в этой версии</span><span><span class="draft">черновик KPI</span> KPI предложены JTBD, нужно подтверждение</span><span><i>курсив</i> — метрика-вклад, не отдельная цель</span><span>КД — коммерческий департамент · Вн — внедрение и поддержка · Разр — разработка · Инфра — инфраструктура · МедЭ — медэкспертиза · Юр — юридическая функция</span></footer>';
+    h += '<footer><span>▸ нажмите на цель, чтобы раскрыть её KPI</span><span><b>Р</b> — результирующий KPI · <b>О</b> — опережающий</span><span><b>⇄</b> общая метрика КД и РП: доля сделок, принятых РП без возврата</span><span><span class="draft">черновик KPI</span> KPI предложены JTBD, нужно подтверждение</span><span><i>курсив</i> — метрика-вклад, не отдельная цель</span><span>КД — коммерческий департамент · Вн — внедрение и поддержка · Разр — разработка · Инфра — инфраструктура · МедЭ — медэкспертиза · Юр — юридическая функция</span></footer>';
     root.innerHTML = h;
     root.classList.toggle('editing', editing);
   }
