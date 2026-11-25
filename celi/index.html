@@ -98,6 +98,28 @@ li.open > .caret{transform:rotate(90deg);color:var(--fg)}
 ul.kpi{grid-column:2 / -1;gap:3px;margin:2px 0 4px;padding-left:8px;border-left:2px solid var(--line)}
 ul.kpi li{grid-template-columns:14px minmax(0,1fr) auto;font-size:10.5px;cursor:default}
 .ky{font-size:9.5px;font-weight:800;color:var(--muted)}
+.kb{display:flex;flex-direction:column;gap:1px;min-width:0}
+.km{font-size:9.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 8px}
+.km .nv{color:var(--fg);font-weight:700}
+.km .nv.none{color:var(--muted);font-weight:500}
+.tabs{display:flex;gap:0;border-bottom:1.5px solid var(--fg)}
+.tab{border:1.5px solid var(--fg);border-bottom:0;margin-right:-1.5px;background:var(--bg);color:var(--muted);font-size:12px;padding:6px 14px}
+.tab[aria-selected="true"]{background:var(--fg);color:var(--bg)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line)}
+table.ref{width:100%;border-collapse:collapse;font-size:11.5px;min-width:820px}
+table.ref th{position:sticky;top:0;background:var(--head-bg);color:var(--head-fg);text-align:left;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:8px 10px;white-space:nowrap}
+table.ref td{border-top:1px solid var(--line);padding:6px 10px;vertical-align:top}
+table.ref td.fn-c{font-weight:800;white-space:nowrap;border-right:1px solid var(--line)}
+table.ref td.fn-c small{display:block;color:var(--muted);font-weight:600;font-size:9.5px;text-transform:uppercase;letter-spacing:.04em}
+table.ref td.g-c{border-right:1px solid var(--line);max-width:240px}
+table.ref td.g-c .code{color:var(--muted);font-variant-numeric:tabular-nums;margin-right:5px;font-size:10px}
+table.ref td.y-c{font-weight:800;color:var(--muted);text-align:center;width:28px}
+table.ref td.u-c{color:var(--muted);white-space:nowrap}
+table.ref td.v-c{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:110px}
+table.ref tr.fn-start td{border-top:1.5px solid var(--fg)}
+table.ref [data-path]:empty::before{content:'—';color:var(--muted);font-weight:500}
+.editing table.ref td.u-c [data-path],.editing table.ref td.v-c [data-path]{display:inline-block;min-width:70px}
+.editing table.ref td.v-c{background:rgba(127,127,127,.08)}
 .draft{border:1px solid var(--muted);color:var(--muted);font-size:9px;font-weight:700;padding:0 3px;margin-left:3px;white-space:nowrap}
 </style>
 </head>
@@ -222,6 +244,7 @@ ul.kpi li{grid-template-columns:14px minmax(0,1fr) auto;font-size:10.5px;cursor:
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSXxX7R77L61_bGbkHOGfIOulFYp1fwnU3mZl--NL-mzyhy5/exec';
 (function(){
   var embedded = JSON.parse(document.getElementById('tree-data').textContent);
+  splitK(embedded);
   var saved = embedded, state = clone(embedded);
   var base = null, editing = false, busy = false, dirty = false;
   /* Ключ правки: из ссылки ?key=…; один раз открытый — запоминается в этом браузере */
@@ -235,6 +258,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     rows:[['290 млн','Регионы ТП (действующие)'],['≈ 90 млн','Новые регионы, ≈ 10 шт.'],['≈ 30 млн','Коммерческая и промышленная медицина'],['≈ 10 млн','Фарма'],['≈ 10 млн','B2G прочее']]};
   var NAMES = {'КД':'Коммерция','РП':'Реализация и РП','Вн':'Внедрение','Разр':'Разработка','ИИ':'ИИ','Прод':'Продукт','DevOps':'DevOps','ИБ':'ИБ','МедЭ':'Медэкспертиза','Юр':'Юристы','Фин':'Финансы','HR':'HR','СМК':'СМК','Марк':'Маркетинг'};
   var params = new URLSearchParams(location.search);
+  var view = params.get('v')==='kpi' ? 'kpi' : 'tree';
   var filter = {};
   (params.get('f')||'').split(',').filter(String).forEach(function(f){filter[f]=true;});
   function filterOn(){return Object.keys(filter).length>0;}
@@ -249,6 +273,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   function syncUrl(){
     var p=new URLSearchParams(location.search), f=Object.keys(filter).join(',');
     if(f) p.set('f',f); else p['delete']('f');
+    if(view==='kpi') p.set('v','kpi'); else p['delete']('v');
     var q=p.toString().replace(/%2C/g,',');
     try{ history.replaceState(null,'',location.pathname+(q?'?'+q:'')); }catch(e){}
   }
@@ -258,6 +283,23 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   }
 
   function clone(o){return JSON.parse(JSON.stringify(o));}
+  /* KPI хранится в таблице одной строкой «Р: Название | ед. изм. | норматив»; на сайте — три поля n, u, norm */
+  function splitK(tree){
+    tree.goals.forEach(function(g){g.vectors.forEach(function(v){v.items.forEach(function(it){(it.kpi||[]).forEach(function(k){
+      if(k.u!==undefined) return;
+      var parts=String(k.n||'').split('|');
+      k.n=parts[0].trim(); k.u=(parts[1]||'').trim(); k.norm=parts.slice(2).join('/').trim();
+    });});});});
+    return tree;
+  }
+  function joinK(tree){
+    var t=clone(tree), c=function(x){return String(x==null?'':x).replace(/\|/g,'/').replace(/\s+/g,' ').trim();};
+    t.goals.forEach(function(g){g.vectors.forEach(function(v){v.items.forEach(function(it){(it.kpi||[]).forEach(function(k){
+      var n=c(k.n), u=c(k.u), nv=c(k.norm);
+      k.n = (u||nv) ? n+' | '+u+' | '+nv : n; delete k.u; delete k.norm;
+    });});});});
+    return t;
+  }
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function ed(path, text, tag, cls){
     tag = tag || 'span';
@@ -294,7 +336,8 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
       h += '<ul class="kpi">';
       (it.kpi||[]).forEach(function(k,ki){
         var kp = path+'.kpi.'+ki;
-        h += '<li>'+ed(kp+'.y',k.y,'span','ky')+ed(kp+'.n',k.n,'span','kn')+(editing?'<button class="del" data-act="del" data-path="'+kp+'" aria-label="Удалить KPI">×</button>':'<span></span>')+'</li>';
+        var meta = '<span class="km">'+(k.u?'<span>'+esc(k.u)+'</span>':'')+(k.norm?'<span class="nv">норматив: '+esc(k.norm)+'</span>':'<span class="nv none">норматив не задан</span>')+'</span>';
+        h += '<li>'+ed(kp+'.y',k.y,'span','ky')+'<span class="kb">'+ed(kp+'.n',k.n,'span','kn')+meta+'</span>'+(editing?'<button class="del" data-act="del" data-path="'+kp+'" aria-label="Удалить KPI">×</button>':'<span></span>')+'</li>';
       });
       if(editing) h += '<li class="kadd"><span></span><button class="add" data-act="addk" data-path="'+path+'">+ KPI</button><span></span></li>';
       h += '</ul>';
@@ -302,19 +345,51 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     return h + '</li>';
   }
 
+  function refTable(){
+    var order=fnList().map(function(x){return x.fn;}), rows={};
+    eachItem(function(it,p){
+      if(it.kind || !it.kpi || !it.kpi.length || !visible(it)) return;
+      var code=p.split('.'), g=state.goals[+code[1]], v=g.vectors[+code[3]];
+      (rows[it.fn]=rows[it.fn]||[]).push({it:it,p:p,code:v.code});
+    });
+    var h='<div class="tbl-wrap"><table class="ref"><thead><tr><th>Подразделение</th><th>Цель подразделения</th><th title="Р — результирующий, О — опережающий">Р/О</th><th>Показатель</th><th>Ед. изм.</th><th>Норматив</th></tr></thead><tbody>', any=false;
+    order.forEach(function(fn){
+      var list=rows[fn]; if(!list) return; any=true;
+      var total=list.reduce(function(a,r){return a+r.it.kpi.length;},0), first=true;
+      list.forEach(function(r){
+        r.it.kpi.forEach(function(k,ki){
+          var kp=r.p+'.kpi.'+ki;
+          h+='<tr'+(first?' class="fn-start"':'')+'>';
+          if(first) h+='<td class="fn-c" rowspan="'+total+'">'+esc(NAMES[fn]||fn)+'<small>'+esc(fn)+'</small></td>';
+          if(ki===0) h+='<td class="g-c" rowspan="'+r.it.kpi.length+'"><span class="code">'+esc(r.code)+'</span>'+esc(r.it.t)+(r.it.draft?' <span class="draft">черновик KPI</span>':'')+'</td>';
+          h+='<td class="y-c">'+esc(k.y)+'</td><td>'+ed(kp+'.n',k.n)+'</td><td class="u-c">'+ed(kp+'.u',k.u||'')+'</td><td class="v-c">'+ed(kp+'.norm',k.norm||'')+'</td></tr>';
+          first=false;
+        });
+      });
+    });
+    h+='</tbody></table></div>';
+    return any ? h : '<div class="empty">У выбранных функций нет KPI</div>';
+  }
+
   function render(){
     var h = '';
     h += '<header><h1>К-Скай · <mark>дерево целей 2027</mark></h1><div class="meta">проект для обсуждения · '+counts()+' · обновлено '+esc(state.updated)+'</div></header>';
+    h += '<div class="tabs" role="tablist"><button class="tab" role="tab" data-act="view" data-v="tree" aria-selected="'+(view==='tree')+'">Дерево целей</button><button class="tab" role="tab" data-act="view" data-v="kpi" aria-selected="'+(view==='kpi')+'">Справочник KPI</button></div>';
     h += '<div class="bar">';
-    if(!editing && kpiPaths().length) h += '<button id="b-all" aria-pressed="'+(allOpen()?'true':'false')+'">'+(allOpen()?'Свернуть все KPI':'Раскрыть все KPI')+'</button>';
+    if(view==='tree' && !editing && kpiPaths().length) h += '<button id="b-all" aria-pressed="'+(allOpen()?'true':'false')+'">'+(allOpen()?'Свернуть все KPI':'Раскрыть все KPI')+'</button>';
     if(canEdit && !editing) h += '<button id="b-edit">Редактировать</button>';
-    if(editing) h += '<button class="primary" id="b-save">Сохранить для всех</button><button id="b-cancel">Отменить</button><span class="status">Нажмите на текст, чтобы изменить. «+ цель» и «+ KPI» добавляют строку, × удаляет. Тип KPI: Р или О.</span>';
+    if(editing) h += '<button class="primary" id="b-save">Сохранить для всех</button><button id="b-cancel">Отменить</button><span class="status">'+(view==='kpi'?'Нажмите на показатель, ед. изм. или норматив, чтобы изменить.':'Нажмите на текст, чтобы изменить. «+ цель» и «+ KPI» добавляют строку, × удаляет. Тип KPI: Р или О. Ед. изм. и норматив — во вкладке «Справочник KPI».')+'</span>';
     h += '<span class="status" id="msg">'+esc(note)+'</span></div>';
     if(!editing){
       h += '<div class="filters" role="group" aria-label="Фильтр по функциям"><span class="lvl">Функция</span>';
       fnList().forEach(function(x){ h += '<button class="chip" data-act="fn" data-fn="'+esc(x.fn)+'" aria-pressed="'+(filter[x.fn]?'true':'false')+'" title="'+esc(NAMES[x.fn]||x.fn)+'">'+esc(NAMES[x.fn]||x.fn)+'<span class="c">'+x.n+'</span></button>'; });
       if(filterOn()) h += '<button class="chip reset" data-act="fn-reset">Все функции</button>';
       h += '</div>';
+    }
+    if(view==='kpi'){
+      h += refTable();
+      h += '<footer><span>Подразделения, их цели и KPI. Ед. изм. и норматив правятся здесь: «Редактировать» → «Сохранить для всех» — значения сразу подтягиваются в дерево целей.</span><span><b>Р</b> — результирующий KPI · <b>О</b> — опережающий</span><span><span class="draft">черновик KPI</span> KPI предложены JTBD, нужно подтверждение</span></footer>';
+      root.innerHTML = h; root.classList.toggle('editing', editing); return;
     }
     h += '<div class="l0"><span class="lvl">L0 · видение</span><b>'+ed('l0.title',state.l0.title)+'</b>'+ed('l0.sub',state.l0.sub,'span','meta')+'</div>';
     h += '<div class="rev"><div class="rev-h"><span class="lvl">Выручка 2027 · цель</span><b><mark>'+esc(REVENUE.total)+'</mark></b><span class="meta">'+esc(REVENUE.growth)+' · '+esc(REVENUE.note)+'</span></div><ul>';
@@ -371,6 +446,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     if(b.id==='b-save'){ save(); return; }
     var act=b.dataset.act, path=b.dataset.path;
     if(act==='fn'){ var f=b.dataset.fn; if(filter[f]) delete filter[f]; else filter[f]=true; openFiltered(); syncUrl(); render(); return; }
+    if(act==='view'){ view=b.dataset.v; syncUrl(); render(); window.scrollTo(0,0); return; }
     if(act==='fn-reset'){ filter={}; openSet={}; syncUrl(); render(); return; }
     if(act==='toggle'){ openSet[path]=!openSet[path]; render(); return; }
     if(act==='del'){ var ks=path.split('.'), idx=+ks.pop(); getPath(ks.join('.')).splice(idx,1); dirty=true; render(); return; }
@@ -392,7 +468,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     if(data && !data.empty && data.tree && data.tree.goals){
       var kc=0; data.tree.goals.forEach(function(g){g.vectors.forEach(function(v){v.items.forEach(function(it){kc+=(it.kpi||[]).length;});});});
       if(!data.kpiColumn || kc===0) mergeKpi(data.tree);
-      saved = data.tree; state = clone(saved); base = data.stamp; openFiltered();
+      saved = splitK(data.tree); state = clone(saved); base = data.stamp; openFiltered();
     }
   }
   function load(){
@@ -403,7 +479,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   }
   function save(){
     busy=true; msg('Сохраняю…');
-    fetch(SCRIPT_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({key:key, base:base, tree:state})})
+    fetch(SCRIPT_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({key:key, base:base, tree:joinK(state)})})
       .then(function(r){return r.json();})
       .then(function(res){
         busy=false;
