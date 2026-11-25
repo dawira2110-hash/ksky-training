@@ -90,6 +90,30 @@ ul.kpi{grid-column:2 / -1;gap:3px;margin:2px 0 4px;padding-left:8px;border-left:
 ul.kpi li{grid-template-columns:14px minmax(0,1fr) auto;font-size:10.5px;cursor:default}
 .ky{font-size:9.5px;font-weight:800;color:var(--muted)}
 .draft{border:1px solid var(--muted);color:var(--muted);font-size:9px;font-weight:700;padding:0 3px;margin-left:3px;white-space:nowrap}
+.views{display:flex;gap:0;border-bottom:1px solid var(--line)}
+.views button{border:0;border-bottom:3px solid transparent;padding:9px 18px;font-size:14px;background:transparent}
+.views button[aria-current="page"]{border-bottom-color:var(--fg)}
+.initiative-intro{font-size:14px;color:var(--muted);margin:4px 0}
+.initiative-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.initiative-goal{border:1px solid var(--line);min-width:0}
+.initiative-goal-head{background:var(--head-bg);color:var(--head-fg);padding:12px 14px}
+.initiative-goal-head .meta{color:var(--head-fg);opacity:.75;font-size:12px}
+.initiative-goal-head h2{font-size:16px;margin:5px 0 0;line-height:1.35}
+.initiative-list{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.initiative-card{border-bottom:1px solid var(--line);padding-bottom:10px;font-size:14px}
+.initiative-card:last-child{border-bottom:0;padding-bottom:0}
+.initiative-card h3{font-size:15px;line-height:1.35;margin:0 0 5px}
+.initiative-card p{margin:5px 0;line-height:1.45}
+.initiative-card .meta{font-size:12px;line-height:1.45}
+.initiative-card .label{font-weight:700}
+.initiative-status{display:inline-block;border:1px solid var(--line);padding:2px 6px;font-size:12px;margin-bottom:7px}
+.initiative-empty{font-size:13px;color:var(--muted);margin:0}
+.initiative-edit [contenteditable="true"]{outline:1px dashed var(--muted);outline-offset:2px;min-height:1em}
+.initiative-edit [contenteditable="true"]:empty::before{content:attr(data-placeholder);color:var(--muted)}
+.initiative-edit .add,.initiative-edit .del{display:inline-block}
+.initiative-edit .del{margin-top:6px;font-size:12px}
+.initiative-edit select{font:inherit;font-size:13px;padding:4px;background:var(--bg);color:var(--fg);border:1px solid var(--line)}
+@media(max-width:720px){.initiative-grid{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -212,14 +236,24 @@ ul.kpi li{grid-template-columns:14px minmax(0,1fr) auto;font-size:10.5px;cursor:
    {"y":"О","n":"Кол-во автоматизированных функций (формула не задана)"}]}]}]}
 ]}
 </script>
+<script type="application/json" id="initiative-data">
+{"items":[
+{"id":"И-001","fn":"Вн","code":"3.3","goal":"Контроль платформ и коннекторов","title":"Развернуть мониторинг платформ и коннекторов","result":"Мониторинг запущен; доступны дашборды и порядок реакции на сбои","due":"I кв. 2027 (предварительно)","owner":"","status":"Обсуждалась","note":"Встреча 24.11.2026; срок требует подтверждения"},
+{"id":"И-002","fn":"Вн","code":"2.2","goal":"Быстрый старт проектов","title":"Стандартизировать запуск новых интеграций","result":"Описаны этапы, типовые задачи, оценки времени и ответственные","due":"","owner":"","status":"Обсуждалась","note":"Работа начата; срок требует подтверждения"},
+{"id":"И-003","fn":"Вн","code":"2.2","goal":"Быстрый старт проектов","title":"Внедрить оценку трудозатрат и планирование загрузки","result":"Для типовых задач заданы нормы, для новых — прогноз часов; видна плановая загрузка команды","due":"","owner":"","status":"Обсуждалась","note":"Связь с целью и срок требуют подтверждения"}
+]}
+</script>
 
 <script>
 /* Адрес веб-приложения Apps Script (таблица «К-Скай_Дерево целей 2027 (данные сайта)»). Ключ правки на сайте не хранится: он приходит в ссылке ?key=… */
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSXxX7R77L61_bGbkHOGfIOulFYp1fwnU3mZl--NL-mzyhy5/exec';
 (function(){
   var embedded = JSON.parse(document.getElementById('tree-data').textContent);
+  var initiativeEmbedded = JSON.parse(document.getElementById('initiative-data').textContent);
   var saved = embedded, state = clone(embedded);
   var base = null, editing = false, busy = false, dirty = false;
+  var initiativeSaved = clone(initiativeEmbedded.items), initiativeState = clone(initiativeEmbedded.items);
+  var initiativeBase = null, initiativeReady = false, initiativeEditing = false, initiativeDirty = false;
   /* Ключ правки: из ссылки ?key=…; один раз открытый — запоминается в этом браузере */
   var key = new URLSearchParams(location.search).get('key') || '';
   try{ if(key) localStorage.setItem('ksky-celi-key', key); else key = localStorage.getItem('ksky-celi-key') || ''; }catch(e){}
@@ -229,6 +263,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   var openSet = {};
   var NAMES = {'КД':'Коммерция','РП':'Реализация и РП','Вн':'Внедрение','Разр':'Разработка','ИИ':'ИИ','Прод':'Продукт','Инфра':'Инфраструктура','ИБ':'ИБ','МедЭ':'Медэкспертиза','Юр':'Юристы','Фин':'Финансы','HR':'HR','СМК':'СМК','Марк':'Маркетинг'};
   var params = new URLSearchParams(location.search);
+  var view = params.get('view') === 'initiatives' ? 'initiatives' : 'goals';
   var filter = {};
   (params.get('f')||'').split(',').filter(String).forEach(function(f){filter[f]=true;});
   function filterOn(){return Object.keys(filter).length>0;}
@@ -243,6 +278,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   function syncUrl(){
     var p=new URLSearchParams(location.search), f=Object.keys(filter).join(',');
     if(f) p.set('f',f); else p['delete']('f');
+    if(view==='initiatives') p.set('view','initiatives'); else p['delete']('view');
     var q=p.toString().replace(/%2C/g,',');
     try{ history.replaceState(null,'',location.pathname+(q?'?'+q:'')); }catch(e){}
   }
@@ -296,19 +332,71 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     return h + '</li>';
   }
 
+  function viewsHtml(){
+    return '<nav class="views" aria-label="Разделы"><button data-act="view" data-view="goals" aria-current="'+(view==='goals'?'page':'false')+'">Цели</button><button data-act="view" data-view="initiatives" aria-current="'+(view==='initiatives'?'page':'false')+'">Инициативы</button></nav>';
+  }
+  function filtersHtml(single){
+    var h='<div class="filters" role="group" aria-label="Выбор отдела"><span class="lvl">Отдел</span>';
+    fnList().forEach(function(x){h+='<button class="chip" data-act="fn" data-fn="'+esc(x.fn)+'" aria-pressed="'+(filter[x.fn]?'true':'false')+'" title="'+esc(NAMES[x.fn]||x.fn)+'">'+esc(NAMES[x.fn]||x.fn)+'<span class="c">'+x.n+'</span></button>';});
+    if(filterOn()) h+='<button class="chip reset" data-act="fn-reset">'+(single?'Выбрать другой отдел':'Все функции')+'</button>';
+    return h+'</div>';
+  }
+  function initText(index,key,placeholder){
+    var value=initiativeState[index][key]||'';
+    if(!initiativeEditing) return esc(value||'—');
+    return '<span contenteditable="true" spellcheck="false" role="textbox" aria-label="'+esc(placeholder)+'" data-init-index="'+index+'" data-init-field="'+key+'" data-placeholder="'+esc(placeholder)+'">'+esc(value)+'</span>';
+  }
+  function initiativeCard(it,index){
+    var statuses=['Обсуждалась','На согласовании','Согласована','В работе','Завершена'];
+    var h='<article class="initiative-card"><span class="initiative-status">'+(initiativeEditing?'<select data-init-status="'+index+'" aria-label="Статус инициативы">'+statuses.map(function(s){return '<option'+(it.status===s?' selected':'')+'>'+esc(s)+'</option>';}).join('')+'</select>':esc(it.status||'Без статуса'))+'</span>';
+    h+='<h3>'+initText(index,'title','Название инициативы')+'</h3>';
+    h+='<p><span class="label">Результат:</span> '+initText(index,'result','Ожидаемый результат')+'</p>';
+    h+='<div class="meta"><span class="label">Срок:</span> '+initText(index,'due','Указать срок')+' · <span class="label">Ответственный:</span> '+initText(index,'owner','Указать ответственного')+'</div>';
+    if(it.note||initiativeEditing) h+='<p class="meta"><span class="label">Примечание:</span> '+initText(index,'note','Добавить примечание')+'</p>';
+    if(initiativeEditing) h+='<button class="del" data-act="init-del" data-index="'+index+'" aria-label="Удалить инициативу">Удалить инициативу</button>';
+    return h+'</article>';
+  }
+  function renderInitiatives(){
+    var selected=Object.keys(filter)[0]||'', goals=0, shown=0;
+    var h='<header><h1>К-Скай · <mark>инициативы 2027</mark></h1><div class="meta">проект для обсуждения · данные по целям от '+esc(state.updated)+'</div></header>'+viewsHtml();
+    h+='<div class="bar">';
+    if(canEdit&&initiativeReady&&!initiativeEditing&&selected) h+='<button id="i-edit">Редактировать инициативы</button>';
+    if(initiativeEditing) h+='<button class="primary" id="i-save">Сохранить для всех</button><button id="i-cancel">Отменить</button><span class="status">Измените поля под целью или добавьте инициативу.</span>';
+    h+='<span class="status" id="msg">'+esc(note)+'</span></div>';
+    if(!initiativeEditing) h+=filtersHtml(true);
+    if(!selected){h+='<p class="initiative-intro">Выберите отдел: появятся его цели и инициативы для их достижения.</p>';}
+    else {
+      h+='<p class="initiative-intro">'+esc(NAMES[selected]||selected)+' · инициативы привязаны к целям отдела. Статус «Обсуждалась» означает, что решение ещё не утверждено.</p>';
+      h+='<div class="initiative-grid">';
+      state.goals.forEach(function(g){g.vectors.forEach(function(v){v.items.forEach(function(it){
+        if(it.kind||it.fn!==selected) return;
+        goals++;
+        var indices=[];initiativeState.forEach(function(x,i){if(x.fn===selected&&x.code===v.code&&x.goal===it.t)indices.push(i);});
+        shown+=indices.length;
+        h+='<section class="initiative-goal"><div class="initiative-goal-head"><span class="meta">'+esc(v.code)+' · '+esc(v.title)+'</span><h2>'+esc(it.t)+'</h2></div><div class="initiative-list">';
+        if(indices.length) indices.forEach(function(i){h+=initiativeCard(initiativeState[i],i);});
+        else h+='<p class="initiative-empty">Инициативы предстоит добавить</p>';
+        if(initiativeEditing) h+='<button class="add" data-act="init-add" data-fn="'+esc(selected)+'" data-code="'+esc(v.code)+'" data-goal="'+esc(it.t)+'">+ Инициатива</button>';
+        h+='</div></section>';
+      });});});
+      h+='</div><footer>'+goals+' целей отдела · '+shown+' инициатив. Данные инициатив хранятся отдельно от KPI.</footer>';
+    }
+    root.innerHTML=h;
+    root.classList.toggle('initiative-edit',initiativeEditing);
+    root.classList.remove('editing');
+  }
   function render(){
+    if(view==='initiatives'){renderInitiatives();return;}
     var h = '';
     h += '<header><h1>К-Скай · <mark>дерево целей 2027</mark></h1><div class="meta">проект для обсуждения · '+counts()+' · обновлено '+esc(state.updated)+'</div></header>';
+    h += viewsHtml();
     h += '<div class="bar">';
     if(!editing && kpiPaths().length) h += '<button id="b-all" aria-pressed="'+(allOpen()?'true':'false')+'">'+(allOpen()?'Свернуть все KPI':'Раскрыть все KPI')+'</button>';
     if(canEdit && !editing) h += '<button id="b-edit">Редактировать</button>';
     if(editing) h += '<button class="primary" id="b-save">Сохранить для всех</button><button id="b-cancel">Отменить</button><span class="status">Нажмите на текст, чтобы изменить. «+ цель» и «+ KPI» добавляют строку, × удаляет. Тип KPI: Р или О.</span>';
     h += '<span class="status" id="msg">'+esc(note)+'</span></div>';
     if(!editing){
-      h += '<div class="filters" role="group" aria-label="Фильтр по функциям"><span class="lvl">Функция</span>';
-      fnList().forEach(function(x){ h += '<button class="chip" data-act="fn" data-fn="'+esc(x.fn)+'" aria-pressed="'+(filter[x.fn]?'true':'false')+'" title="'+esc(NAMES[x.fn]||x.fn)+'">'+esc(NAMES[x.fn]||x.fn)+'<span class="c">'+x.n+'</span></button>'; });
-      if(filterOn()) h += '<button class="chip reset" data-act="fn-reset">Все функции</button>';
-      h += '</div>';
+      h += filtersHtml(false);
     }
     h += '<div class="l0"><span class="lvl">L0 · видение</span><b>'+ed('l0.title',state.l0.title)+'</b>'+ed('l0.sub',state.l0.sub,'span','meta')+'</div>';
     h += '<div class="grid">';
@@ -332,12 +420,18 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     h += '<footer><span>▸ нажмите на цель, чтобы раскрыть её KPI</span><span><b>Р</b> — результирующий KPI · <b>О</b> — опережающий</span><span><b>⇄</b> общая метрика КД и РП: доля сделок, принятых РП без возврата</span><span><span class="new">новое</span> добавлено в этой версии</span><span><span class="draft">черновик KPI</span> KPI предложены JTBD, нужно подтверждение</span><span><i>курсив</i> — метрика-вклад, не отдельная цель</span><span>КД — коммерческий департамент · Вн — внедрение и поддержка · Разр — разработка · Инфра — инфраструктура · МедЭ — медэкспертиза · Юр — юридическая функция</span></footer>';
     root.innerHTML = h;
     root.classList.toggle('editing', editing);
+    root.classList.remove('initiative-edit');
   }
   function msg(t){note=t; var m=document.getElementById('msg'); if(m) m.textContent=t;}
 
   root.addEventListener('input', function(e){
+    var initEl=e.target.closest('[data-init-field]');
+    if(initEl&&initEl.isContentEditable){initiativeState[+initEl.dataset.initIndex][initEl.dataset.initField]=initEl.textContent.replace(/\s+/g,' ').trim();initiativeDirty=true;return;}
     var el = e.target.closest('[data-path]');
     if(el && el.isContentEditable){ setPath(el.dataset.path, el.textContent.replace(/\s+/g,' ').trim()); dirty=true; }
+  });
+  root.addEventListener('change',function(e){
+    if(e.target.matches('[data-init-status]')){initiativeState[+e.target.dataset.initStatus].status=e.target.value;initiativeDirty=true;}
   });
   root.addEventListener('keydown', function(e){
     if(e.key==='Enter' && e.target.isContentEditable){ e.preventDefault(); e.target.blur(); }
@@ -350,6 +444,28 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   root.addEventListener('click', function(e){
     if(busy) return;
     var b = e.target.closest('button');
+    var act=b&&b.dataset.act;
+    if(act==='view'){
+      if((editing&&dirty)||(initiativeEditing&&initiativeDirty)){msg('Сначала сохраните или отмените изменения.');return;}
+      editing=false;initiativeEditing=false;view=b.dataset.view;
+      if(view==='initiatives'&&Object.keys(filter).length>1){var first=Object.keys(filter)[0];filter={};filter[first]=true;}
+      note='';syncUrl();render();return;
+    }
+    if(view==='initiatives'){
+      if(!b)return;
+      if(b.id==='i-edit'){initiativeEditing=true;note='';render();return;}
+      if(b.id==='i-cancel'){initiativeState=clone(initiativeSaved);initiativeEditing=false;initiativeDirty=false;note='';render();return;}
+      if(b.id==='i-save'){saveInitiatives();return;}
+      if(act==='fn'){filter={};filter[b.dataset.fn]=true;syncUrl();render();return;}
+      if(act==='fn-reset'){filter={};syncUrl();render();return;}
+      if(act==='init-del'){initiativeState.splice(+b.dataset.index,1);initiativeDirty=true;render();return;}
+      if(act==='init-add'){
+        var n=initiativeState.reduce(function(max,it){var m=String(it.id||'').match(/\d+$/);return Math.max(max,m?+m[0]:0);},0)+1;
+        initiativeState.push({id:'И-'+String(n).padStart(3,'0'),fn:b.dataset.fn,code:b.dataset.code,goal:b.dataset.goal,title:'Новая инициатива',result:'',due:'',owner:'',status:'На согласовании',note:''});
+        initiativeDirty=true;render();return;
+      }
+      return;
+    }
     if(!b){
       if(editing || e.target.closest('.kpi')) return;
       var li = e.target.closest('li.has-k');
@@ -360,7 +476,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     if(b.id==='b-edit'){ editing=true; note=''; render(); return; }
     if(b.id==='b-cancel'){ state=clone(saved); editing=false; dirty=false; note=''; render(); return; }
     if(b.id==='b-save'){ save(); return; }
-    var act=b.dataset.act, path=b.dataset.path;
+    var path=b.dataset.path;
     if(act==='fn'){ var f=b.dataset.fn; if(filter[f]) delete filter[f]; else filter[f]=true; openFiltered(); syncUrl(); render(); return; }
     if(act==='fn-reset'){ filter={}; openSet={}; syncUrl(); render(); return; }
     if(act==='toggle'){ openSet[path]=!openSet[path]; render(); return; }
@@ -368,7 +484,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     if(act==='add'){ getPath(path).items.push({fn:'Функция',t:'Новая цель',kpi:[]}); dirty=true; render(); return; }
     if(act==='addk'){ var it=getPath(path); (it.kpi=it.kpi||[]).push({y:'Р',n:'Новый KPI'}); dirty=true; render(); return; }
   });
-  window.addEventListener('beforeunload', function(e){ if(editing && dirty){ e.preventDefault(); e.returnValue=''; } });
+  window.addEventListener('beforeunload', function(e){ if((editing&&dirty)||(initiativeEditing&&initiativeDirty)){ e.preventDefault(); e.returnValue=''; } });
 
   /* Таблица без KPI (заполнена до появления колонки или колонка пустая): KPI берём из встроенной версии по совпадению вектора, функции и формулировки */
   function mergeKpi(tree){
@@ -380,6 +496,10 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     });});});
   }
   function apply(data){
+    if(data&&data.initiatives&&Array.isArray(data.initiatives.items)){
+      initiativeSaved=clone(data.initiatives.items);initiativeState=clone(initiativeSaved);
+      initiativeBase=data.initiatives.stamp;initiativeReady=true;
+    }
     if(data && !data.empty && data.tree && data.tree.goals){
       var kc=0; data.tree.goals.forEach(function(g){g.vectors.forEach(function(v){v.items.forEach(function(it){kc+=(it.kpi||[]).length;});});});
       if(!data.kpiColumn || kc===0) mergeKpi(data.tree);
@@ -404,6 +524,24 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
         msg('Не сохранилось. Попробуйте ещё раз через минуту.');
       })
       .catch(function(){ busy=false; msg('Нет связи с таблицей. Правки на странице, попробуйте сохранить ещё раз.'); });
+  }
+  function saveInitiatives(){
+    if(!initiativeReady){msg('Сервис инициатив ещё не доступен.');return;}
+    if(initiativeState.some(function(it){return !it.title.trim();})){msg('Укажите название каждой инициативы.');return;}
+    busy=true;msg('Сохраняю инициативы…');
+    fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({kind:'initiatives',key:key,base:initiativeBase,initiatives:initiativeState})})
+      .then(function(r){return r.json();})
+      .then(function(res){
+        busy=false;
+        if(res.ok&&res.data&&Array.isArray(res.data.items)){
+          initiativeSaved=clone(res.data.items);initiativeState=clone(initiativeSaved);initiativeBase=res.data.stamp;
+          initiativeEditing=false;initiativeDirty=false;note='Сохранено. Инициативы видят все, кто откроет ссылку.';render();return;
+        }
+        if(res.error==='conflict'&&res.data){initiativeSaved=clone(res.data.items);initiativeState=clone(initiativeSaved);initiativeBase=res.data.stamp;initiativeEditing=false;initiativeDirty=false;note='Кто-то сохранил изменения раньше вас. Показана новая версия.';render();return;}
+        if(res.error==='bad_key'){canEdit=false;initiativeEditing=false;note='Нет доступа к сохранению.';render();return;}
+        msg('Не удалось сохранить инициативы. Проверьте данные и попробуйте ещё раз.');
+      })
+      .catch(function(){busy=false;msg('Нет связи с таблицей. Попробуйте сохранить ещё раз.');});
   }
 
   openFiltered();
