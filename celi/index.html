@@ -328,7 +328,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     var open = isGoal && (editing || (hasK && openSet[path]));
     var cls = (it.kind||'') + (hasK && !editing ? ' has-k' : '') + (open && hasK ? ' open' : '');
     var h = '<li class="'+cls+'" data-item="'+path+'">'+ed(path+'.fn',it.fn,'span','fn')+
-      '<span class="t">'+ed(path+'.t',it.t,'span','tt')+(it.shared?'<span class="shared" title="Общая метрика КД и РП">⇄</span>':'')+(it.draft?'<span class="draft" title="KPI предложены JTBD, нужно подтверждение">черновик KPI</span>':'')+'</span>';
+      '<span class="t">'+ed(path+'.t',it.t,'span','tt')+(it.shared?'<span class="shared" title="Общая метрика КД и РП">⇄</span>':'')+'</span>';
     if(editing) h += '<button class="del" data-act="del" data-path="'+path+'" aria-label="Удалить цель">×</button>';
     else if(hasK) h += '<button class="caret" data-act="toggle" data-path="'+path+'" aria-expanded="'+(open?'true':'false')+'" aria-label="Показать KPI">▸</button>';
     else h += '<span></span>';
@@ -361,7 +361,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
           var kp=r.p+'.kpi.'+ki;
           h+='<tr'+(first?' class="fn-start"':'')+'>';
           if(first) h+='<td class="fn-c" rowspan="'+total+'">'+esc(NAMES[fn]||fn)+'<small>'+esc(fn)+'</small></td>';
-          if(ki===0) h+='<td class="g-c" rowspan="'+r.it.kpi.length+'"><span class="code">'+esc(r.code)+'</span>'+esc(r.it.t)+(r.it.draft?' <span class="draft">черновик KPI</span>':'')+'</td>';
+          if(ki===0) h+='<td class="g-c" rowspan="'+r.it.kpi.length+'"><span class="code">'+esc(r.code)+'</span>'+esc(r.it.t)+'</td>';
           h+='<td class="y-c">'+esc(k.y)+'</td><td>'+ed(kp+'.n',k.n)+'</td><td class="u-c">'+ed(kp+'.u',k.u||'')+'</td><td class="v-c">'+ed(kp+'.norm',k.norm||'')+'</td></tr>';
           first=false;
         });
@@ -388,7 +388,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
     }
     if(view==='kpi'){
       h += refTable();
-      h += '<footer><span>Подразделения, их цели и KPI. Ед. изм. и норматив правятся здесь: «Редактировать» → «Сохранить для всех» — значения сразу подтягиваются в дерево целей.</span><span><b>Р</b> — результирующий KPI · <b>О</b> — опережающий</span><span><span class="draft">черновик KPI</span> KPI предложены JTBD, нужно подтверждение</span></footer>';
+      h += '<footer><span>Подразделения, их цели и KPI. Ед. изм. и норматив правятся здесь: «Редактировать» → «Сохранить для всех» — значения сразу подтягиваются в дерево целей.</span><span><b>Р</b> — результирующий KPI · <b>О</b> — опережающий</span></footer>';
       root.innerHTML = h; root.classList.toggle('editing', editing); return;
     }
     h += '<div class="l0"><span class="lvl">L0 · видение</span><b>'+ed('l0.title',state.l0.title)+'</b>'+ed('l0.sub',state.l0.sub,'span','meta')+'</div>';
@@ -413,7 +413,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
       h += '</div></section>';
     });
     h += '</div>';
-    h += '<footer><span>▸ нажмите на цель, чтобы раскрыть её KPI</span><span><b>Р</b> — результирующий KPI · <b>О</b> — опережающий</span><span><b>⇄</b> общая метрика КД и РП: доля сделок, принятых РП без возврата</span><span><span class="draft">черновик KPI</span> KPI предложены JTBD, нужно подтверждение</span><span><i>курсив</i> — метрика-вклад, не отдельная цель</span><span>КД — коммерческий департамент · Марк — маркетинг · РП — реализация проектов, руководители проектов · Вн — внедрение и поддержка · Разр — разработка · DevOps — инфраструктура и DevOps · Прод — продукт · ИИ — искусственный интеллект · МедЭ — медэкспертиза · СМК — система менеджмента качества · ИБ — информационная безопасность · Юр — юридическая функция · Фин — финансы · HR — персонал</span></footer>';
+    h += '<footer><span>▸ нажмите на цель, чтобы раскрыть её KPI</span><span><b>Р</b> — результирующий KPI · <b>О</b> — опережающий</span><span><b>⇄</b> общая метрика КД и РП: доля сделок, принятых РП без возврата</span><span><i>курсив</i> — метрика-вклад, не отдельная цель</span><span>КД — коммерческий департамент · Марк — маркетинг · РП — реализация проектов, руководители проектов · Вн — внедрение и поддержка · Разр — разработка · DevOps — инфраструктура и DevOps · Прод — продукт · ИИ — искусственный интеллект · МедЭ — медэкспертиза · СМК — система менеджмента качества · ИБ — информационная безопасность · Юр — юридическая функция · Фин — финансы · HR — персонал</span></footer>';
     root.innerHTML = h;
     root.classList.toggle('editing', editing);
   }
