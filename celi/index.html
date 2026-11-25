@@ -41,6 +41,15 @@ button:disabled{opacity:.5;cursor:default}
 .lvl{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .l0 b{font-size:13px;font-weight:700}
 
+.rev{border:1.5px solid var(--fg);padding:8px 12px 10px;display:flex;flex-direction:column;gap:7px}
+.rev-h{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.rev-h b{font-size:13px;font-weight:700}
+.rev-h mark{background:var(--accent);color:var(--accent-fg);padding:0 .25em;font-weight:800}
+.rev ul{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+@media (max-width:760px){.rev ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rev li{display:flex;flex-direction:column;gap:1px;border-left:2px solid var(--line);padding-left:7px}
+.rev li b{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
+.rev li span{color:var(--muted);font-size:10.5px}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:auto;gap:12px;align-items:start}
 @media (max-width:980px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.grid{grid-template-columns:minmax(0,1fr)}}
@@ -138,7 +147,7 @@ ul.kpi li{grid-template-columns:14px minmax(0,1fr) auto;font-size:10.5px;cursor:
   {"fn":"РП","t":"Контракты с выполнимыми условиями (ТЗ до закупки)","kpi":[
    {"y":"О","n":"Приоритетные ТЗ, проверенные с технической функцией до закупки, шт./мес."},
    {"y":"Р","n":"Доля контрактов, исполненных без пересмотра условий и убытков, %"}]},
-  {"fn":"Инфра","t":"Инфраструктура не ограничивает продажи","kpi":[
+  {"fn":"DevOps","t":"Инфраструктура не ограничивает продажи","kpi":[
    {"y":"Р","n":"Пилоты с готовой инфраструктурой к согласованной дате, шт./мес."},
    {"y":"Р","n":"Сделки, задержанные из-за инфраструктуры, шт."}]}]},
  {"code":"2.2","title":"Запуск в срок","items":[
@@ -222,7 +231,9 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
   var root = document.getElementById('root');
   var note = '';
   var openSet = {};
-  var NAMES = {'КД':'Коммерция','РП':'Реализация и РП','Вн':'Внедрение','Разр':'Разработка','ИИ':'ИИ','Прод':'Продукт','Инфра':'Инфраструктура','ИБ':'ИБ','МедЭ':'Медэкспертиза','Юр':'Юристы','Фин':'Финансы','HR':'HR','СМК':'СМК','Марк':'Маркетинг'};
+  var REVENUE = {total:'430 млн ₽', growth:'≈ +30% к 2026', note:'план Павла Серякова; по фарме и новым направлениям возможен пересмотр',
+    rows:[['290 млн','Регионы ТП (действующие)'],['≈ 90 млн','Новые регионы, ≈ 10 шт.'],['≈ 30 млн','Коммерческая и промышленная медицина'],['≈ 10 млн','Фарма'],['≈ 10 млн','B2G прочее']]};
+  var NAMES = {'КД':'Коммерция','РП':'Реализация и РП','Вн':'Внедрение','Разр':'Разработка','ИИ':'ИИ','Прод':'Продукт','DevOps':'DevOps','ИБ':'ИБ','МедЭ':'Медэкспертиза','Юр':'Юристы','Фин':'Финансы','HR':'HR','СМК':'СМК','Марк':'Маркетинг'};
   var params = new URLSearchParams(location.search);
   var filter = {};
   (params.get('f')||'').split(',').filter(String).forEach(function(f){filter[f]=true;});
@@ -306,6 +317,9 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
       h += '</div>';
     }
     h += '<div class="l0"><span class="lvl">L0 · видение</span><b>'+ed('l0.title',state.l0.title)+'</b>'+ed('l0.sub',state.l0.sub,'span','meta')+'</div>';
+    h += '<div class="rev"><div class="rev-h"><span class="lvl">Выручка 2027 · цель</span><b><mark>'+esc(REVENUE.total)+'</mark></b><span class="meta">'+esc(REVENUE.growth)+' · '+esc(REVENUE.note)+'</span></div><ul>';
+    REVENUE.rows.forEach(function(r){ h += '<li><b>'+esc(r[0])+'</b><span>'+esc(r[1])+'</span></li>'; });
+    h += '</ul></div>';
     h += '<div class="grid">';
     state.goals.forEach(function(goal,gi){
       var gp='goals.'+gi;
@@ -324,7 +338,7 @@ var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBDNTtkJZHRnnaSTI7uSX
       h += '</div></section>';
     });
     h += '</div>';
-    h += '<footer><span>▸ нажмите на цель, чтобы раскрыть её KPI</span><span><b>Р</b> — результирующий KPI · <b>О</b> — опережающий</span><span><b>⇄</b> общая метрика КД и РП: доля сделок, принятых РП без возврата</span><span><span class="draft">черновик KPI</span> KPI предложены JTBD, нужно подтверждение</span><span><i>курсив</i> — метрика-вклад, не отдельная цель</span><span>КД — коммерческий департамент · Вн — внедрение и поддержка · Разр — разработка · Инфра — инфраструктура · МедЭ — медэкспертиза · Юр — юридическая функция</span></footer>';
+    h += '<footer><span>▸ нажмите на цель, чтобы раскрыть её KPI</span><span><b>Р</b> — результирующий KPI · <b>О</b> — опережающий</span><span><b>⇄</b> общая метрика КД и РП: доля сделок, принятых РП без возврата</span><span><span class="draft">черновик KPI</span> KPI предложены JTBD, нужно подтверждение</span><span><i>курсив</i> — метрика-вклад, не отдельная цель</span><span>КД — коммерческий департамент · Марк — маркетинг · РП — реализация проектов, руководители проектов · Вн — внедрение и поддержка · Разр — разработка · DevOps — инфраструктура и DevOps · Прод — продукт · ИИ — искусственный интеллект · МедЭ — медэкспертиза · СМК — система менеджмента качества · ИБ — информационная безопасность · Юр — юридическая функция · Фин — финансы · HR — персонал</span></footer>';
     root.innerHTML = h;
     root.classList.toggle('editing', editing);
   }
